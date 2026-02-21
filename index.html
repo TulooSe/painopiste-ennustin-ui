@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <title>Painopisteen Ennustin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      background: #1e73be;
+      color: white;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Painopisteen Ennustin</h1>
+
+  <button onclick="haeData()">Testaa backend-yhteys</button>
+
+  <div id="result" class="result"></div>
+</div>
+
+<script>
+const API_URL = "LIITÄ_TÄHÄN_APPS_SCRIPT_EXEC_URL";
+
+function haeData() {
+  fetch(API_URL)
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById("result").innerHTML =
+        "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+    })
+    .catch(err => {
+      document.getElementById("result").innerHTML =
+        "Virhe: " + err;
+    });
+}
+</script>
+
+</body>
+</html>
