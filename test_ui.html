@@ -6,7 +6,7 @@
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
     button { margin: 5px 0; padding: 10px; }
-    pre { background: #f4f4f4; padding: 10px; }
+    pre { background: #f4f4f4; padding: 10px; white-space: pre-wrap; }
   </style>
 </head>
 <body>
@@ -15,27 +15,39 @@
   <button onclick="haeAktiivinen()">Hae aktiivinen lennokki</button>
   <button onclick="haeOsat()">Hae osat ja kokoonpanot</button>
   <button onclick="haeYhteenveto()">Hae yhteenveto</button>
-  
+
   <h3>Tulos:</h3>
   <pre id="tulos">Ei dataa vielä</pre>
-  
+
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPipYxC6wXNnqc7oF9V9E3sGZEucmTu16fv77C3hn9Hc2hc0zDio-Adgmh_Jqxlqgy/exec"
+    // 🔹 Aseta tähän oma Apps Script web app URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPipYxC6wXNnqc7oF9V9E3sGZEucmTu16fv77C3hn9Hc2hc0zDio-Adgmh_Jqxlqgy/exec";
+
     const tulosEl = document.getElementById('tulos');
-    
+
     async function callAppsScript(action, body = {}) {
       try {
-        const params = action === 'GET' ? `?action=${body.action || action}` : '';
-        const url = `${SCRIPT_URL}${params}`; 
-        const options = {
-          method: action === 'GET' ? 'GET' : 'POST',
+        let url = SCRIPT_URL;
+        let options = {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: action === 'GET' ? null : JSON.stringify(body)
+          body: JSON.stringify({ action, ...body })
         };
+
+        // GET-toiminnot voidaan halutessa myös tehdä query-paramina
+        if (['haeLennokitAloitukseen', 'haeAktiivinenLennokkiId', 'haeOsat', 'haeYhteenveto'].includes(action)) {
+          url += `?action=${action}`;
+          options = { method: 'GET' };
+        }
+
         const response = await fetch(url, options);
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
         const data = await response.json();
         console.log(action, data);
         tulosEl.textContent = JSON.stringify(data, null, 2);
+
       } catch (err) {
         console.error(err);
         tulosEl.textContent = 'Virhe: ' + err;
@@ -43,19 +55,19 @@
     }
 
     function haeLennokit() {
-      callAppsScript('haeLennokitAloitukseen', { action: 'haeLennokitAloitukseen' });
+      callAppsScript('haeLennokitAloitukseen');
     }
 
     function haeAktiivinen() {
-      callAppsScript('haeAktiivinenLennokkiId', { action: 'haeAktiivinenLennokkiId' });
+      callAppsScript('haeAktiivinenLennokkiId');
     }
 
     function haeOsat() {
-      callAppsScript('haeOsat', { action: 'haeOsat' });
+      callAppsScript('haeOsat');
     }
 
     function haeYhteenveto() {
-      callAppsScript('haeYhteenveto', { action: 'haeYhteenveto' });
+      callAppsScript('haeYhteenveto');
     }
   </script>
 </body>
