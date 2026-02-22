@@ -6,11 +6,12 @@
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
     button { margin: 5px 0; padding: 10px; }
-    pre { background: #f4f4f4; padding: 10px; white-space: pre-wrap; }
+    pre { background: #f4f4f4; padding: 10px; max-height: 400px; overflow: auto; }
   </style>
 </head>
 <body>
   <h2>Testi UI – Lennokit</h2>
+
   <button onclick="haeLennokit()">Hae lennokit</button>
   <button onclick="haeAktiivinen()">Hae aktiivinen lennokki</button>
   <button onclick="haeOsat()">Hae osat ja kokoonpanot</button>
@@ -19,41 +20,53 @@
   <h3>Tulos:</h3>
   <pre id="tulos">Ei dataa vielä</pre>
 
+  <!-- =========================
+       User-moduuli
+       ========================= -->
   <script>
-    // 🔹 Aseta tähän oma Apps Script web app URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPipYxC6wXNnqc7oF9V9E3sGZEucmTu16fv77C3hn9Hc2hc0zDio-Adgmh_Jqxlqgy/exec";
+    const User = {
+      id: "rc.hietaneva@gmail.com", // testikäyttäjä
+      getId: function() { return this.id; },
+      setId: function(newId) { this.id = newId; }
+    };
+  </script>
 
+  <!-- =========================
+       Apps Script fetch
+       ========================= -->
+  <script>
     const tulosEl = document.getElementById('tulos');
 
-    async function callAppsScript(action, body = {}) {
+    // Yhtenäinen paikka Google Apps Script URLille
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPUJZniWcwrsVmYUFyo85CAOLOsRkDo_-TF6iltg03cAS_4teqBUDTsPJQsFs62r7x/exec";
+
+    async function callAppsScript(action) {
       try {
-        let url = SCRIPT_URL;
-        let options = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action, ...body })
+        const body = {
+          action: action,
+          userId: User.getId() // testikäyttäjä lisätään bodyyn
         };
 
-        // GET-toiminnot voidaan halutessa myös tehdä query-paramina
-        if (['haeLennokitAloitukseen', 'haeAktiivinenLennokkiId', 'haeOsat', 'haeYhteenveto'].includes(action)) {
-          url += `?action=${action}`;
-          options = { method: 'GET' };
-        }
+        const options = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        };
 
-        const response = await fetch(url, options);
-
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
+        const response = await fetch(SCRIPT_URL, options);
         const data = await response.json();
+
         console.log(action, data);
         tulosEl.textContent = JSON.stringify(data, null, 2);
-
       } catch (err) {
         console.error(err);
-        tulosEl.textContent = 'Virhe: ' + err;
+        tulosEl.textContent = "Virhe: " + err;
       }
     }
 
+    // =========================
+    // Napit
+    // =========================
     function haeLennokit() {
       callAppsScript('haeLennokitAloitukseen');
     }
