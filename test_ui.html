@@ -21,11 +21,11 @@
   
   <script>
     const tulosEl = document.getElementById('tulos');
-
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPUJZniWcwrsVmYUFyo85CAOLOsRkDo_-TF6iltg03cAS_4teqBUDTsPJQsFs62r7x/exec"
     async function callAppsScript(action, body = {}) {
       try {
         const params = action === 'GET' ? `?action=${body.action || action}` : '';
-        const url = `${SCRIPT_URL}${params}`; Script  https://script.google.com/macros/s/AKfycbxPUJZniWcwrsVmYUFyo85CAOLOsRkDo_-TF6iltg03cAS_4teqBUDTsPJQsFs62r7x/exec
+        const url = `${SCRIPT_URL}${params}`; Script 
         const options = {
           method: action === 'GET' ? 'GET' : 'POST',
           headers: { 'Content-Type': 'application/json' },
