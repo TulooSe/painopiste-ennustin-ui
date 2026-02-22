@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Testi UI – Lennokit</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    button { margin: 5px 0; padding: 10px; }
+    pre { background: #f4f4f4; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Testi UI – Lennokit</h2>
+  <button onclick="haeLennokit()">Hae lennokit</button>
+  <button onclick="haeAktiivinen()">Hae aktiivinen lennokki</button>
+  <button onclick="haeOsat()">Hae osat ja kokoonpanot</button>
+  <button onclick="haeYhteenveto()">Hae yhteenveto</button>
+  
+  <h3>Tulos:</h3>
+  <pre id="tulos">Ei dataa vielä</pre>
+  
+  <script>
+    const tulosEl = document.getElementById('tulos');
+
+    async function callAppsScript(action, body = {}) {
+      try {
+        const params = action === 'GET' ? `?action=${body.action || action}` : '';
+        const url = `${SCRIPT_URL}${params}`; // <– SCRIPT_URL määritettävä Apps Script URLiksi
+        const options = {
+          method: action === 'GET' ? 'GET' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: action === 'GET' ? null : JSON.stringify(body)
+        };
+        const response = await fetch(url, options);
+        const data = await response.json();
+        console.log(action, data);
+        tulosEl.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        console.error(err);
+        tulosEl.textContent = 'Virhe: ' + err;
+      }
+    }
+
+    function haeLennokit() {
+      callAppsScript('haeLennokitAloitukseen', { action: 'haeLennokitAloitukseen' });
+    }
+
+    function haeAktiivinen() {
+      callAppsScript('haeAktiivinenLennokkiId', { action: 'haeAktiivinenLennokkiId' });
+    }
+
+    function haeOsat() {
+      callAppsScript('haeOsat', { action: 'haeOsat' });
+    }
+
+    function haeYhteenveto() {
+      callAppsScript('haeYhteenveto', { action: 'haeYhteenveto' });
+    }
+  </script>
+</body>
+</html>
