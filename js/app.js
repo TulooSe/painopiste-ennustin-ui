@@ -14,8 +14,12 @@ function apiGet(action) {
 function apiPost(action, payload = {}) {
   return fetch(API_BASE, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action, ...payload })
+    headers: { "Content-Type": "text/plain" },   // 🔥 TÄRKEÄ MUUTOS
+    body: JSON.stringify({
+      action,
+      userId: User.getId(),   // 🔥 LISÄTTY
+      ...payload
+    })
   }).then(r => r.json());
 }
 
