@@ -12,11 +12,25 @@
 <body>
   <h2>Testi UI – Lennokit</h2>
 
-  <button onclick="haeLennokit()">Hae lennokit</button>
-  <button onclick="haeAktiivinen()">Hae aktiivinen lennokki</button>
-  <button onclick="haeOsat()">Hae osat ja kokoonpanot</button>
-  <button onclick="haeYhteenveto()">Hae yhteenveto</button>
-  <button onclick="callAppsScript('ping')">Testaa Ping</button>
+  <button onclick="callAppsScript('haeLennokitAloitukseen')">
+  Hae lennokit
+  </button>
+
+  <button onclick="callAppsScript('haeAktiivinenLennokkiId')">
+    Hae aktiivinen
+  </button>
+  
+  <button onclick="callAppsScript('haeOsat')">
+    Hae osat
+  </button>
+  
+  <button onclick="callAppsScript('haeYhteenveto')">
+    Hae yhteenveto
+  </button>
+  
+  <button onclick="callAppsScript('ping')">
+    Ping
+  </button>
 
   <h3>Tulos:</h3>
   <pre id="tulos">Ei dataa vielä</pre>
