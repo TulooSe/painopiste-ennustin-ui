@@ -42,30 +42,39 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxVJiqnBPDqjmP98RPCJjBRSYEZVMhaJib5N3CnpSvGKVtIfzWlKOHl-B3axyAMVP0Z/exec";
 
     async function callAppsScript(action) {
-      try {
-        const body = {
-          action: action,
-          userId: User.getId() // testikäyttäjä lisätään bodyyn
-        };
 
-        const options = {
-          method: "POST",
+      console.log("CALL LÄHTEE:", action);
+    
+        try {
+          const body = {
+            action: action,
+            userId: User.getId()
+          };
+      
+          console.log("BODY:", body);
+      
           const options = {
-          headers: { "Content-Type": "text/plain" }, // 🔥 MUUTOS
-          body: JSON.stringify(body)
-        };
-
-        const response = await fetch(SCRIPT_URL, options);
-        const data = await response.json();
-
-        console.log(action, data);
-        tulosEl.textContent = JSON.stringify(data, null, 2);
-      } catch (err) {
-        console.error(err);
-        tulosEl.textContent = "Virhe: " + err;
-      }
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify(body)
+          };
+      
+          const response = await fetch(SCRIPT_URL, options);
+      
+          console.log("STATUS:", response.status);
+      
+          const text = await response.text();
+          console.log("RAW RESPONSE:", text);
+      
+          tulosEl.textContent = text;
+      
+        } catch (err) {
+          console.error("FETCH ERROR:", err);
+          tulosEl.textContent = "Virhe: " + err;
+        }
     }
 
+    
     // =========================
     // Napit
     // =========================
