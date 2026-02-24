@@ -4,109 +4,139 @@
   <meta charset="UTF-8">
   <title>Testi UI – Lennokit</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    button { margin: 5px 0; padding: 10px; }
-    pre { background: #f4f4f4; padding: 10px; max-height: 400px; overflow: auto; }
+    body { font-family: Arial; padding: 20px; }
+    button { margin: 4px 0; padding: 8px; width: 260px; }
+    input { margin: 4px 0; padding: 6px; width: 250px; }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      max-height: 400px;
+      overflow: auto;
+    }
   </style>
 </head>
 <body>
-  <h2>Testi UI – Lennokit</h2>
 
-  <button onclick="callAppsScript('haeLennokitAloitukseen')">
-  Hae lennokit
-  </button>
+<h2>Testi UI – API Debug</h2>
 
-  <button onclick="callAppsScript('haeAktiivinenLennokkiId')">
-    Hae aktiivinen
-  </button>
-  
-  <button onclick="callAppsScript('haeOsat')">
-    Hae osat
-  </button>
-  
-  <button onclick="callAppsScript('haeYhteenveto')">
-    Hae yhteenveto
-  </button>
-  
-  <button onclick="callAppsScript('ping')">
-    Ping
-  </button>
+<h3>Perushaut</h3>
+<button onclick="call('haeLennokitAloitukseen')">Hae lennokit</button>
+<button onclick="call('haeAktiivinenLennokkiId')">Hae aktiivinen</button>
+<button onclick="call('haeOsat')">Hae osat</button>
+<button onclick="call('haeYhteenveto')">Hae yhteenveto</button>
+<button onclick="call('ping')">Ping</button>
 
-  <h3>Tulos:</h3>
-  <pre id="tulos">Ei dataa vielä</pre>
+<hr>
 
-  <!-- =========================
-       User-moduuli
-       ========================= -->
-  <script>
-    const User = {
-      id: "rc.hietaneva@gmail.com", // testikäyttäjä
-      getId: function() { return this.id; },
-      setId: function(newId) { this.id = newId; }
+<h3>Lennokin hallinta</h3>
+
+<input id="lennokkiId" placeholder="Lennokin ID">
+<button onclick="asetaAktiivinen()">Aseta aktiivinen</button>
+
+<input id="uusiNimi" placeholder="Uusi lennokki nimi">
+<button onclick="luoUusi()">Luo uusi</button>
+
+<button onclick="kopioi()">Kopioi valittu</button>
+<button onclick="poista()">Poista valittu</button>
+
+<hr>
+
+<h3>Testi tallennus (dummy osa)</h3>
+<button onclick="testiTallennus()">Tallenna testi-osa</button>
+
+<hr>
+
+<h3>Tulos</h3>
+<pre id="tulos">Ei dataa vielä</pre>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxVJiqnBPDqjmP98RPCJjBRSYEZVMhaJib5N3CnpSvGKVtIfzWlKOHl-B3axyAMVP0Z/exec";
+
+const User = {
+  id: "rc.hietaneva@gmail.com",
+  getId() { return this.id; }
+};
+
+const tulosEl = document.getElementById("tulos");
+
+async function call(action, payload = {}) {
+  try {
+
+    const body = {
+      action,
+      userId: User.getId(),
+      ...payload
     };
-  </script>
 
-  <!-- =========================
-       Apps Script fetch
-       ========================= -->
-  <script>
-    const tulosEl = document.getElementById('tulos');
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(body)
+    });
 
-    // Yhtenäinen paikka Google Apps Script URLille
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxVJiqnBPDqjmP98RPCJjBRSYEZVMhaJib5N3CnpSvGKVtIfzWlKOHl-B3axyAMVP0Z/exec";
+    const text = await response.text();
 
-    async function callAppsScript(action) {
-
-      console.log("CALL LÄHTEE:", action);
-    
-        try {
-          const body = {
-            action: action,
-            userId: User.getId()
-          };
-      
-          console.log("BODY:", body);
-      
-          const options = {
-            method: "POST",
-            headers: { "Content-Type": "text/plain" },
-            body: JSON.stringify(body)
-          };
-      
-          const response = await fetch(SCRIPT_URL, options);
-      
-          console.log("STATUS:", response.status);
-      
-          const text = await response.text();
-          console.log("RAW RESPONSE:", text);
-      
-          tulosEl.textContent = text;
-      
-        } catch (err) {
-          console.error("FETCH ERROR:", err);
-          tulosEl.textContent = "Virhe: " + err;
-        }
+    try {
+      tulosEl.textContent =
+        JSON.stringify(JSON.parse(text), null, 2);
+    } catch {
+      tulosEl.textContent = text;
     }
 
-    
-    // =========================
-    // Napit
-    // =========================
-    function haeLennokit() {
-      callAppsScript('haeLennokitAloitukseen');
-    }
+  } catch (err) {
+    tulosEl.textContent = "Virhe: " + err;
+  }
+}
 
-    function haeAktiivinen() {
-      callAppsScript('haeAktiivinenLennokkiId');
-    }
+/* =========================
+   LENNOKIN HALLINTA
+========================= */
 
-    function haeOsat() {
-      callAppsScript('haeOsat');
-    }
+function asetaAktiivinen() {
+  const id = document.getElementById("lennokkiId").value;
+  call("asetaAktiivinen", { id });
+}
 
-    function haeYhteenveto() {
-      callAppsScript('haeYhteenveto');
-    }
-  </script>
+function luoUusi() {
+  const nimi = document.getElementById("uusiNimi").value;
+  call("luoUusiLennokki", { nimi });
+}
+
+function kopioi() {
+  const id = document.getElementById("lennokkiId").value;
+  const uusi = prompt("Kopion nimi:");
+  if (!uusi) return;
+  call("kopioiLennokki", {
+    alkuperainen: id,
+    uusiNimi: uusi
+  });
+}
+
+function poista() {
+  const id = document.getElementById("lennokkiId").value;
+  call("poistaLennokki", { nimi: id });
+}
+
+/* =========================
+   TESTI TALLENNUS
+========================= */
+
+function testiTallennus() {
+
+  const id = document.getElementById("lennokkiId").value;
+
+  const dummyOsa = {
+    osa: "TestiOsa",
+    massa: 123,
+    etaisyys: 250
+  };
+
+  call("tallennaOsat", {
+    aktiivinenLennokkiId: id,
+    osat: [dummyOsa]
+  });
+}
+</script>
+
 </body>
 </html>
