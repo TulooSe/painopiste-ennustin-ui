@@ -3,24 +3,21 @@ const APP_VERSION = "1.50";
 document.addEventListener("DOMContentLoaded", init);
 
 /* =========================
-   API HELPERS
+   API WRAPPER
 ========================= */
 
-function apiGet(action) {
-  return fetch(`${API_BASE}?action=${action}`)
-    .then(r => r.json());
-}
-
-function apiPost(action, payload = {}) {
-  return fetch(API_BASE, {
+async function API(action, payload = {}) {
+  const res = await fetch(API_BASE, {
     method: "POST",
-    headers: { "Content-Type": "text/plain" },   // 🔥 TÄRKEÄ MUUTOS
+    headers: { "Content-Type": "text/plain" },
     body: JSON.stringify({
       action,
-      userId: User.getId(),   // 🔥 LISÄTTY
+      userId: User.getId(),
       ...payload
     })
-  }).then(r => r.json());
+  });
+
+  return res.json();
 }
 
 /* =========================
@@ -36,98 +33,109 @@ function init() {
    LENNOKIT
 ========================= */
 
-function loadLennokit() {
-  apiGet("getLennokit")
-    .then(data => {
-      state.lennokit = data;
-      renderStartTable();
-    })
-    .catch(err => alert("Latausvirhe: " + err));
+async function loadLennokit() {
+  try {
+    const data = await API("haeLennokitAloitukseen");
+    state.lennokit = data;
+    renderStartTable();
+  } catch (err) {
+    alert("Latausvirhe: " + err);
+  }
 }
 
-function lataaLennokit() {
-  apiGet("listaaLennokit")
-    .then(lista => {
-      const select = document.getElementById("lennokkiSelect");
-      select.innerHTML = "";
+async function lataaLennokit() {
+  try {
+    const lista = await API("listaaLennokit");
 
-      lista.forEach(l => {
-        const opt = document.createElement("option");
-        opt.value = l.id;
-        opt.textContent = l.id;
+    const select = document.getElementById("lennokkiSelect");
+    select.innerHTML = "";
 
-        if (l.aktiivinen) {
-          opt.selected = true;
-          aktiivinenLennokkiId = l.id;
-        }
+    lista.forEach(l => {
+      const opt = document.createElement("option");
+      opt.value = l.id;
+      opt.textContent = l.id;
 
-        select.appendChild(opt);
-      });
+      if (l.aktiivinen) {
+        opt.selected = true;
+        aktiivinenLennokkiId = l.id;
+      }
+
+      select.appendChild(opt);
     });
+
+  } catch (err) {
+    alert("Lennokkien latausvirhe: " + err);
+  }
 }
 
 /* =========================
    OSAT
 ========================= */
 
-function lataaOsat() {
-  apiGet("haeOsat")
-    .then(response => {
-      osat = response.osat;
-      kokoonpanot = response.kokoonpanot;
-      piirraOsat();
-    })
-    .catch(err => alert("Osien lataus epäonnistui: " + err));
+async function lataaOsat() {
+  try {
+    const response = await API("haeOsat");
+
+    osat = response.osat;
+    kokoonpanot = response.kokoonpanot;
+
+    piirraOsat();
+
+  } catch (err) {
+    alert("Osien lataus epäonnistui: " + err);
+  }
 }
 
 /* =========================
    YHTEENVETO
 ========================= */
 
-function lataaYhteenveto() {
-  apiGet("haeYhteenveto")
-    .then(data => {
+async function lataaYhteenveto() {
+  try {
+    const data = await API("haeYhteenveto");
 
-      if (!data || !data.length) {
-        yhteenvetoView.innerHTML = "<p>Ei yhteenvetotietoja.</p>";
-        return;
-      }
+    if (!data || !data.length) {
+      yhteenvetoView.innerHTML = "<p>Ei yhteenvetotietoja.</p>";
+      return;
+    }
 
-      let html = `
-        <table>
-          <thead>
-            <tr>
-              <th>Kokoonpano</th>
-              <th class="col-num">Kokonaismassa</th>
-              <th class="col-num">Painopiste</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      data.forEach(r => {
-        const isYhteensa = r[0] === "Yhteensä";
-
-        html += `
-          <tr class="${isYhteensa ? 'yhteensa' : ''}">
-            <td>${r[0]}</td>
-            <td class="col-num">${r[1]}</td>
-            <td class="col-num">${Math.round(r[3] || 0)}</td>
+    let html = `
+      <table>
+        <thead>
+          <tr>
+            <th>Kokoonpano</th>
+            <th class="col-num">Kokonaismassa</th>
+            <th class="col-num">Painopiste</th>
           </tr>
-        `;
-      });
+        </thead>
+        <tbody>
+    `;
 
-      html += `</tbody></table>`;
-      yhteenvetoView.innerHTML = html;
-    })
-    .catch(err => alert("Yhteenveto-virhe: " + err));
+    data.forEach(r => {
+      const isYhteensa = r[0] === "Yhteensä";
+
+      html += `
+        <tr class="${isYhteensa ? 'yhteensa' : ''}">
+          <td>${r[0]}</td>
+          <td class="col-num">${r[1]}</td>
+          <td class="col-num">${Math.round(r[3] || 0)}</td>
+        </tr>
+      `;
+    });
+
+    html += `</tbody></table>`;
+    yhteenvetoView.innerHTML = html;
+
+  } catch (err) {
+    alert("Yhteenveto-virhe: " + err);
+  }
 }
 
 /* =========================
    TALLENNUS
 ========================= */
 
-function tallenna() {
+async function tallenna() {
 
   const virhe = osat.find(o => Number(o.massa) < 0);
   if (virhe) {
@@ -140,12 +148,10 @@ function tallenna() {
 
   tallennaBtn.disabled = true;
 
-  apiPost("tallennaOsat", {
-    osat: muuttuneet,
-    aktiivinenLennokkiId,
-    currentUserId
-  })
-  .then(() => {
+  try {
+    await API("tallennaOsat", {
+      osat: muuttuneet
+    });
 
     muuttuneet.forEach(o => delete o._dirty);
     muutoksia = false;
@@ -154,84 +160,75 @@ function tallenna() {
     tallennaBtn.classList.remove("unsaved");
 
     naytaTallennusKuittaus();
-  })
-  .catch(err => {
+
+  } catch (err) {
     alert("Tallennus epäonnistui: " + err);
     tallennaBtn.disabled = false;
-  });
+  }
 }
 
 /* =========================
    LENNOKIN HALLINTA
 ========================= */
 
-function avaaLennokki() {
+async function avaaLennokki() {
+  await API("asetaAktiivinen", { id: valittuLennokkiId });
 
-  apiPost("asetaAktiivinen", {
-    id: valittuLennokkiId
-  })
-  .then(() => {
-    aktiivinenLennokkiId = valittuLennokkiId;
-    siirryAppiin();
-    lataaOsat();
-  });
+  aktiivinenLennokkiId = valittuLennokkiId;
+
+  siirryAppiin();
+  lataaOsat();
 }
 
-function avaaUusiLennokki() {
+async function avaaUusiLennokki() {
 
-  apiPost("luoUusiLennokki", {
+  const uusiId = await API("luoUusiLennokki", {
     nimi: uusiLennokkiNimi,
     malli: document.getElementById("uusiMalliSelect")?.value
-  })
-  .then(uusiId => {
-
-    aktiivinenLennokkiId = uusiId;
-    uusiLennokkiNimi = "";
-    valittuLennokkiId = null;
-
-    paivitaAloitus();
-    siirryAppiin();
-    lataaOsat();
   });
+
+  aktiivinenLennokkiId = uusiId;
+
+  uusiLennokkiNimi = "";
+  valittuLennokkiId = null;
+
+  paivitaAloitus();
+  siirryAppiin();
+  lataaOsat();
 }
 
-function kopioiValittuLennokki() {
+async function kopioiValittuLennokki() {
 
   const alkuperainen = valittuLennokkiId;
   const uusiNimi = prompt("Anna kopion nimi:", alkuperainen + "_kopio");
   if (!uusiNimi) return;
 
-  apiPost("kopioiLennokki", {
-    alkuperainen,
-    uusiNimi
-  }).then(() => {
-    valittuLennokkiId = null;
-    paivitaAloitus();
-  });
+  await API("kopioiLennokki", { alkuperainen, uusiNimi });
+
+  valittuLennokkiId = null;
+  paivitaAloitus();
 }
 
-function poistaValittuLennokki() {
+async function poistaValittuLennokki() {
 
   if (!confirm("Poistetaanko lennokki?")) return;
 
-  apiPost("poistaLennokki", {
-    nimi: valittuLennokkiId
-  }).then(() => {
-    valittuLennokkiId = null;
-    paivitaAloitus();
-  });
+  await API("poistaLennokki", { nimi: valittuLennokkiId });
+
+  valittuLennokkiId = null;
+  paivitaAloitus();
 }
 
-function muokkaaValittuaLennokkia() {
+async function muokkaaValittuaLennokkia() {
 
   const uusi = prompt("Anna uusi nimi:", valittuLennokkiId);
   if (!uusi) return;
 
-  apiPost("nimeaLennokkiUudelleen", {
+  await API("nimeaLennokkiUudelleen", {
     vanha: valittuLennokkiId,
     uusi
-  }).then(() => {
-    valittuLennokkiId = null;
-    paivitaAloitus();
   });
+
+  valittuLennokkiId = null;
+  paivitaAloitus();
 }
