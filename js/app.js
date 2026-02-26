@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", init);
 ========================= */
 
 async function API(action, payload = {}) {
-  const res = await fetch(API_BASE, {
+
+  const response = await fetch(API_BASE, {
     method: "POST",
-    headers: { "Content-Type": "text/plain" },
     body: JSON.stringify({
       action,
       userId: PP_User.getId(),
@@ -17,8 +17,13 @@ async function API(action, payload = {}) {
     })
   });
 
-  return res.json();
+  if (!response.ok) {
+    throw new Error("HTTP " + response.status);
+  }
+
+  return response.json();
 }
+
 
 /* =========================
    INIT
