@@ -62,7 +62,8 @@ async function loadLennokit() {
     state.lennokit = data;
     renderStart();
   } catch (err) {
-    alert("Latausvirhe: " + err);
+    console.error("Latausvirhe:", err);  
+    alert("Latausvirhe: " + err.message);
   }
 }
 
