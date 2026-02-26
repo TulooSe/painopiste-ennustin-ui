@@ -38,6 +38,8 @@ async function API(action, payload = {}) {
   return response.json();
 }
 
+const data = await API("haeLennokitAloitukseen");
+console.log("API palautti dataa:", data);
 
 /* =========================
    INIT
