@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", init);
 
 async function API(action, payload = {}) {
 
+   console.log("API kutsu:", action);
+   
   const response = await fetch(API_BASE, {
     method: "POST",
     body: JSON.stringify({
@@ -30,6 +32,7 @@ async function API(action, payload = {}) {
 ========================= */
 
 function init() {
+  console.log("INIT käynnistyi");
   renderStart();
   loadLennokit();
 }
@@ -37,6 +40,11 @@ function init() {
 /* =========================
    LENNOKIT
 ========================= */
+
+async function loadLennokit() {
+  console.log("loadLennokit käynnistyi");
+  try {
+    const data = await API("haeLennokitAloitukseen");
 
 async function loadLennokit() {
   try {
