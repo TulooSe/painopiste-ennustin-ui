@@ -38,9 +38,6 @@ async function API(action, payload = {}) {
   return response.json();
 }
 
-const data = await API("haeLennokitAloitukseen");
-console.log("API palautti dataa:", data);
-
 /* =========================
    INIT
 ========================= */
@@ -59,6 +56,7 @@ async function loadLennokit() {
    console.log("loadLennokit käynnistyi");
    try {
     const data = await API("haeLennokitAloitukseen");
+    console.log("API palautti dataa:", data);  
     state.lennokit = data;
     renderStart();
   } catch (err) {
