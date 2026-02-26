@@ -10,13 +10,13 @@ const state = {
 
 /*Yksi keskitetty state*/
 
-export function initRender(initialState) {
+function initRender(initialState) {
   Object.assign(state, initialState);
   bindEvents();
   render();
 }
 
-export function setOsat(osat) {
+function setOsat(osat) {
   state.osat = osat;
   render();
 }
