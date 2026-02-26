@@ -1,8 +1,4 @@
-import { state } from "./state.js";
-import { renderStart } from "./startView.js";
-import { renderEditor } from "./editorView.js";
-
-export function renderApp() {
+function renderApp() {
   hideAllViews();
 
   switch (state.view) {
