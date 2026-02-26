@@ -37,7 +37,7 @@ async function loadLennokit() {
   try {
     const data = await API("haeLennokitAloitukseen");
     state.lennokit = data;
-    renderStartTable();
+    renderStart();
   } catch (err) {
     alert("Latausvirhe: " + err);
   }
