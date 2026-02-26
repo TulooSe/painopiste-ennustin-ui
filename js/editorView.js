@@ -1,6 +1,4 @@
-import { state } from "./state.js";
-
-export function renderEditor() {
+function renderEditor() {
 
   const container = document.getElementById("editorView");
   container.style.display = "block";
@@ -12,20 +10,4 @@ export function renderEditor() {
   `;
 
   bindEditorEvents();
-}
-
-
-/*Editor eventit*/
-
-import { setView } from "./state.js";
-import { renderApp } from "./router.js";
-
-function bindEditorEvents() {
-
-  document
-    .getElementById("backBtn")
-    .addEventListener("click", () => {
-      setView("start");
-      renderApp();
-    });
 }
