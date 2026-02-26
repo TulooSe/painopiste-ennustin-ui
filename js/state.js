@@ -14,14 +14,14 @@ export const state = {
   }
 };
 
-export function setView(view) {
+function setView(view) {
   state.view = view;
 }
 
-export function setOsat(osat) {
+function setOsat(osat) {
   state.osat = osat;
 }
 
-export function setLennokit(lennokit) {
+function setLennokit(lennokit) {
   state.lennokit = lennokit;
 }
