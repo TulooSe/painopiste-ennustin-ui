@@ -1,6 +1,18 @@
 const APP_VERSION = "1.50";
 
+let osat = [];
+let kokoonpanot = [];
+let tallennaBtn = document.getElementById("tallennaBtn"); // jos on
+let yhteenvetoView = document.getElementById("yhteenvetoView"); // jos on
+let valittuLennokkiId = null;
+let aktiivinenLennokkiId = null;
+let uusiLennokkiNimi = "";
+let muutoksia = false;
+
+
 document.addEventListener("DOMContentLoaded", init);
+
+
 
 /* =========================
    API WRAPPER
