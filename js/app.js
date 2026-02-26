@@ -42,12 +42,8 @@ function init() {
 ========================= */
 
 async function loadLennokit() {
-  console.log("loadLennokit käynnistyi");
-  try {
-    const data = await API("haeLennokitAloitukseen");
-
-async function loadLennokit() {
-  try {
+   console.log("loadLennokit käynnistyi");
+   try {
     const data = await API("haeLennokitAloitukseen");
     state.lennokit = data;
     renderStart();
