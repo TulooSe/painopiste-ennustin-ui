@@ -23,3 +23,29 @@ function renderStart() {
 
   bindStartEvents();
 }
+
+
+function bindStartEvents() {
+
+  const container = document.getElementById("startView");
+
+  container.addEventListener("click", e => {
+
+    const row = e.target.closest("tr");
+    if (row) {
+      state.valittuLennokkiId = row.dataset.id;
+
+      container.querySelectorAll("tr")
+        .forEach(r => r.classList.remove("selected"));
+
+      row.classList.add("selected");
+    }
+
+    if (e.target.id === "openEditorBtn") {
+      if (!state.valittuLennokkiId) return;
+
+      setView("editor");
+      renderApp();
+    }
+  });
+}
