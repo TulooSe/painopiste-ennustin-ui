@@ -1,14 +1,3 @@
-/*Yksi keskitetty state */
-
-const state = {
-  osat: [],
-  aktiivinenRyhma: null,
-  suodataNollat: false,
-  kokoonpanot: []
-};
-
-
-/*Yksi keskitetty state*/
 
 function initRender(initialState) {
   Object.assign(state, initialState);
