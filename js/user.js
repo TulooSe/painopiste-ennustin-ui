@@ -2,22 +2,22 @@
 // USER HANDLING
 // =========================
 
-const User = {
+const PP_User = (function () {
 
-  storageKey: "pp_user_email",
+  const storageKey = "pp_user_email";
 
-  getId() {
-    let email = localStorage.getItem(this.storageKey);
+  function getId() {
+    let email = localStorage.getItem(storageKey);
 
     if (!email) {
-      email = this.askEmail();
-      localStorage.setItem(this.storageKey, email);
+      email = askEmail();
+      localStorage.setItem(storageKey, email);
     }
 
     return email;
-  },
+  }
 
-  askEmail() {
+  function askEmail() {
     let email = "";
 
     while (!email) {
@@ -28,10 +28,16 @@ const User = {
     }
 
     return email.trim().toLowerCase();
-  },
+  }
 
-  changeUser() {
-    localStorage.removeItem(this.storageKey);
+  function changeUser() {
+    localStorage.removeItem(storageKey);
     location.reload();
   }
-};
+
+  return {
+    getId,
+    changeUser
+  };
+
+})();
