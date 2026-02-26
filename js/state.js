@@ -1,4 +1,4 @@
-export const state = {
+const state = {
   view: "start",        // start | editor
   lennokit: [],
   valittuLennokkiId: null,
