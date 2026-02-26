@@ -12,7 +12,7 @@ async function API(action, payload = {}) {
     headers: { "Content-Type": "text/plain" },
     body: JSON.stringify({
       action,
-      userId: User.getId(),
+      userId: PP_User.getId(),
       ...payload
     })
   });
