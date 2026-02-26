@@ -1,3 +1,7 @@
+// =========================
+// APP.JS VERSION 1.50
+// =========================
+
 const APP_VERSION = "1.50";
 
 let osat = [];
@@ -9,19 +13,13 @@ let aktiivinenLennokkiId = null;
 let uusiLennokkiNimi = "";
 let muutoksia = false;
 
-
-document.addEventListener("DOMContentLoaded", init);
-
-
-
-/* =========================
-   API WRAPPER
-========================= */
+// =========================
+// API WRAPPER
+// =========================
 
 async function API(action, payload = {}) {
+  console.log("API kutsu:", action);
 
-   console.log("API kutsu:", action);
-   
   const response = await fetch(API_BASE, {
     method: "POST",
     body: JSON.stringify({
@@ -38,29 +36,31 @@ async function API(action, payload = {}) {
   return response.json();
 }
 
-/* =========================
-   INIT
-========================= */
+// =========================
+// INIT
+// =========================
+
+document.addEventListener("DOMContentLoaded", init);
 
 function init() {
   console.log("INIT käynnistyi");
-  renderStart();
-  loadLennokit();
+  renderStart();     // näyttää start-view
+  loadLennokit();    // async kutsu lennokkien lataukseen
 }
 
-/* =========================
-   LENNOKIT
-========================= */
+// =========================
+// LENNOKIT
+// =========================
 
 async function loadLennokit() {
-   console.log("loadLennokit käynnistyi");
-   try {
+  console.log("loadLennokit käynnistyi");
+  try {
     const data = await API("haeLennokitAloitukseen");
-    console.log("API palautti dataa:", data);  
+    console.log("API palautti dataa:", data);
     state.lennokit = data;
     renderStart();
   } catch (err) {
-    console.error("Latausvirhe:", err);  
+    console.error("Latausvirhe:", err);
     alert("Latausvirhe: " + err.message);
   }
 }
@@ -90,9 +90,9 @@ async function lataaLennokit() {
   }
 }
 
-/* =========================
-   OSAT
-========================= */
+// =========================
+// OSAT
+// =========================
 
 async function lataaOsat() {
   try {
@@ -108,16 +108,16 @@ async function lataaOsat() {
   }
 }
 
-/* =========================
-   YHTEENVETO
-========================= */
+// =========================
+// YHTEENVETO
+// =========================
 
 async function lataaYhteenveto() {
   try {
     const data = await API("haeYhteenveto");
 
     if (!data || !data.length) {
-      yhteenvetoView.innerHTML = "<p>Ei yhteenvetotietoja.</p>";
+      if (yhteenvetoView) yhteenvetoView.innerHTML = "<p>Ei yhteenvetotietoja.</p>";
       return;
     }
 
@@ -146,19 +146,19 @@ async function lataaYhteenveto() {
     });
 
     html += `</tbody></table>`;
-    yhteenvetoView.innerHTML = html;
+
+    if (yhteenvetoView) yhteenvetoView.innerHTML = html;
 
   } catch (err) {
     alert("Yhteenveto-virhe: " + err);
   }
 }
 
-/* =========================
-   TALLENNUS
-========================= */
+// =========================
+// TALLENNUS
+// =========================
 
 async function tallenna() {
-
   const virhe = osat.find(o => Number(o.massa) < 0);
   if (virhe) {
     alert("Massa ei voi olla negatiivinen.\n\nOsa: " + virhe.osa);
@@ -168,32 +168,33 @@ async function tallenna() {
   const muuttuneet = osat.filter(o => o._dirty);
   if (!muuttuneet.length) return;
 
-  tallennaBtn.disabled = true;
+  if (tallennaBtn) tallennaBtn.disabled = true;
 
   try {
-    await API("tallennaOsat", {
-      osat: muuttuneet
-    });
+    await API("tallennaOsat", { osat: muuttuneet });
 
     muuttuneet.forEach(o => delete o._dirty);
     muutoksia = false;
 
-    tallennaBtn.disabled = false;
-    tallennaBtn.classList.remove("unsaved");
+    if (tallennaBtn) {
+      tallennaBtn.disabled = false;
+      tallennaBtn.classList.remove("unsaved");
+    }
 
     naytaTallennusKuittaus();
 
   } catch (err) {
     alert("Tallennus epäonnistui: " + err);
-    tallennaBtn.disabled = false;
+    if (tallennaBtn) tallennaBtn.disabled = false;
   }
 }
 
-/* =========================
-   LENNOKIN HALLINTA
-========================= */
+// =========================
+// LENNOKIN HALLINTA
+// =========================
 
 async function avaaLennokki() {
+  if (!valittuLennokkiId) return;
   await API("asetaAktiivinen", { id: valittuLennokkiId });
 
   aktiivinenLennokkiId = valittuLennokkiId;
@@ -203,14 +204,12 @@ async function avaaLennokki() {
 }
 
 async function avaaUusiLennokki() {
-
   const uusiId = await API("luoUusiLennokki", {
     nimi: uusiLennokkiNimi,
     malli: document.getElementById("uusiMalliSelect")?.value
   });
 
   aktiivinenLennokkiId = uusiId;
-
   uusiLennokkiNimi = "";
   valittuLennokkiId = null;
 
@@ -220,6 +219,7 @@ async function avaaUusiLennokki() {
 }
 
 async function kopioiValittuLennokki() {
+  if (!valittuLennokkiId) return;
 
   const alkuperainen = valittuLennokkiId;
   const uusiNimi = prompt("Anna kopion nimi:", alkuperainen + "_kopio");
@@ -232,7 +232,7 @@ async function kopioiValittuLennokki() {
 }
 
 async function poistaValittuLennokki() {
-
+  if (!valittuLennokkiId) return;
   if (!confirm("Poistetaanko lennokki?")) return;
 
   await API("poistaLennokki", { nimi: valittuLennokkiId });
@@ -242,14 +242,12 @@ async function poistaValittuLennokki() {
 }
 
 async function muokkaaValittuaLennokkia() {
+  if (!valittuLennokkiId) return;
 
   const uusi = prompt("Anna uusi nimi:", valittuLennokkiId);
   if (!uusi) return;
 
-  await API("nimeaLennokkiUudelleen", {
-    vanha: valittuLennokkiId,
-    uusi
-  });
+  await API("nimeaLennokkiUudelleen", { vanha: valittuLennokkiId, uusi });
 
   valittuLennokkiId = null;
   paivitaAloitus();
