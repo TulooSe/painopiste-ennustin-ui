@@ -1,3 +1,5 @@
+console.log("STARTVIEW VERSION 1.50");
+
 function renderStart() {
 
   const container = document.getElementById("startView");
