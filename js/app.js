@@ -25,7 +25,7 @@ async function API(action, payload = {}) {
 ========================= */
 
 function init() {
-  renderStartTable();
+  renderStart();
   loadLennokit();
 }
 
