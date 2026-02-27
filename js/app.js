@@ -29,6 +29,10 @@ let valittuLennokkiId = null;
 let aktiivinenLennokkiId = null;
 let uusiLennokkiNimi = "";
 let muutoksia = false;
+let state = {
+  lennokit: [],
+  valittuLennokkiId: null
+};
 
 // =========================
 // API WRAPPER
