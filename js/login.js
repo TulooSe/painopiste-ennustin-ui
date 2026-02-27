@@ -22,64 +22,59 @@ const Auth = (function () {
   }
 
   function showLogin() {
-    document.body.innerHTML = `
+  
+    const overlay = document.createElement("div");
+    overlay.id = "loginOverlay";
+  
+    overlay.innerHTML = `
       <div style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.4);
         display:flex;
         align-items:center;
         justify-content:center;
-        height:100vh;
         font-family:sans-serif;
-        background:#f2f2f2;
+        z-index:9999;
       ">
         <div style="
           background:white;
           padding:30px;
           border-radius:10px;
-          box-shadow:0 5px 15px rgba(0,0,0,0.1);
           width:300px;
         ">
-          <h2 style="margin-top:0;">Kirjaudu</h2>
-
-          <input 
-            type="email" 
-            id="loginEmail" 
+          <h2>Kirjaudu</h2>
+  
+          <input type="email" id="loginEmail"
             placeholder="Sähköpostiosoite"
-            style="width:100%;padding:8px;margin-bottom:10px;"
-            required
-          />
-
+            style="width:100%;padding:8px;margin-bottom:10px;" />
+  
           <label style="font-size:14px;">
             <input type="checkbox" id="rememberMe" />
             Muista minut
           </label>
-
-          <button 
-            id="loginBtn"
-            style="
-              width:100%;
-              padding:10px;
-              margin-top:15px;
-              background:#007bff;
-              color:white;
-              border:none;
-              border-radius:5px;
-              cursor:pointer;
-            ">
+  
+          <button id="loginBtn"
+            style="width:100%;padding:10px;margin-top:15px;">
             Kirjaudu
           </button>
-
+  
           <p id="loginError" style="color:red;font-size:13px;"></p>
         </div>
       </div>
     `;
-
+  
+    document.body.appendChild(overlay);
+  
     document
       .getElementById("loginBtn")
       .addEventListener("click", handleLogin);
   }
-
+  
   function hideLogin() {
-    document.body.style.visibility = "visible";
+    const overlay = document.getElementById("loginOverlay");
+    if (overlay) overlay.remove();
+  
     document.dispatchEvent(new Event("userLoggedIn"));
   }
 
