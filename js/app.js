@@ -24,7 +24,7 @@ async function API(action, payload = {}) {
     method: "POST",
     body: JSON.stringify({
       action,
-      userId: PP_User.getId(),
+      userId: Auth.getUser(),
       ...payload
     })
   });
