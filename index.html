@@ -8,6 +8,17 @@
 </head>
 <body>
 
+<script src="login.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    Auth.init();
+  });
+
+  document.addEventListener("userLoggedIn", function() {
+    console.log("Käyttäjä kirjautunut:", Auth.getUser());
+  });
+</script>
+  
 <div id="appRoot"></div>
 <div id="startView"></div>
 <div id="editorView"></div>
