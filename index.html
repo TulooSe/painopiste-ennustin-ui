@@ -7,17 +7,6 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    Auth.init();
-  });
-
-  document.addEventListener("userLoggedIn", function() {
-    console.log("Käyttäjä kirjautunut:", Auth.getUser());
-  });
-</script>
   
 <div id="appRoot"></div>
 <div id="startView"></div>
@@ -29,5 +18,16 @@ const API_BASE = "https://script.google.com/macros/s/AKfycbz3q7d8OMMqvxUYZyUyWyZ
 
 <script src="js/app_combined.js"></script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    Auth.init();
+  });
+
+  document.addEventListener("userLoggedIn", function() {
+    console.log("Käyttäjä kirjautunut:", Auth.getUser());
+  });
+</script>
+
+  
 </body>
 </html>
