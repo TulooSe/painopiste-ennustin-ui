@@ -71,16 +71,29 @@ function init() {
 
 async function loadLennokit() {
   console.log("loadLennokit käynnistyi");
+
   try {
     const data = await API("haeLennokitAloitukseen");
     console.log("API palautti dataa:", data);
-    state.lennokit = data;
+
+    // Turvallinen käsittely
+    if (Array.isArray(data)) {
+      state.lennokit = data;
+    } else if (Array.isArray(data.lennokit)) {
+      state.lennokit = data.lennokit;
+    } else {
+      console.error("Data ei ole taulukko:", data);
+      state.lennokit = [];
+    }
+
     renderStart();
+
   } catch (err) {
     console.error("Latausvirhe:", err);
     alert("Latausvirhe: " + err.message);
   }
 }
+
 
 async function lataaLennokit() {
   try {
