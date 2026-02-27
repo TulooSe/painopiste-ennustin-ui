@@ -65,8 +65,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 function init() {
   console.log("INIT käynnistyi");
-  renderStart();     // näyttää start-view
-  loadLennokit();    // async kutsu lennokkien lataukseen
+  loadLennokit();   // renderStart kutsutaan vasta kun data tulee
 }
 
 // =========================
@@ -80,17 +79,14 @@ async function loadLennokit() {
     const data = await API("haeLennokitAloitukseen");
     console.log("API palautti dataa:", data);
 
-    // Turvallinen käsittely
-    if (Array.isArray(data)) {
-      state.lennokit = data;
-    } else if (Array.isArray(data.lennokit)) {
-      state.lennokit = data.lennokit;
-    } else {
-      console.error("Data ei ole taulukko:", data);
+    if (!Array.isArray(data)) {
+      console.error("Data ei ole array:", data);
       state.lennokit = [];
+    } else {
+      state.lennokit = data;
     }
 
-    renderStart();
+    renderStart(); // 🔥 kutsutaan vasta nyt
 
   } catch (err) {
     console.error("Latausvirhe:", err);
