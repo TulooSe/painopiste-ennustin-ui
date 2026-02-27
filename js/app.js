@@ -1,3 +1,20 @@
+document.addEventListener("DOMContentLoaded", function () {
+  if (typeof Auth === "undefined") {
+    console.error("Auth puuttuu – login.js ei latautunut");
+    return;
+  }
+
+  if (!Auth.getUser()) {
+    console.log("Ei käyttäjää – odotetaan loginia");
+    return;
+  }
+
+  init();
+});
+
+
+
+
 // =========================
 // APP.JS VERSION 1.50
 // =========================
