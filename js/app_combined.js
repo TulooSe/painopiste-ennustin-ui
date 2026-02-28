@@ -228,10 +228,12 @@ function render() {
 function renderStart() {
   const container = document.getElementById("startView");
   if (!container) return;
+  
   container.style.display = "block";
-
+  
   container.innerHTML = `
-    <h2>Lennokit</h2>
+    <h2 class="start-title">Lennokit</h2>
+    
     <div class="start-table-wrapper">
       <table class="start-table">
         <thead>
@@ -246,17 +248,21 @@ function renderStart() {
           ${state.lennokit.map(l => `
             <tr data-id="${l.id}">
               <td class="col-name">${l.id}</td>
-              <td class="col-num">${l.massa??''}</td>
-              <td class="col-num">${l.pp??''}</td>
-              <td class="col-date">${l.pvm??''}</td>
-            </tr>`).join('')}
+              <td class="col-num">${l.massa ?? ''}</td>
+              <td class="col-num">${l.pp ?? ''}</td>
+              <td class="col-date">${l.pvm ?? ''}</td>
+            </tr>
+          `).join('')}
         </tbody>
       </table>
     </div>
-    <button id="openEditorBtn">Avaa</button>
+    
+    <div class="start-actions">
+      <button id="openEditorBtn">Avaa</button>
+    </div>
   `;
 
-  bindStartEvents();
+  bindStartEvents(); // sitoo klikit jne.
 }
 
 function renderEditor() {
