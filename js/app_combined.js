@@ -23,48 +23,37 @@ const Auth = (function () {
   function showLogin() {
     const overlay = document.createElement("div");
     overlay.id = "loginOverlay";
+  
     overlay.innerHTML = `
-      <div style="
-        position:fixed;
-        inset:0;
-        background:rgba(0,0,0,0.4);
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-family:sans-serif;
-        z-index:9999;
-      ">
-        <div style="
-          background:white;
-          padding:30px;
-          border-radius:10px;
-          width:300px;
-        ">
-        <div class="login-overlay">
-          <div class="login-box">
-            <h2>Kirjaudu</h2>
-      
-            <input type="email"
-                   id="loginEmail"
-                   class="login-input"
-                   placeholder="Sähköpostiosoite"
-                   required>
-      
-            <label class="login-remember">
-              <input type="checkbox" id="rememberMe">
-              Muista minut
-            </label>
-      
-            <button id="loginBtn" class="login-button">
-              Kirjaudu
-            </button>
-      
-            <p id="loginError" class="login-error"></p>
-          </div>
+      <div class="login-overlay">
+        <div class="login-box">
+          <h2>Kirjaudu</h2>
+  
+          <input type="email"
+                 id="loginEmail"
+                 class="login-input"
+                 placeholder="Sähköpostiosoite"
+                 required>
+  
+          <label class="login-remember">
+            <input type="checkbox" id="rememberMe">
+            Muista minut
+          </label>
+  
+          <button id="loginBtn" class="login-button">
+            Kirjaudu
+          </button>
+  
+          <p id="loginError" class="login-error"></p>
         </div>
-      `;
+      </div>
+    `;
+  
     document.body.appendChild(overlay);
-    document.getElementById("loginBtn").addEventListener("click", handleLogin);
+  
+    document
+      .getElementById("loginBtn")
+      .addEventListener("click", handleLogin);
   }
 
   function hideLogin() {
