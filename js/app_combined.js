@@ -40,27 +40,29 @@ const Auth = (function () {
           border-radius:10px;
           width:300px;
         ">
-          <h2>Kirjaudu</h2>
-
-          <div class="login-overlay">
+        <div class="login-overlay">
           <div class="login-box">
             <h2>Kirjaudu</h2>
-            <input type="email" id="loginEmail" class="login-input"
-                   placeholder="Sähköpostiosoite" required>
+      
+            <input type="email"
+                   id="loginEmail"
+                   class="login-input"
+                   placeholder="Sähköpostiosoite"
+                   required>
+      
             <label class="login-remember">
               <input type="checkbox" id="rememberMe">
               Muista minut
             </label>
+      
             <button id="loginBtn" class="login-button">
-       
-          <label style="font-size:14px;">
-            <input type="checkbox" id="rememberMe" /> Muista minut
-          </label>
-          <button id="loginBtn" style="width:100%;padding:10px;margin-top:15px;">Kirjaudu</button>
-          <p id="loginError" style="color:red;font-size:13px;"></p>
+              Kirjaudu
+            </button>
+      
+            <p id="loginError" class="login-error"></p>
+          </div>
         </div>
-      </div>
-    `;
+      `;
     document.body.appendChild(overlay);
     document.getElementById("loginBtn").addEventListener("click", handleLogin);
   }
