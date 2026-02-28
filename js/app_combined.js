@@ -84,7 +84,6 @@ const Auth = (function () {
     }
 
     hideLogin();
-    location.reload();
   }
 
   function validateEmail(email) {
