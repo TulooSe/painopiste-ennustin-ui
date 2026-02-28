@@ -136,15 +136,6 @@ let aktiivinenLennokkiId = null;
 let uusiLennokkiNimi = "";
 let muutoksia = false;
 
-async function API(action, payload = {}) {
-  console.log("API kutsu:", action);
-  const response = await fetch(API_BASE, {
-    method: "POST",
-    body: JSON.stringify({ action, userId: Auth.getUser(), ...payload })
-  });
-  if (!response.ok) throw new Error("HTTP " + response.status);
-  return response.json();
-}
 
 async function API(action, payload = {}) {
   const user = Auth.getUser();
