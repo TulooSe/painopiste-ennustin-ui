@@ -287,6 +287,13 @@ function bindEditorEvents() {
 // INIT
 // ===============================
 
+function init() {
+  console.log("Sovellus käynnistyy");
+  hideAllViews();
+  setView("start");
+  loadLennokit();
+}
+
 document.addEventListener("userLoggedIn", () => {
   console.log("Käyttäjä kirjautunut:", Auth.getUser());
   init();
@@ -294,9 +301,4 @@ document.addEventListener("userLoggedIn", () => {
 
 document.addEventListener("DOMContentLoaded", () => Auth.init());
 
-function init() {
-  console.log("Sovellus käynnistyy");
-  hideAllViews();
-  setView("start");
-  loadLennokit();
-}
+
