@@ -146,6 +146,20 @@ async function API(action, payload = {}) {
   return response.json();
 }
 
+async function API(action, payload = {}) {
+  const user = Auth.getUser();
+  if (!user) throw new Error("Käyttäjä ei ole kirjautunut");
+
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    body: JSON.stringify({ action, userId: user, ...payload })
+  });
+
+  if (!response.ok) throw new Error("HTTP " + response.status);
+  return response.json();
+}
+
+
 async function loadLennokit() {
   console.log("loadLennokit käynnistyi");
   try {
@@ -209,9 +223,14 @@ async function tallenna() {
 // ===============================
 
 function render() {
+  hideAllViews();
   switch (state.view) {
-    case "start": renderStart(); break;
-    case "editor": renderEditor(); break;
+    case "start":
+      renderStart();
+      break;
+    case "editor":
+      renderEditor();
+      break;
   }
 }
 
@@ -274,3 +293,10 @@ document.addEventListener("userLoggedIn", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => Auth.init());
+
+function init() {
+  console.log("Sovellus käynnistyy");
+  hideAllViews();
+  setView("start");
+  loadLennokit();
+}
