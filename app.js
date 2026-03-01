@@ -165,7 +165,7 @@ async function loadLennokit() {
 
 async function lataaOsat() {
   try {
-    const response = await API("haeOsat");
+    const response = await API("haeOsatAktiiviselleLennokille");
     state.osat = response.osat;
     state.kokoonpanot = response.kokoonpanot;
     renderOsat();
@@ -176,7 +176,7 @@ async function lataaOsat() {
 
 async function lataaYhteenveto() {
   try {
-    const data = await API("haeYhteenveto");
+    const data = await API("haeYhteenvetoAktiiviselleLennokille")
     if (!yhteenvetoView) return;
     if (!data || !data.length) {
       yhteenvetoView.innerHTML = "<p>Ei yhteenvetotietoja.</p>";
@@ -199,7 +199,7 @@ async function tallenna() {
   if (!muuttuneet.length) return;
   if (tallennaBtn) tallennaBtn.disabled = true;
   try {
-    await API("tallennaOsat", { osat: muuttuneet });
+    await API("tallennaOsatAktiiviselleLennokille", { osat: muuttuneet });
     muuttuneet.forEach(o => delete o._dirty);
     muutoksia = false;
     if (tallennaBtn) { tallennaBtn.disabled = false; tallennaBtn.classList.remove("unsaved"); }
