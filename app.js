@@ -152,13 +152,11 @@ async function API(action, payload = {}) {
 
 
 async function loadLennokit() {
-  console.log("loadLennokit käynnistyi");
   try {
     const data = await API("haeLennokitAloitukseen");
     state.lennokit = Array.isArray(data) ? data : [];
-
+    renderStartTable();
   } catch (err) {
-    console.error("Latausvirhe:", err);
     alert("Latausvirhe: " + err.message);
   }
 }
@@ -213,7 +211,29 @@ async function tallenna() {
 // RENDER LOGIIKKA
 // ===============================
 
+function renderStartTable() {
+  const body = document.getElementById("startTableBody");
+  if (!body) return;
 
+  body.innerHTML = "";
+
+  state.lennokit.forEach(l => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${l.id}</td>
+      <td>${l.massa ?? ""}</td>
+      <td>${l.pp ?? ""}</td>
+      <td>${l.pvm ?? ""}</td>
+    `;
+    tr.onclick = () => {
+      document.querySelectorAll("#startTableBody tr")
+        .forEach(r => r.classList.remove("selected"));
+      tr.classList.add("selected");
+      state.valittuLennokkiId = l.id;
+    };
+    body.appendChild(tr);
+  });
+}
 
 // ===============================
 // EVENT HANDLERS
@@ -250,6 +270,13 @@ document.addEventListener("userLoggedIn", () => {
   console.log("Käyttäjä kirjautunut:", Auth.getUser());
   init();
 });
+
+document.getElementById("appVersion").textContent = APP_VERSION;
+document.getElementById("appVersion2").textContent = APP_VERSION;
+ loadLennokit();
+});
+
+
 
 document.addEventListener("DOMContentLoaded", () => Auth.init());
 
