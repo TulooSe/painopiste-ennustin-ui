@@ -143,23 +143,43 @@ async function API(action, payload = {}) {
 
   const response = await fetch(API_BASE, {
     method: "POST",
-    body: JSON.stringify({ action, userId: user, ...payload })
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      action: action,
+      userId: user,
+      ...payload
+    })
   });
 
-  if (!response.ok) throw new Error("HTTP " + response.status);
-  return response.json();
+  if (!response.ok) {
+    throw new Error("HTTP " + response.status);
+  }
+
+  return await response.json();
 }
 
 
 async function loadLennokit() {
   try {
     const data = await API("haeLennokitAloitukseen");
-    state.lennokit = Array.isArray(data) ? data : [];
+
+    if (!Array.isArray(data)) {
+      console.error("Virheellinen vastaus:", data);
+      state.lennokit = [];
+    } else {
+      state.lennokit = data;
+    }
+
     renderStartTable();
+
   } catch (err) {
-    alert("Latausvirhe: " + err.message);
+    console.error("loadLennokit virhe:", err);
   }
 }
+
+
 
 async function lataaOsat() {
   try {
