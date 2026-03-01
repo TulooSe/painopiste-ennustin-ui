@@ -283,14 +283,11 @@ function bindEditorEvents() {
 function init() {
   console.log("Sovellus käynnistyy");
 
-  hideAllViews();
   setView("start");
 
-  // Näytetään sama versionumero molemmissa paikoissa
   const versionEls = document.querySelectorAll("#appVersion, #appVersion2");
   versionEls.forEach(el => el.textContent = APP_VERSION);
 
-  // Ladataan lennokit
   loadLennokit();
 }
 
