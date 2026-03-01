@@ -272,21 +272,14 @@ function init() {
   if (v1) v1.textContent = APP_VERSION;
   if (v2) v2.textContent = APP_VERSION;
 
-  // Ladataan lennokit
+  // Ladataan lennokit vasta kirjautumisen jälkeen
   loadLennokit();
 }
 
-
 // Kun DOM valmis → käynnistetään auth
 document.addEventListener("DOMContentLoaded", () => {
-  // Jos haluat testata ilman oikeaa kirjautumista:
-  const testUser = "test@test.com";
-  localStorage.setItem("pp_user_email", testUser);
-  localStorage.setItem("pp_user_remember", "true");
-
-  Auth.init();  // Tämä lukee nyt testUserin
+  Auth.init();
 });
-
 
 // Kun kirjautuminen valmis → käynnistetään sovellus
 document.addEventListener("userLoggedIn", () => {
