@@ -236,6 +236,7 @@ function renderStartTable() {
 
   state.lennokit.forEach(l => {
     const tr = document.createElement("tr");
+    tr.dataset.id = l.id;
     tr.innerHTML = `
       <td>${l.id}</td>
       <td>${l.massa ?? ""}</td>
@@ -284,6 +285,9 @@ function init() {
 
   const versionEls = document.querySelectorAll("#appVersion, #appVersion2");
   versionEls.forEach(el => el.textContent = APP_VERSION);
+
+  bindStartEvents();   // ← TÄMÄ PUUTTUI
+  bindEditorEvents();  // ← jos käytät editoria
 
   loadLennokit();
 }
