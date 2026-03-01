@@ -257,8 +257,10 @@ function bindEditorEvents() {
 
 
 // ===============================
-// INIT
+// INIT – sovellus ja versionäyttö
 // ===============================
+
+const APP_VERSION = "1.50";
 
 function init() {
   console.log("Sovellus käynnistyy");
@@ -266,23 +268,25 @@ function init() {
   hideAllViews();
   setView("start");
 
-  // Versionumerot
-  const v1 = document.getElementById("appVersion");
-  const v2 = document.getElementById("appVersion2");
-  if (v1) v1.textContent = APP_VERSION;
-  if (v2) v2.textContent = APP_VERSION;
+  // Näytetään sama versionumero molemmissa paikoissa
+  const versionEls = document.querySelectorAll("#appVersion, #appVersion2");
+  versionEls.forEach(el => el.textContent = APP_VERSION);
 
-  // Ladataan lennokit vasta kirjautumisen jälkeen
+  // Ladataan lennokit
   loadLennokit();
 }
 
+// ===============================
+// DOMREADY & AUTH
+// ===============================
+
 // Kun DOM valmis → käynnistetään auth
-document.addEventListener("DOMContentLoaded", () => {
-  Auth.init();
-});
+document.addEventListener("DOMContentLoaded", () => Auth.init());
 
 // Kun kirjautuminen valmis → käynnistetään sovellus
 document.addEventListener("userLoggedIn", () => {
   console.log("Käyttäjä kirjautunut:", Auth.getUser());
   init();
 });
+
+
