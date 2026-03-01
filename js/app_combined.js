@@ -225,48 +225,6 @@ function render() {
   }
 }
 
-function renderStart() {
-  const container = document.getElementById("startView");
-  if (!container) return;
-
-  container.style.display = "block";
-
-  container.innerHTML = `
-    <div class="start-card">
-      <h2 class="start-title">Lennokit</h2>
-
-      <div class="start-table-wrapper">
-        <table class="start-table">
-          <thead>
-            <tr>
-              <th class="col-name">ID</th>
-              <th class="col-num">Massa</th>
-              <th class="col-num">PP</th>
-              <th class="col-date">PVM</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${state.lennokit.map(l => `
-              <tr data-id="${l.id}">
-                <td class="col-name">${l.id}</td>
-                <td class="col-num">${l.massa ?? ''}</td>
-                <td class="col-num">${l.pp ?? ''}</td>
-                <td class="col-date">${l.pvm ?? ''}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-
-      <div class="start-actions">
-        <button id="openEditorBtn">Avaa</button>
-      </div>
-    </div>
-  `;
-
-  bindStartEvents();
-}
-
 function renderEditor() {
   const container = document.getElementById("editorView");
   if (!container) return;
