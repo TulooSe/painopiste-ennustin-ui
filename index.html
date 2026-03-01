@@ -11,6 +11,50 @@
 <div id="appRoot"></div>
 <div id="startView"></div>
 <div id="editorView"></div>
+
+<div id="startView" class="start-view">
+  <div class="start-card">
+
+    <img class="start-logo" ...>
+
+    <div class="start-title">
+      Painopisteen Ennustin
+      <span class="start-version">v<span id="appVersion"></span></span>
+    </div>
+
+    <div class="start-actions">
+      <button id="lisaaBtn" onclick="avaaUusiLennokki()">+</button>
+      <button id="avaaBtn" onclick="avaaLennokki()">›</button>
+      <button onclick="kopioiValittuLennokki()">⧉</button>
+      <button onclick="muokkaaValittuaLennokkia()">✏️</button>
+      <button onclick="poistaValittuLennokki()">−</button>
+      <button onclick="avaaOhje()">?</button>
+    </div>
+
+    <div class="start-table-wrapper">
+      <table class="start-table">
+        <colgroup>
+          <col class="col-name">
+          <col class="col-num">
+          <col class="col-num">
+          <col class="col-date">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="col-name">Lennokki</th>
+            <th class="col-num">Paino</th>
+            <th class="col-num">Pp</th>
+            <th class="col-date">Pvm</th>
+          </tr>
+        </thead>
+        <tbody id="startTableBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
   
 <script>
 const API_BASE = "https://script.google.com/macros/s/AKfycbz3q7d8OMMqvxUYZyUyWyZcGFqVV2TKRNO-_mhA-qejnP1dgNN088psrwrGgSq5Q7yq/exec";
