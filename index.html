@@ -1,132 +1,79 @@
-
-
 <!DOCTYPE html>
 <html lang="fi">
 <head>
-  <meta charset="UTF-8">
-  <title>Painopisteen Ennustin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painopisteen Ennustin</title>
 
-<div class="app-container">
-
-  <!-- =========================
-       OHJE MODAL
-  ========================= -->
-  <div id="ohjeModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="suljeOhje()">×</span>
-      <div id="ohjeTeksti" class="ohje"></div>
-    </div>
-  </div>
-
-  <!-- =========================
-       ALOITUSNÄYTTÖ
-  ========================= -->
-  <div id="startView" class="start-view">
-
-    <div class="start-card">
-
-      <img
-        src="Iconi_500x300-removebg-preview.png"
-        class="start-logo"
-        alt="Logo">
-
-      <div class="start-title">
-        Painopisteen Ennustin
-        <span class="start-version">v<span id="appVersion"></span></span>
-      </div>
-
-      <div class="start-actions">
-        <button id="lisaaBtn" onclick="avaaUusiLennokki()">+</button>
-        <button id="avaaBtn" onclick="avaaLennokki()">›</button>
-        <button onclick="kopioiValittuLennokki()">⧉</button>
-        <button onclick="muokkaaValittuaLennokkia()">✏️</button>
-        <button onclick="poistaValittuLennokki()">−</button>
-        <button onclick="avaaOhje()">?</button>
-      </div>
-
-      <div class="start-table-wrapper">
-        <table class="start-table">
-          <colgroup>
-            <col class="col-name">
-            <col class="col-num">
-            <col class="col-num">
-            <col class="col-date">
-          </colgroup>
-          <thead>
-            <tr>
-              <th class="col-name">Lennokki</th>
-              <th class="col-num">Paino</th>
-              <th class="col-num">Pp</th>
-              <th class="col-date">Pvm</th>
-            </tr>
-          </thead>
-          <tbody id="startTableBody"></tbody>
-        </table>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- =========================
-       APP-NÄKYMÄ
-  ========================= -->
-  <div id="appView" style="display:none;">
-
-    <div class="app">
-      <div id="saveToast" class="toast">√ Tallennettu</div>
-
-      <header class="topbar">
-
-        <div class="left">
-          <div class="titlebar">
-            <strong class="title">
-              Painopisteen Ennustin v<span id="appVersion"></span>
-            </strong>
-          </div>
-
-          <div class="nav">
-            <button class="back-btn" onclick="palaaAloitukseen()">‹</button>
-            <button class="active" onclick="naytaOsat()">#</button>
-            <button id="suodatusBtn" onclick="vaihdaSuodatus()">Ø</button>
-            <button id="tallennaBtn" onclick="tallenna()">√</button>
-            <button onclick="naytaYhteenveto()">Ʃ</button>
-            <button class="help-btn" onclick="avaaOhje()">?</button>
-          </div>
-        </div>
-
-        <div class="right">
-          <select id="lennokkiSelect" onchange="vaihdaLennokki(this.value)"></select>
-
-          <img
-            src="Iconi_500x300-removebg-preview.png"
-            class="logo"
-            alt="">
-        </div>
-
-      </header>
-
-      <main>
-        <div id="osatView" class="table-wrapper">
-          <div id="osatContainer"></div>
-        </div>
-
-        <div id="yhteenvetoView" class="table-wrapper" style="display:none;"></div>
-      </main>
-
-    </div>
-  </div>
-
-</div>
+<link rel="stylesheet" href="style.css">
 
 <script>
 const API_BASE = "https://script.google.com/macros/s/AKfycbz3q7d8OMMqvxUYZyUyWyZcGFqVV2TKRNO-_mhA-qejnP1dgNN088psrwrGgSq5Q7yq/exec";
-</script>
+</script
 
-<script src="app.js"></script>
+<script src="app.js" defer></script>
+</head>
+
+<body>
+
+<!-- ================= ALOITUS ================= -->
+<div id="startView" class="start-view">
+
+  <div class="start-card">
+
+    <img src="Iconi_500x300-removebg-preview.png" class="start-logo" alt="Logo">
+
+    <div class="start-title">
+      Painopisteen Ennustin
+      <span class="start-version">v<span id="appVersion"></span></span>
+    </div>
+
+    <div class="start-actions">
+      <button onclick="avaaUusiLennokki()">+</button>
+      <button onclick="avaaLennokki()">›</button>
+      <button onclick="kopioiValittuLennokki()">⧉</button>
+      <button onclick="muokkaaValittuaLennokkia()">✏️</button>
+      <button onclick="poistaValittuLennokki()">−</button>
+      <button onclick="avaaOhje()">?</button>
+    </div>
+
+    <div class="start-table-wrapper">
+      <table class="start-table">
+        <thead>
+          <tr>
+            <th>Lennokki</th>
+            <th>Paino</th>
+            <th>Pp</th>
+            <th>Pvm</th>
+          </tr>
+        </thead>
+        <tbody id="startTableBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= SOVELLUS ================= -->
+<div id="appView" style="display:none;">
+  <div class="app">
+
+    <header class="topbar">
+      <div class="left">
+        <strong>Painopisteen Ennustin v<span id="appVersion2"></span></strong>
+      </div>
+      <div class="right">
+        <select id="lennokkiSelect"></select>
+      </div>
+    </header>
+
+    <main>
+      <div id="osatView"></div>
+      <div id="yhteenvetoView" style="display:none;"></div>
+    </main>
+
+  </div>
+</div>
 
 </body>
 </html>
