@@ -156,7 +156,7 @@ async function loadLennokit() {
   try {
     const data = await API("haeLennokitAloitukseen");
     state.lennokit = Array.isArray(data) ? data : [];
-    renderStart();
+
   } catch (err) {
     console.error("Latausvirhe:", err);
     alert("Latausvirhe: " + err.message);
@@ -213,32 +213,7 @@ async function tallenna() {
 // RENDER LOGIIKKA
 // ===============================
 
-function render() {
-  hideAllViews();
-  switch (state.view) {
-    case "start":
-      renderStart();
-      break;
-    case "editor":
-      renderEditor();
-      break;
-  }
-}
 
-function renderEditor() {
-  const container = document.getElementById("editorView");
-  if (!container) return;
-  container.style.display = "block";
-  container.innerHTML = `<h2>Editor</h2><div id="osatView"></div><button id="backBtn">Takaisin</button>`;
-  bindEditorEvents();
-}
-
-function hideAllViews() {
-  const start = document.getElementById("startView");
-  const editor = document.getElementById("editorView");
-  if(start) start.style.display = "none";
-  if(editor) editor.style.display = "none";
-}
 
 // ===============================
 // EVENT HANDLERS
