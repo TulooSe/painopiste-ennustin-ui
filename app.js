@@ -277,10 +277,8 @@ function bindEditorEvents() {
 
 
 // ===============================
-// INIT – sovellus ja versionäyttö
+// INIT 
 // ===============================
-
-const APP_VERSION = "1.50";
 
 function init() {
   console.log("Sovellus käynnistyy");
