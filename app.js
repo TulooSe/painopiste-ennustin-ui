@@ -279,7 +279,12 @@ function init() {
 
 // Kun DOM valmis → käynnistetään auth
 document.addEventListener("DOMContentLoaded", () => {
-  Auth.init();
+  // Jos haluat testata ilman oikeaa kirjautumista:
+  const testUser = "test@test.com";
+  localStorage.setItem("pp_user_email", testUser);
+  localStorage.setItem("pp_user_remember", "true");
+
+  Auth.init();  // Tämä lukee nyt testUserin
 });
 
 
