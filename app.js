@@ -255,28 +255,36 @@ function bindEditorEvents() {
   if (backBtn) backBtn.addEventListener("click", () => { setView("start"); render(); });
 }
 
+
 // ===============================
 // INIT
 // ===============================
 
 function init() {
   console.log("Sovellus käynnistyy");
+
   hideAllViews();
   setView("start");
+
+  // Versionumerot
+  const v1 = document.getElementById("appVersion");
+  const v2 = document.getElementById("appVersion2");
+  if (v1) v1.textContent = APP_VERSION;
+  if (v2) v2.textContent = APP_VERSION;
+
+  // Ladataan lennokit
   loadLennokit();
 }
 
+
+// Kun DOM valmis → käynnistetään auth
+document.addEventListener("DOMContentLoaded", () => {
+  Auth.init();
+});
+
+
+// Kun kirjautuminen valmis → käynnistetään sovellus
 document.addEventListener("userLoggedIn", () => {
   console.log("Käyttäjä kirjautunut:", Auth.getUser());
   init();
 });
-
-document.getElementById("appVersion").textContent = APP_VERSION;
-document.getElementById("appVersion2").textContent = APP_VERSION;
- loadLennokit();
-});
-
-
-
-document.addEventListener("DOMContentLoaded", () => Auth.init());
-
