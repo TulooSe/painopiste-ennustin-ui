@@ -260,17 +260,37 @@ function renderStartTable() {
 function bindStartEvents() {
   const container = document.getElementById("startView");
   if (!container) return;
+
   container.addEventListener("click", e => {
     const row = e.target.closest("tr");
-    if (row) { state.valittuLennokkiId = row.dataset.id; container.querySelectorAll("tr").forEach(r=>r.classList.remove("selected")); row.classList.add("selected"); }
-    if (e.target.id === "openEditorBtn" && state.valittuLennokkiId) { setView("editor"); render(); }
+
+    if (row) {
+      state.valittuLennokkiId = row.dataset.id;
+      container.querySelectorAll("#startTableBody tr")
+        .forEach(r => r.classList.remove("selected"));
+      row.classList.add("selected");
+    }
+
+    // Jos joskus lisäät napin ID:llä openEditorBtn
+    if (e.target.id === "openEditorBtn" && state.valittuLennokkiId) {
+      document.getElementById("startView").style.display = "none";
+      document.getElementById("appView").style.display = "block";
+    }
   });
 }
 
+
 function bindEditorEvents() {
-  const container = document.getElementById("editorView");
+  const container = document.getElementById("appView");
+  if (!container) return;
+
   const backBtn = container.querySelector("#backBtn");
-  if (backBtn) backBtn.addEventListener("click", () => { setView("start"); render(); });
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      document.getElementById("appView").style.display = "none";
+      document.getElementById("startView").style.display = "block";
+    });
+  }
 }
 
 
@@ -281,13 +301,14 @@ function bindEditorEvents() {
 function init() {
   console.log("Sovellus käynnistyy");
 
-  setView("start");
+  document.getElementById("startView").style.display = "block";
+  document.getElementById("appView").style.display = "none";
 
   const versionEls = document.querySelectorAll("#appVersion, #appVersion2");
   versionEls.forEach(el => el.textContent = APP_VERSION);
 
-  bindStartEvents();   // ← TÄMÄ PUUTTUI
-  bindEditorEvents();  // ← jos käytät editoria
+  bindStartEvents();
+  bindEditorEvents();
 
   loadLennokit();
 }
