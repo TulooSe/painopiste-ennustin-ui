@@ -253,6 +253,64 @@ function renderStartTable() {
   });
 }
 
+function renderOsat() {
+  const container = document.getElementById("osatView");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (!state.osat || !state.osat.length) {
+    container.innerHTML = "<p>Ei osia.</p>";
+    return;
+  }
+
+  const table = document.createElement("table");
+  table.className = "osat-table";
+
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>Nro</th>
+        <th>Osa</th>
+        <th>Massa</th>
+        <th>Varsi</th>
+        <th>Kokoonpano</th>
+        <th>Ryhmä</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  `;
+
+  const tbody = table.querySelector("tbody");
+
+  state.osat.forEach(o => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${o.osanro ?? ""}</td>
+      <td>${o.osa ?? ""}</td>
+      <td><input type="number" value="${o.massa ?? 0}" data-field="massa"></td>
+      <td><input type="number" value="${o.varsi ?? 0}" data-field="varsi"></td>
+      <td>${o.kokoonpano ?? ""}</td>
+      <td>${o.ryhma ?? ""}</td>
+    `;
+
+    // Muutosten seuranta
+    tr.querySelectorAll("input").forEach(input => {
+      input.addEventListener("change", e => {
+        const field = e.target.dataset.field;
+        o[field] = Number(e.target.value);
+        o._dirty = true;
+      });
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  container.appendChild(table);
+}
+
+
 // ===============================
 // EVENT HANDLERS
 // ===============================
