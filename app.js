@@ -293,6 +293,39 @@ function bindEditorEvents() {
   }
 }
 
+// ===============================
+// START VIEW BUTTON FUNCTIONS
+// ===============================
+
+function avaaOhje() {
+  alert(
+`Painopisteen Ennustin
+
+1. Valitse lennokki taulukosta
+2. Paina › avataksesi
+3. + luo uusi
+4. ✏️ muokkaa
+5. ⧉ kopioi
+6. − poista
+
+Versio ` + APP_VERSION
+  );
+}
+
+function avaaLennokki() {
+  if (!state.valittuLennokkiId) {
+    alert("Valitse ensin lennokki taulukosta.");
+    return;
+  }
+
+  document.getElementById("startView").style.display = "none";
+  document.getElementById("appView").style.display = "block";
+
+  lataaOsat();
+  lataaYhteenveto();
+}
+
+
 
 // ===============================
 // INIT 
