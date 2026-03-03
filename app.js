@@ -347,18 +347,13 @@ function bindEditorEvents() {
 // ===============================
 
 function avaaOhje() {
-  alert(
-`Painopisteen Ennustin
+  document.getElementById("ohjeTeksti").innerHTML =
+    "<h2>Painopisteen Ennustin</h2><p>Ohje tulee tähän.</p>";
+  document.getElementById("ohjeModal").style.display = "block";
+}
 
-1. Valitse lennokki taulukosta
-2. Paina › avataksesi
-3. + luo uusi
-4. ✏️ muokkaa
-5. ⧉ kopioi
-6. − poista
-
-Versio ` + APP_VERSION
-  );
+function suljeOhje() {
+  document.getElementById("ohjeModal").style.display = "none";
 }
 
 function avaaLennokki() {
