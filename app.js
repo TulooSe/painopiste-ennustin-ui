@@ -265,17 +265,15 @@ function renderOsat() {
   }
 
   const table = document.createElement("table");
-  table.className = "osat-table";
 
   table.innerHTML = `
     <thead>
       <tr>
-        <th>Nro</th>
-        <th>Osa</th>
-        <th>Massa</th>
-        <th>Varsi</th>
-        <th>Kokoonpano</th>
-        <th>Ryhmä</th>
+        <th class="col-nro">Nro</th>
+        <th class="col-osa">Osa</th>
+        <th class="col-num">Massa</th>
+        <th class="col-num">Varsi</th>
+        <th class="col-kok">Kokoonpano</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -287,29 +285,22 @@ function renderOsat() {
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
-      <td>${o.osanro ?? ""}</td>
-      <td>${o.osa ?? ""}</td>
-      <td><input type="number" value="${o.massa ?? 0}" data-field="massa"></td>
-      <td><input type="number" value="${o.varsi ?? 0}" data-field="varsi"></td>
-      <td>${o.kokoonpano ?? ""}</td>
-      <td>${o.ryhma ?? ""}</td>
+      <td class="col-nro">${o.osanro ?? ""}</td>
+      <td class="col-osa">${o.osa ?? ""}</td>
+      <td class="col-num">
+        <input type="number" value="${o.massa ?? 0}">
+      </td>
+      <td class="col-num">
+        <input type="number" value="${o.varsi ?? 0}">
+      </td>
+      <td class="col-kok">${o.kokoonpano ?? ""}</td>
     `;
-
-    // Muutosten seuranta
-    tr.querySelectorAll("input").forEach(input => {
-      input.addEventListener("change", e => {
-        const field = e.target.dataset.field;
-        o[field] = Number(e.target.value);
-        o._dirty = true;
-      });
-    });
 
     tbody.appendChild(tr);
   });
 
   container.appendChild(table);
 }
-
 
 // ===============================
 // EVENT HANDLERS
