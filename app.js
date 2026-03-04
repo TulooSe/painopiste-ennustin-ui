@@ -178,6 +178,7 @@ async function loadLennokit() {
 
 
 async function lataaOsat() {
+  console.log("Ladataan osat ID:", state.valittuLennokkiId);
   try {
     const response = await API("haeOsatAktiiviselleLennokille", {
       lennokkiId: state.valittuLennokkiId
