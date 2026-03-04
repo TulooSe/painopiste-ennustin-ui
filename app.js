@@ -197,19 +197,44 @@ async function lataaYhteenveto() {
   try {
     const data = await API("haeYhteenvetoAktiiviselleLennokille", {
       lennokkiId: state.valittuLennokkiId
+    });
+
     if (!yhteenvetoView) return;
+
     if (!data || !data.length) {
       yhteenvetoView.innerHTML = "<p>Ei yhteenvetotietoja.</p>";
       return;
     }
-    let html = `<table><thead><tr><th>Kokoonpano</th><th class="col-num">Kokonaismassa</th><th class="col-num">Painopiste</th></tr></thead><tbody>`;
+
+    let html = `
+      <table>
+        <thead>
+          <tr>
+            <th>Kokoonpano</th>
+            <th class="col-num">Kokonaismassa</th>
+            <th class="col-num">Painopiste</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
     data.forEach(r => {
       const isYhteensa = r[0] === "Yhteensä";
-      html += `<tr class="${isYhteensa?'yhteensa':''}"><td>${r[0]}</td><td class="col-num">${r[1]}</td><td class="col-num">${Math.round(r[3]||0)}</td></tr>`;
+      html += `
+        <tr class="${isYhteensa ? 'yhteensa' : ''}">
+          <td>${r[0]}</td>
+          <td class="col-num">${r[1]}</td>
+          <td class="col-num">${Math.round(r[3] || 0)}</td>
+        </tr>
+      `;
     });
-    html += `</tbody></table>`;
+
+    html += "</tbody></table>";
     yhteenvetoView.innerHTML = html;
-  } catch (err) { alert("Yhteenveto-virhe: " + err); }
+
+  } catch (err) {
+    alert("Yhteenveto-virhe: " + err);
+  }
 }
 
 async function tallenna() {
