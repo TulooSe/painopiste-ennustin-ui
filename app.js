@@ -268,7 +268,9 @@ function renderStartTable() {
 
   state.lennokit.forEach(l => {
     const tr = document.createElement("tr");
-    tr.dataset.id = l.lennokkiId;
+    tr.dataset.id = l.id;
+    tr.onclick = () => {
+      state.valittuLennokkiId = l.id; };
     tr.innerHTML = `
       <td>${l.id}</td>
       <td>${l.massa ?? ""}</td>
@@ -279,7 +281,7 @@ function renderStartTable() {
       document.querySelectorAll("#startTableBody tr")
         .forEach(r => r.classList.remove("selected"));
       tr.classList.add("selected");
-      state.valittuLennokkiId = l.lennokkiId;
+      state.valittuLennokkiId = l.id;
     };
     body.appendChild(tr);
   });
