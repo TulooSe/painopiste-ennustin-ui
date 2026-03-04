@@ -361,8 +361,6 @@ function avaaLennokki() {
     alert("Valitse ensin lennokki taulukosta.");
     return;
   }
-
-  await lataaOsat(state.valittuLennokkiId);
   
   document.getElementById("startView").style.display = "none";
   document.getElementById("appView").style.display = "block";
