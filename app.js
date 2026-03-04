@@ -259,6 +259,7 @@ async function tallenna() {
 // ===============================
 
 function renderStartTable() {
+  console.log("Lennokit data:", state.lennokit);
   const body = document.getElementById("startTableBody");
   if (!body) return;
 
@@ -266,7 +267,7 @@ function renderStartTable() {
 
   state.lennokit.forEach(l => {
     const tr = document.createElement("tr");
-    tr.dataset.id = l.id;
+    tr.dataset.id = l.lennokkiId;
     tr.innerHTML = `
       <td>${l.id}</td>
       <td>${l.massa ?? ""}</td>
@@ -277,7 +278,7 @@ function renderStartTable() {
       document.querySelectorAll("#startTableBody tr")
         .forEach(r => r.classList.remove("selected"));
       tr.classList.add("selected");
-      state.valittuLennokkiId = l.id;
+      state.valittuLennokkiId = l.lennokkiId;
     };
     body.appendChild(tr);
   });
@@ -388,6 +389,13 @@ function avaaOhje() {
 
 function suljeOhje() {
   document.getElementById("ohjeModal").style.display = "none";
+}
+
+function scrollOhje(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function avaaLennokki() {
