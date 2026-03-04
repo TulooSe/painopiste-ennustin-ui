@@ -177,13 +177,17 @@ async function loadLennokit() {
 }
 
 
-
 async function lataaOsat() {
   try {
-    const response = await API("haeOsatAktiiviselleLennokille");
-    state.osat = response.osat;
-    state.kokoonpanot = response.kokoonpanot;
+    const response = await API("haeOsatAktiiviselleLennokille", {
+      lennokkiId: state.valittuLennokkiId
+    });
+
+    state.osat = response.osat || [];
+    state.kokoonpanot = response.kokoonpanot || [];
+
     renderOsat();
+
   } catch (err) {
     alert("Osien lataus epäonnistui: " + err);
   }
@@ -191,7 +195,8 @@ async function lataaOsat() {
 
 async function lataaYhteenveto() {
   try {
-    const data = await API("haeYhteenvetoAktiiviselleLennokille")
+    const data = await API("haeYhteenvetoAktiiviselleLennokille", {
+      lennokkiId: state.valittuLennokkiId
     if (!yhteenvetoView) return;
     if (!data || !data.length) {
       yhteenvetoView.innerHTML = "<p>Ei yhteenvetotietoja.</p>";
@@ -265,6 +270,7 @@ function renderOsat() {
   }
 
   const table = document.createElement("table");
+  table.id = "osatTable";
 
   table.innerHTML = `
     <thead>
@@ -347,9 +353,12 @@ function bindEditorEvents() {
 // ===============================
 
 function avaaOhje() {
-  document.getElementById("ohjeTeksti").innerHTML ="Painopiste_ohje"
-    "<h2>Painopisteen Ennustin</h2><p>Painopiste_ohje.html</p>";
-  document.getElementById("ohjeModal").style.display = "block";
+  fetch("Painopiste_ohje.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("ohjeTeksti").innerHTML = html;
+      document.getElementById("ohjeModal").style.display = "block";
+    });
 }
 
 function suljeOhje() {
