@@ -179,10 +179,13 @@ async function loadLennokit() {
 
 async function lataaOsat() {
   console.log("Ladataan osat ID:", state.valittuLennokkiId);
+
   try {
     const response = await API("haeOsatAktiiviselleLennokille", {
-      id: state.valittuLennokkiId
+      lennokkiId: state.valittuLennokkiId
     });
+
+    console.log("Backend vastaus:", response);   // 👈 LISÄÄ TÄMÄ
 
     state.osat = response.osat || [];
     state.kokoonpanot = response.kokoonpanot || [];
@@ -197,7 +200,7 @@ async function lataaOsat() {
 async function lataaYhteenveto() {
   try {
     const data = await API("haeYhteenvetoAktiiviselleLennokille", {
-      id: state.valittuLennokkiId
+     lennokkiId: state.valittuLennokkiId
     });
 
     if (!yhteenvetoView) return;
