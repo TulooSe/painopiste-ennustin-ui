@@ -181,7 +181,7 @@ async function lataaOsat() {
   console.log("Ladataan osat ID:", state.valittuLennokkiId);
   try {
     const response = await API("haeOsatAktiiviselleLennokille", {
-      l.id: state.valittuLennokkiId
+      id: state.valittuLennokkiId
     });
 
     state.osat = response.osat || [];
@@ -197,7 +197,7 @@ async function lataaOsat() {
 async function lataaYhteenveto() {
   try {
     const data = await API("haeYhteenvetoAktiiviselleLennokille", {
-      l.id: state.valittuLennokkiId
+      id: state.valittuLennokkiId
     });
 
     if (!yhteenvetoView) return;
