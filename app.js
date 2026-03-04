@@ -348,7 +348,7 @@ function bindEditorEvents() {
 
 function avaaOhje() {
   document.getElementById("ohjeTeksti").innerHTML =
-    "<h2>Painopisteen Ennustin</h2><p>Ohje tulee tähän.</p>";
+    "<h2>Painopisteen Ennustin</h2><p>Painopiste_ohje.html</p>";
   document.getElementById("ohjeModal").style.display = "block";
 }
 
