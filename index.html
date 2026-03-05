@@ -59,25 +59,29 @@ const API_BASE = "https://script.google.com/macros/s/AKfycbyR6Dj6c0J0hHe-6g0ZMnT
   <div class="app">
 
     <header class="topbar">
-      <div class="left">
-        <strong>Painopisteen Ennustin v<span id="appVersion2"></span></strong>
-      </div>
-      <div class="right">
-        <select id="lennokkiSelect"></select>
-      </div>
-    </header>
-    
-<button class="active" onclick="naytaOsat()">#</button>
-<button onclick="naytaYhteenveto()">Ʃ</button>
 
-    
-    <main>
-      <div id="osatView"></div>
-      <div id="yhteenvetoView" style="display:none;"></div>
-    </main>
+  <div class="left">
+    <div class="titlebar">
+      <strong class="title">
+        Painopisteen Ennustin v<span id="appVersion2"></span>
+      </strong>
+    </div>
 
+    <div class="nav">
+      <button class="back-btn" onclick="palaaAloitukseen()">‹</button>
+      <button class="active" onclick="naytaOsat()">#</button>
+      <button id="tallennaBtn" onclick="tallenna()">√</button>
+      <button onclick="naytaYhteenveto()">Ʃ</button>
+      <button class="help-btn" onclick="avaaOhje()">?</button>
+    </div>
   </div>
-</div>
+
+  <div class="right">
+    <select id="lennokkiSelect"
+            onchange="vaihdaLennokki(this.value)">
+    </select>
+  </div>
+</header>
 
 <div id="ohjeModal" class="modal">
   <div class="modal-content">
