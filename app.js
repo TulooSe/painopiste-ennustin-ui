@@ -181,7 +181,7 @@ async function lataaOsat() {
   console.log("Ladataan osat ID:", state.valittuLennokkiId);
 
   try {
-    const response = await API("haeOsatAktiiviselleLennokille", {
+    const response = await API("haeOsat", {
       lennokkiId: state.valittuLennokkiId
     });
 
@@ -199,7 +199,7 @@ async function lataaOsat() {
 
 async function lataaYhteenveto() {
   try {
-    const data = await API("haeYhteenvetoAktiiviselleLennokille", {
+    const data = await API("haeYhteenveto", {
      lennokkiId: state.valittuLennokkiId
     });
 
@@ -248,7 +248,7 @@ async function tallenna() {
   if (!muuttuneet.length) return;
   if (tallennaBtn) tallennaBtn.disabled = true;
   try {
-    await API("tallennaOsatAktiiviselleLennokille", { osat: muuttuneet });
+    await API("tallennaOsat", { osat: muuttuneet });
     muuttuneet.forEach(o => delete o._dirty);
     muutoksia = false;
     if (tallennaBtn) { tallennaBtn.disabled = false; tallennaBtn.classList.remove("unsaved"); }
