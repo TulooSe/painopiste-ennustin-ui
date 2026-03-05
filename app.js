@@ -184,22 +184,26 @@ async function avaaLennokki() {
     return;
   }
 
+  // 1 Aseta aktiivinen backendille
   await api({
     action: "asetaAktiivinen",
     id: state.valittuLennokkiId
   });
 
+  // 2 Vaihda näkymä
   document.getElementById("startView").style.display = "none";
   document.getElementById("appView").style.display = "block";
 
+  // 3 Päivitä dropdown
   await paivitaLennokkiLista();
 
+  // 4 Hae osat
   await loadOsat();
+
+  // 5 Piirrä osat
   renderOsat();
 
 }
-
-
 
 async function paivitaLennokkiLista() {
 
@@ -230,7 +234,6 @@ async function paivitaLennokkiLista() {
 
 
 async function vaihdaLennokki(id) {
-
   await api({
     action: "asetaAktiivinen",
     id: id
@@ -240,7 +243,6 @@ async function vaihdaLennokki(id) {
 
   await loadOsat();
   renderOsat();
-
 }
 
 
