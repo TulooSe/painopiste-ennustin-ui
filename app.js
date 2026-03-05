@@ -177,6 +177,73 @@ async function loadLennokit() {
 }
 
 
+async function avaaLennokki() {
+
+  if (!state.valittuLennokkiId) {
+    alert("Valitse lennokki");
+    return;
+  }
+
+  await api({
+    action: "asetaAktiivinen",
+    id: state.valittuLennokkiId
+  });
+
+  document.getElementById("startView").style.display = "none";
+  document.getElementById("appView").style.display = "block";
+
+  await paivitaLennokkiLista();
+
+  await loadOsat();
+  renderOsat();
+
+}
+
+
+
+async function paivitaLennokkiLista() {
+
+  const lista = await api({
+    action: "listaaLennokit"
+  });
+
+  const select = document.getElementById("lennokkiSelect");
+  if (!select) return;
+
+  select.innerHTML = "";
+
+  lista.forEach(l => {
+
+    const opt = document.createElement("option");
+    opt.value = l.id;
+    opt.textContent = l.id;
+
+    if (l.aktiivinen) {
+      opt.selected = true;
+    }
+
+    select.appendChild(opt);
+
+  });
+
+}
+
+
+async function vaihdaLennokki(id) {
+
+  await api({
+    action: "asetaAktiivinen",
+    id: id
+  });
+
+  state.valittuLennokkiId = id;
+
+  await loadOsat();
+  renderOsat();
+
+}
+
+
 async function lataaOsat() {
   console.log("Ladataan osat ID:", state.valittuLennokkiId);
 
@@ -196,6 +263,14 @@ async function lataaOsat() {
     alert("Osien lataus epäonnistui: " + err);
   }
 }
+
+function naytaOsat() {
+
+  document.getElementById("osatView").style.display = "block";
+  document.getElementById("yhteenvetoView").style.display = "none";
+
+}
+
 
 async function lataaYhteenveto() {
   try {
@@ -241,6 +316,7 @@ async function lataaYhteenveto() {
   }
 }
 
+
 async function tallenna() {
   const virhe = state.osat.find(o => Number(o.massa) < 0);
   if (virhe) { alert("Massa ei voi olla negatiivinen.\n\nOsa: " + virhe.osa); return; }
@@ -257,6 +333,44 @@ async function tallenna() {
     if (tallennaBtn) tallennaBtn.disabled = false;
   }
 }
+
+async function naytaYhteenveto() {
+
+  const data = await api({
+    action: "haeYhteenveto"
+  });
+
+  const view = document.getElementById("yhteenvetoView");
+
+  view.style.display = "block";
+  document.getElementById("osatView").style.display = "none";
+
+  if (!data.length) {
+    view.innerHTML = "<p>Ei tietoja</p>";
+    return;
+  }
+
+  let html = "<table class='summary'>";
+
+  data.forEach(r => {
+
+    html += `
+      <tr>
+        <td>${r[0]}</td>
+        <td>${r[1]}</td>
+        <td>${r[2]}</td>
+        <td>${r[3]}</td>
+      </tr>
+    `;
+
+  });
+
+  html += "</table>";
+
+  view.innerHTML = html;
+
+}
+
 
 // ===============================
 // RENDER LOGIIKKA
