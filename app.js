@@ -185,7 +185,7 @@ async function avaaLennokki() {
   }
 
   // 1 Aseta aktiivinen backendille
-  await api({
+  await API({
     action: "asetaAktiivinen",
     id: state.valittuLennokkiId
   });
@@ -198,7 +198,7 @@ async function avaaLennokki() {
   await paivitaLennokkiLista();
 
   // 4 Hae osat
-  await loadOsat();
+  await lataaOsat();
 
   // 5 Piirrä osat
   renderOsat();
@@ -207,7 +207,7 @@ async function avaaLennokki() {
 
 async function paivitaLennokkiLista() {
 
-  const lista = await api({
+  const lista = await API({
     action: "listaaLennokit"
   });
 
@@ -234,14 +234,14 @@ async function paivitaLennokkiLista() {
 
 
 async function vaihdaLennokki(id) {
-  await api({
+  await API({
     action: "asetaAktiivinen",
     id: id
   });
 
   state.valittuLennokkiId = id;
 
-  await loadOsat();
+  await lataaOsat();
   renderOsat();
 }
 
@@ -338,7 +338,7 @@ async function tallenna() {
 
 async function naytaYhteenveto() {
 
-  const data = await api({
+  const data = await API({
     action: "haeYhteenveto"
   });
 
