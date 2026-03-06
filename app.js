@@ -207,9 +207,10 @@ async function avaaLennokki() {
 
 async function paivitaLennokkiLista() {
 
-  const lista = await API({
-    action: "listaaLennokit"
-  });
+  const vastaus = await API("listaaLennokit");
+  const lista = vastaus.lennokit;
+
+  console.log("Lennokit data:", lista);
 
   const select = document.getElementById("lennokkiSelect");
   if (!select) return;
@@ -222,9 +223,7 @@ async function paivitaLennokkiLista() {
     opt.value = l.id;
     opt.textContent = l.id;
 
-    if (l.aktiivinen) {
-      opt.selected = true;
-    }
+    if (l.aktiivinen) opt.selected = true;
 
     select.appendChild(opt);
 
@@ -298,7 +297,9 @@ async function lataaYhteenveto() {
         </thead>
         <tbody>
     `;
-
+    
+    console.log("API vastaus:", vastaus);
+    
     data.forEach(r => {
       const isYhteensa = r[0] === "Yhteensä";
       html += `
