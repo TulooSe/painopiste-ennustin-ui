@@ -520,20 +520,6 @@ function scrollOhje(id) {
   }
 }
 
-function avaaLennokki() {
-  if (!state.valittuLennokkiId) {
-    alert("Valitse ensin lennokki taulukosta.");
-    return;
-  }
-  
-  document.getElementById("startView").style.display = "none";
-  document.getElementById("appView").style.display = "block";
-
-  lataaOsat();
-  lataaYhteenveto();
-}
-
-
 
 // ===============================
 // INIT 
