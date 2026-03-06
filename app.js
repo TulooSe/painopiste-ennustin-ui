@@ -1,7 +1,7 @@
 // ===============================
 // LOGIN.JS – Selainpohjainen kirjautuminen
 // ===============================
-
+/*
 const LOGIN_STORAGE_KEY = "pp_user_email";
 const LOGIN_REMEMBER_KEY = "pp_user_remember";
 
@@ -556,5 +556,235 @@ document.addEventListener("userLoggedIn", () => {
   console.log("Käyttäjä kirjautunut:", Auth.getUser());
   init();
 });
+*/
+
+// UUSI APP
+
+// ===============================
+// STATE – Sovelluksen tila
+// ===============================
+
+const state = {
+  view: "start",               // start | editor
+  lennokit: [],
+  valittuLennokkiId: null,
+  osat: [],
+  aktiivinenRyhma: null,
+  suodataNollat: false,
+  kokoonpanot: [],
+  uusiLennokki: { nimi: "", malli: "RAKENTEILLA" }
+}
+
+
+// ===============================
+// SOVELLUS KÄYNNISTYS
+// ===============================
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  console.log("Sovellus käynnistyy")
+
+  await haeLennokit()
+
+  naytaAloitus()
+
+})
+
+
+// ===============================
+// BACKEND KUTSU
+// ===============================
+
+async function backend(action, data = {}) {
+
+  const payload = {
+    action: action,
+    ...data
+  }
+
+  const res = await fetch(scriptURL, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  })
+
+  return await res.json()
+
+}
+
+
+// ===============================
+// HAE LENNNOKIT
+// ===============================
+
+async function haeLennokit() {
+
+  const vastaus = await backend("haeLennokit")
+
+  console.log("Lennokit data:", vastaus)
+
+  if (Array.isArray(vastaus)) {
+    state.lennokit = vastaus
+  } else {
+    state.lennokit = []
+  }
+
+}
+
+
+// ===============================
+// ALOITUSNÄKYMÄ
+// ===============================
+
+function naytaAloitus() {
+
+  state.view = "start"
+
+  document.getElementById("editor").style.display = "none"
+  document.getElementById("start").style.display = "block"
+
+  paivitaAloitusTaulukko()
+
+}
+
+
+// ===============================
+// ALOITUSTAULUKKO
+// ===============================
+
+function paivitaAloitusTaulukko() {
+
+  const tbody = document.getElementById("lennokkiLista")
+  tbody.innerHTML = ""
+
+  state.lennokit.forEach(lennokki => {
+
+    const tr = document.createElement("tr")
+
+    tr.innerHTML = `
+      <td>${lennokki.nimi}</td>
+      <td>${lennokki.malli}</td>
+      <td>
+        <button onclick="avaaLennokki('${lennokki.id}')">
+        Avaa
+        </button>
+      </td>
+    `
+
+    tbody.appendChild(tr)
+
+  })
+
+}
+
+
+// ===============================
+// AVAA LENNNOKKI
+// ===============================
+
+async function avaaLennokki(id) {
+
+  console.log("Avataan lennokki:", id)
+
+  state.valittuLennokkiId = id
+
+  await haeOsat()
+
+  naytaEditor()
+
+}
+
+
+// ===============================
+// HAE OSAT
+// ===============================
+
+async function haeOsat() {
+
+  if (!state.valittuLennokkiId) return
+
+  console.log("Ladataan osat ID:", state.valittuLennokkiId)
+
+  const vastaus = await backend(
+    "haeOsatAktiiviselleLennokille",
+    { lennokkiId: state.valittuLennokkiId }
+  )
+
+  console.log("Backend vastaus:", vastaus)
+
+  if (Array.isArray(vastaus)) {
+    state.osat = vastaus
+  } else {
+    state.osat = []
+  }
+
+}
+
+
+// ===============================
+// EDITORIN NÄYTTÖ
+// ===============================
+
+function naytaEditor() {
+
+  state.view = "editor"
+
+  document.getElementById("start").style.display = "none"
+  document.getElementById("editor").style.display = "block"
+
+  paivitaOsatTaulukko()
+
+}
+
+
+// ===============================
+// OSATAULUKKO
+// ===============================
+
+function paivitaOsatTaulukko() {
+
+  const tbody = document.getElementById("osatLista")
+  tbody.innerHTML = ""
+
+  if (!Array.isArray(state.osat) || state.osat.length === 0) {
+
+    const tr = document.createElement("tr")
+    tr.innerHTML = `<td colspan="6">Ei osia</td>`
+
+    tbody.appendChild(tr)
+    return
+  }
+
+  state.osat.forEach(osa => {
+
+    const tr = document.createElement("tr")
+
+    tr.innerHTML = `
+      <td>${osa.osanro}</td>
+      <td>${osa.osa}</td>
+      <td>${osa.massa}</td>
+      <td>${osa.varsi}</td>
+      <td>${osa.momentti}</td>
+      <td>${osa.group}</td>
+    `
+
+    tbody.appendChild(tr)
+
+  })
+
+}
+
+
+// ===============================
+// PALAA ALOITUKSEEN
+// ===============================
+
+function takaisin() {
+
+  state.valittuLennokkiId = null
+  state.osat = []
+
+  naytaAloitus()
+
+}
 
 
