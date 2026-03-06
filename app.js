@@ -185,9 +185,8 @@ async function avaaLennokki() {
   }
 
   // 1 Aseta aktiivinen backendille
-  await API({
-    action: "asetaAktiivinen",
-    id: state.valittuLennokkiId
+  await API("asetaAktiivinen", {
+  id: state.valittuLennokkiId
   });
 
   // 2 Vaihda näkymä
@@ -196,7 +195,10 @@ async function avaaLennokki() {
 
   // 3 Päivitä dropdown
   await paivitaLennokkiLista();
-
+  select.onchange = (e) => {
+  vaihdaLennokki(e.target.value);
+  };
+  
   // 4 Hae osat
   await lataaOsat();
 
@@ -208,9 +210,7 @@ async function avaaLennokki() {
 async function paivitaLennokkiLista() {
 
   const vastaus = await API("listaaLennokit");
-  const lista = vastaus.lennokit;
-
-  console.log("Lennokit data:", lista);
+  const lista = vastaus.lennokit || [];
 
   const select = document.getElementById("lennokkiSelect");
   if (!select) return;
@@ -228,6 +228,10 @@ async function paivitaLennokkiLista() {
     select.appendChild(opt);
 
   });
+
+  select.onchange = (e) => {
+    vaihdaLennokki(e.target.value);
+  };
 
 }
 
@@ -298,7 +302,6 @@ async function lataaYhteenveto() {
         <tbody>
     `;
     
-    console.log("API vastaus:", vastaus);
     
     data.forEach(r => {
       const isYhteensa = r[0] === "Yhteensä";
