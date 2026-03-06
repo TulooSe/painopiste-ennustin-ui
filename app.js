@@ -565,226 +565,221 @@ document.addEventListener("userLoggedIn", () => {
 // ===============================
 
 const state = {
-  view: "start",               // start | editor
+  view: "start",
   lennokit: [],
   valittuLennokkiId: null,
   osat: [],
-  aktiivinenRyhma: null,
-  suodataNollat: false,
-  kokoonpanot: [],
-  uusiLennokki: { nimi: "", malli: "RAKENTEILLA" }
-}
+  user: null
+};
+
 
 
 // ===============================
-// SOVELLUS KÄYNNISTYS
+// SOVELLUKSEN KÄYNNISTYS
 // ===============================
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-  console.log("Sovellus käynnistyy")
+  console.log("Sovellus käynnistyy");
 
-  await haeLennokit()
+  await haeKayttaja();
+  await haeLennokit();
 
-  naytaAloitus()
+});
 
-})
 
 
 // ===============================
-// BACKEND KUTSU
+// KÄYTTÄJÄ
 // ===============================
 
-async function backend(action, data = {}) {
+async function haeKayttaja() {
 
-  const payload = {
-    action: action,
-    ...data
-  }
+  const res = await fetch("?action=haeKayttaja");
+  const data = await res.json();
 
-  const res = await fetch(scriptURL, {
-    method: "POST",
-    body: JSON.stringify(payload)
-  })
+  state.user = data.email;
 
-  return await res.json()
+  console.log("Käyttäjä kirjautunut:", state.user);
 
 }
 
 
+
 // ===============================
-// HAE LENNNOKIT
+// LENNOKIT
 // ===============================
 
 async function haeLennokit() {
 
-  const vastaus = await backend("haeLennokit")
+  const res = await fetch("?action=haeLennokit");
+  const data = await res.json();
 
-  console.log("Lennokit data:", vastaus)
+  console.log("Lennokit data:", data);
 
-  if (Array.isArray(vastaus)) {
-    state.lennokit = vastaus
-  } else {
-    state.lennokit = []
+  if (!Array.isArray(data)) {
+    console.error("Lennokit ei ole lista:", data);
+    return;
   }
 
-}
+  state.lennokit = data;
 
-
-// ===============================
-// ALOITUSNÄKYMÄ
-// ===============================
-
-function naytaAloitus() {
-
-  state.view = "start"
-
-  document.getElementById("editor").style.display = "none"
-  document.getElementById("start").style.display = "block"
-
-  paivitaAloitusTaulukko()
+  piirraLennokkiLista();
 
 }
 
 
-// ===============================
-// ALOITUSTAULUKKO
-// ===============================
 
-function paivitaAloitusTaulukko() {
+function piirraLennokkiLista() {
 
-  const tbody = document.getElementById("lennokkiLista")
-  tbody.innerHTML = ""
+  const lista = document.getElementById("lennokkiLista");
+
+  if (!lista) return;
+
+  lista.innerHTML = "";
 
   state.lennokit.forEach(lennokki => {
 
-    const tr = document.createElement("tr")
+    const btn = document.createElement("button");
 
-    tr.innerHTML = `
-      <td>${lennokki.nimi}</td>
-      <td>${lennokki.malli}</td>
-      <td>
-        <button onclick="avaaLennokki('${lennokki.id}')">
-        Avaa
-        </button>
-      </td>
-    `
+    btn.textContent = lennokki.Nimi;
 
-    tbody.appendChild(tr)
+    btn.onclick = () => avaaLennokki(lennokki["Lennokki-ID"]);
 
-  })
+    lista.appendChild(btn);
+
+  });
 
 }
 
 
+
 // ===============================
-// AVAA LENNNOKKI
+// LENNON AVAUS
 // ===============================
 
-async function avaaLennokki(id) {
+async function avaaLennokki(lennokkiId) {
 
-  console.log("Avataan lennokki:", id)
+  console.log("Avataan lennokki:", lennokkiId);
 
-  state.valittuLennokkiId = id
+  state.valittuLennokkiId = lennokkiId;
 
-  await haeOsat()
+  await haeOsat();
 
-  naytaEditor()
+  naytaOsatNakyma();
 
 }
 
 
+
 // ===============================
-// HAE OSAT
+// OSIEN HAKU
 // ===============================
 
 async function haeOsat() {
 
-  if (!state.valittuLennokkiId) return
-
-  console.log("Ladataan osat ID:", state.valittuLennokkiId)
-
-  const vastaus = await backend(
-    "haeOsatAktiiviselleLennokille",
-    { lennokkiId: state.valittuLennokkiId }
-  )
-
-  console.log("Backend vastaus:", vastaus)
-
-  if (Array.isArray(vastaus)) {
-    state.osat = vastaus
-  } else {
-    state.osat = []
+  if (!state.valittuLennokkiId) {
+    console.error("Lennokki ID puuttuu");
+    return;
   }
 
+  console.log("Ladataan osat ID:", state.valittuLennokkiId);
+
+  const res = await fetch(
+    `?action=haeOsatAktiiviselleLennokille&lennokkiId=${state.valittuLennokkiId}`
+  );
+
+  const data = await res.json();
+
+  console.log("Backend vastaus:", data);
+
+  if (data.error) {
+    console.error(data.error);
+    return;
+  }
+
+  if (!Array.isArray(data)) {
+    console.error("Osat eivät ole lista:", data);
+    return;
+  }
+
+  state.osat = data;
+
+  piirraOsat();
+
 }
 
 
-// ===============================
-// EDITORIN NÄYTTÖ
-// ===============================
-
-function naytaEditor() {
-
-  state.view = "editor"
-
-  document.getElementById("start").style.display = "none"
-  document.getElementById("editor").style.display = "block"
-
-  paivitaOsatTaulukko()
-
-}
-
 
 // ===============================
-// OSATAULUKKO
+// OSIEN PIIRTO
 // ===============================
 
-function paivitaOsatTaulukko() {
+function piirraOsat() {
 
-  const tbody = document.getElementById("osatLista")
-  tbody.innerHTML = ""
+  const taulu = document.getElementById("osatTaulu");
 
-  if (!Array.isArray(state.osat) || state.osat.length === 0) {
+  if (!taulu) return;
 
-    const tr = document.createElement("tr")
-    tr.innerHTML = `<td colspan="6">Ei osia</td>`
+  taulu.innerHTML = "";
 
-    tbody.appendChild(tr)
-    return
+  if (state.osat.length === 0) {
+
+    taulu.innerHTML = "<tr><td>Ei osia</td></tr>";
+    return;
+
   }
 
   state.osat.forEach(osa => {
 
-    const tr = document.createElement("tr")
+    const rivi = document.createElement("tr");
 
-    tr.innerHTML = `
-      <td>${osa.osanro}</td>
-      <td>${osa.osa}</td>
-      <td>${osa.massa}</td>
-      <td>${osa.varsi}</td>
-      <td>${osa.momentti}</td>
-      <td>${osa.group}</td>
-    `
+    rivi.innerHTML = `
+      <td>${osa["Osanro"] || ""}</td>
+      <td>${osa["Osa"] || ""}</td>
+      <td>${osa["Massa"] || ""}</td>
+      <td>${osa["Varsi"] || ""}</td>
+      <td>${osa["Momentti"] || ""}</td>
+      <td>${osa["Kokoonpano"] || ""}</td>
+    `;
 
-    tbody.appendChild(tr)
+    taulu.appendChild(rivi);
 
-  })
-
-}
-
-
-// ===============================
-// PALAA ALOITUKSEEN
-// ===============================
-
-function takaisin() {
-
-  state.valittuLennokkiId = null
-  state.osat = []
-
-  naytaAloitus()
+  });
 
 }
 
 
+
+// ===============================
+// NÄKYMÄT
+// ===============================
+
+function naytaOsatNakyma() {
+
+  const start = document.getElementById("startView");
+  const editor = document.getElementById("editorView");
+
+  if (start) start.style.display = "none";
+  if (editor) editor.style.display = "block";
+
+}
+
+
+
+// ===============================
+// OHJE
+// ===============================
+
+function avaaOhje() {
+
+  const ohje = document.getElementById("ohje");
+
+  if (!ohje) return;
+
+  if (ohje.style.display === "block")
+    ohje.style.display = "none";
+  else
+    ohje.style.display = "block";
+
+}
