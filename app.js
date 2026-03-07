@@ -138,11 +138,15 @@ let muutoksia = false;
 
 
 async function API(action, payload = {}) {
+
   const user = Auth.getUser();
   if (!user) throw new Error("Käyttäjä ei ole kirjautunut");
 
   const response = await fetch(API_BASE, {
     method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
     body: JSON.stringify({
       action: action,
       userId: user,
@@ -154,7 +158,13 @@ async function API(action, payload = {}) {
     throw new Error("HTTP " + response.status);
   }
 
-  return await response.json();
+  const data = await response.json();
+
+  if (data.error) {
+    throw new Error(data.error);
+  }
+
+  return data;
 }
 
 
