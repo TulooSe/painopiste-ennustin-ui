@@ -1,7 +1,7 @@
 // ===============================
 // LOGIN.JS – Selainpohjainen kirjautuminen
 // ===============================
-/*
+
 const LOGIN_STORAGE_KEY = "pp_user_email";
 const LOGIN_REMEMBER_KEY = "pp_user_remember";
 
@@ -209,9 +209,12 @@ async function avaaLennokki() {
 
 async function paivitaLennokkiLista() {
 
-  const vastaus = await API("listaaLennokit");
-  const lista = vastaus.lennokit || [];
+const vastaus = await API("listaaLennokit");
 
+  const lista = Array.isArray(vastaus)
+    ? vastaus
+    : (vastaus.lennokit || []);
+  
   const select = document.getElementById("lennokkiSelect");
   if (!select) return;
 
@@ -237,8 +240,7 @@ async function paivitaLennokkiLista() {
 
 
 async function vaihdaLennokki(id) {
-  await API({
-    action: "asetaAktiivinen",
+  await API({"asetaAktiivinen",
     id: id
   });
 
@@ -253,10 +255,7 @@ async function lataaOsat() {
   console.log("Ladataan osat ID:", state.valittuLennokkiId);
 
   try {
-    const response = await API("haeOsat", {
-      lennokkiId: state.valittuLennokkiId
-    });
-
+    const response = await API("haeOsatAktiiviselleLennokille"); 
     console.log("Backend vastaus:", response);   // 👈 LISÄÄ TÄMÄ
 
     state.osat = response.osat || [];
@@ -383,6 +382,10 @@ async function naytaYhteenveto() {
 // ===============================
 
 function renderStartTable() {
+  if (!Array.isArray(state.lennokit)) {
+  console.error("Lennokit ei ole array", state.lennokit);
+  return;
+  }
   console.log("Lennokit data:", state.lennokit);
   const body = document.getElementById("startTableBody");
   if (!body) return;
@@ -556,275 +559,3 @@ document.addEventListener("userLoggedIn", () => {
   console.log("Käyttäjä kirjautunut:", Auth.getUser());
   init();
 });
-*/
-
-// UUSI APP 7.3.2026 klo 19:45
-
-// ===============================
-// APP VERSION
-// ===============================
-
-const APP_VERSION = "1.50";
-
-
-// ===============================
-// STATE
-// ===============================
-
-const state = {
-  lennokit: [],
-  valittuLennokkiId: null,
-  osat: [],
-  kokoonpanot: []
-};
-
-
-
-// ===============================
-// GENERIC API
-// ===============================
-
-async function API(action, payload = {}) {
-
-  const res = await fetch("", {
-    method: "POST",
-    body: JSON.stringify({
-      action: action,
-      ...payload
-    })
-  });
-
-  if (!res.ok) {
-    throw new Error("HTTP " + res.status);
-  }
-
-  return await res.json();
-}
-
-
-
-// ===============================
-// INIT
-// ===============================
-
-document.addEventListener("DOMContentLoaded", init);
-
-async function init() {
-
-  console.log("Sovellus käynnistyy");
-
-  document.getElementById("startView").style.display = "block";
-  document.getElementById("appView").style.display = "none";
-
-  await loadLennokit();
-
-}
-
-
-
-// ===============================
-// LENNOKIT
-// ===============================
-
-async function loadLennokit() {
-
-  try {
-
-    const data = await API("haeLennokitAloitukseen");
-
-    console.log("Lennokit data:", data);
-
-    state.lennokit = Array.isArray(data) ? data : [];
-
-    renderStartTable();
-
-  } catch (err) {
-
-    console.error("Lennokkien lataus epäonnistui", err);
-
-  }
-
-}
-
-
-
-function renderStartTable() {
-
-  const body = document.getElementById("startTableBody");
-
-  if (!body) return;
-
-  body.innerHTML = "";
-
-  state.lennokit.forEach(l => {
-
-    const tr = document.createElement("tr");
-
-    tr.dataset.id = l.id;
-
-    tr.innerHTML = `
-      <td>${l.id}</td>
-      <td>${l.massa ?? ""}</td>
-      <td>${l.pp ?? ""}</td>
-      <td>${l.pvm ?? ""}</td>
-    `;
-
-    tr.onclick = () => {
-
-      document.querySelectorAll("#startTableBody tr")
-        .forEach(r => r.classList.remove("selected"));
-
-      tr.classList.add("selected");
-
-      state.valittuLennokkiId = l.id;
-
-    };
-
-    body.appendChild(tr);
-
-  });
-
-}
-
-
-
-// ===============================
-// AVAA LENNOKKI
-// ===============================
-
-async function avaaLennokki() {
-
-  if (!state.valittuLennokkiId) {
-
-    alert("Valitse lennokki");
-
-    return;
-
-  }
-
-  console.log("Avataan lennokki:", state.valittuLennokkiId);
-
-  await API("asetaAktiivinen", {
-    id: state.valittuLennokkiId
-  });
-
-  document.getElementById("startView").style.display = "none";
-  document.getElementById("appView").style.display = "block";
-
-  await lataaOsat();
-
-}
-
-
-
-// ===============================
-// OSAT
-// ===============================
-
-async function lataaOsat() {
-
-  console.log("Ladataan osat...");
-
-  try {
-
-    const data = await API("haeOsatAktiiviselleLennokille");
-
-    console.log("Backend vastaus:", data);
-
-    state.osat = data.osat || [];
-    state.kokoonpanot = data.kokoonpanot || [];
-
-    renderOsat();
-
-  } catch (err) {
-
-    console.error("Osien lataus epäonnistui", err);
-
-  }
-
-}
-
-
-
-// ===============================
-// RENDER OSAT
-// ===============================
-
-function renderOsat() {
-
-  const container = document.getElementById("osatView");
-
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  if (!state.osat.length) {
-
-    container.innerHTML = "<p>Ei osia.</p>";
-
-    return;
-
-  }
-
-  const table = document.createElement("table");
-
-  table.innerHTML = `
-    <thead>
-      <tr>
-        <th>Nro</th>
-        <th>Osa</th>
-        <th>Massa</th>
-        <th>Varsi</th>
-        <th>Kokoonpano</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  `;
-
-  const tbody = table.querySelector("tbody");
-
-  state.osat.forEach(o => {
-
-    const tr = document.createElement("tr");
-
-    tr.innerHTML = `
-      <td>${o.osanro ?? ""}</td>
-      <td>${o.osa ?? ""}</td>
-      <td>${o.massa ?? ""}</td>
-      <td>${o.varsi ?? ""}</td>
-      <td>${o.kokoonpano ?? ""}</td>
-    `;
-
-    tbody.appendChild(tr);
-
-  });
-
-  container.appendChild(table);
-
-}
-
-
-// ===============================
-// OHJE
-// ===============================
-
-function avaaOhje() {
-
-  fetch("Painopiste_ohje.html")
-    .then(r => r.text())
-    .then(html => {
-
-      document.getElementById("ohjeTeksti").innerHTML = html;
-      document.getElementById("ohjeModal").style.display = "block";
-
-    });
-
-}
-
-
-function suljeOhje() {
-
-  document.getElementById("ohjeModal").style.display = "none";
-
-}
-
