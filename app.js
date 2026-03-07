@@ -676,37 +676,28 @@ async function avaaLennokki(lennokkiId) {
 // OSIEN HAKU
 // ===============================
 
-async function haeOsat() {
+async function lataaOsat() {
 
-  if (!state.valittuLennokkiId) {
-    console.error("Lennokki ID puuttuu");
-    return;
-  }
+  console.log("Ladataan osat...");
 
-  console.log("Ladataan osat ID:", state.valittuLennokkiId);
-
-  const res = await fetch(
-    `?action=haeOsatAktiiviselleLennokille&lennokkiId=${state.valittuLennokkiId}`
-  );
-
-  const data = await res.json();
+  const data = await API("haeOsatAktiiviselleLennokille");
 
   console.log("Backend vastaus:", data);
 
-  if (data.error) {
-    console.error(data.error);
+  if (!data) {
+    console.error("Backend ei palauttanut dataa");
     return;
   }
 
-  if (!Array.isArray(data)) {
-    console.error("Osat eivät ole lista:", data);
-    return;
-  }
+  // Backend palauttaa objektin
+  state.osat = Array.isArray(data.osat) ? data.osat : [];
+  state.kokoonpanot = Array.isArray(data.kokoonpanot) ? data.kokoonpanot : [];
 
-  state.osat = data;
+  console.log("Osia ladattu:", state.osat.length);
+  console.log("Kokoonpanoja:", state.kokoonpanot.length);
 
-  piirraOsat();
-
+  renderOsat();
+  paivitaKokoonpanoLista();
 }
 
 
