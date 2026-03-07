@@ -195,9 +195,6 @@ async function avaaLennokki() {
 
   // 3 Päivitä dropdown
   await paivitaLennokkiLista();
-  select.onchange = (e) => {
-  vaihdaLennokki(e.target.value);
-  };
   
   // 4 Hae osat
   await lataaOsat();
@@ -209,12 +206,12 @@ async function avaaLennokki() {
 
 async function paivitaLennokkiLista() {
 
-const vastaus = await API("listaaLennokit");
+  const vastaus = await API("listaaLennokit");
 
   const lista = Array.isArray(vastaus)
     ? vastaus
-    : (vastaus.lennokit || []);
-  
+    : (vastaus?.lennokit || []);
+
   const select = document.getElementById("lennokkiSelect");
   if (!select) return;
 
@@ -223,6 +220,7 @@ const vastaus = await API("listaaLennokit");
   lista.forEach(l => {
 
     const opt = document.createElement("option");
+
     opt.value = l.id;
     opt.textContent = l.id;
 
@@ -234,13 +232,12 @@ const vastaus = await API("listaaLennokit");
 
   select.onchange = (e) => {
     vaihdaLennokki(e.target.value);
-  }
-
+  };
 }
 
 
 async function vaihdaLennokki(id) {
-  await API({"asetaAktiivinen",
+  await API({"asetaAktiivinen", {
     id: id
   });
 
