@@ -234,7 +234,7 @@ const vastaus = await API("listaaLennokit");
 
   select.onchange = (e) => {
     vaihdaLennokki(e.target.value);
-  };
+  }
 
 }
 
