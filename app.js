@@ -469,10 +469,10 @@ function renderOsat() {
 
     tbody.appendChild(tr);
   });
-
+  console.log("HTML kirjoitettu:", html);
   container.appendChild(table);
 }
-console.log("HTML kirjoitettu:", html);
+
 
 // ===============================
 // EVENT HANDLERS
