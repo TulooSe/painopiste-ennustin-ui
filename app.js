@@ -423,6 +423,7 @@ function renderStartTable() {
 }
 
 function renderOsat() {
+  console.log("Renderöidään osat:", state.osat);
   const container = document.getElementById("osatView");
   if (!container) return;
 
@@ -471,6 +472,7 @@ function renderOsat() {
 
   container.appendChild(table);
 }
+console.log("HTML kirjoitettu:", html);
 
 // ===============================
 // EVENT HANDLERS
