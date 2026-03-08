@@ -60,30 +60,33 @@ const API_BASE = "https://script.google.com/macros/s/AKfycbyR6Dj6c0J0hHe-6g0ZMnT
 
     <header class="topbar">
 
-  <div class="left">
-    <div class="titlebar">
-      <strong class="title">
-        Painopisteen Ennustin v<span id="appVersion2"></span>
-      </strong>
+    <div class="left">
+      <div class="titlebar">
+        <strong class="title">
+          Painopisteen Ennustin v<span id="appVersion2"></span>
+        </strong>
+      </div>
+  
+      <div class="nav">
+        <button class="back-btn" onclick="palaaAloitukseen()">‹</button>
+        <button class="active" onclick="naytaOsat()">#</button>
+        <button id="suodatusBtn" onclick="vaihdaSuodatus()">Ø</button>      
+        <button id="tallennaBtn" onclick="tallenna()">√</button>
+        <button onclick="naytaYhteenveto()">Ʃ</button>
+        <button class="help-btn" onclick="avaaOhje()">?</button>
+      </div>
     </div>
-
-    <div class="nav">
-      <button class="back-btn" onclick="palaaAloitukseen()">‹</button>
-      <button class="active" onclick="naytaOsat()">#</button>
-      <button id="suodatusBtn" onclick="vaihdaSuodatus()">Ø</button>      
-      <button id="tallennaBtn" onclick="tallenna()">√</button>
-      <button onclick="naytaYhteenveto()">Ʃ</button>
-      <button class="help-btn" onclick="avaaOhje()">?</button>
+  
+    <div class="right">
+      <select id="lennokkiSelect"
+              onchange="vaihdaLennokki(this.value)">
+      </select>
     </div>
-  </div>
+  </header>
+  <div id="osatView"></div>
 
-  <div class="right">
-    <select id="lennokkiSelect"
-            onchange="vaihdaLennokki(this.value)">
-    </select>
   </div>
-</header>
-
+</div>
 <div id="ohjeModal" class="modal">
   <div class="modal-content">
     <span onclick="suljeOhje()" class="close">&times;</span>
