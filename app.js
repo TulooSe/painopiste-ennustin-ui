@@ -261,11 +261,14 @@ async function vaihdaLennokki(id) {
 
 
 async function lataaOsat() {
+
   console.log("Ladataan osat ID:", state.valittuLennokkiId);
 
   try {
-    const response = await API("haeOsatAktiiviselleLennokille"); 
-    console.log("Backend vastaus:", response);   // 👈 LISÄÄ TÄMÄ
+
+    const response = await API("haeOsat");
+
+    console.log("Backend vastaus:", response);
 
     state.osat = response.osat || [];
     state.kokoonpanot = response.kokoonpanot || [];
@@ -273,8 +276,11 @@ async function lataaOsat() {
     renderOsat();
 
   } catch (err) {
+
     alert("Osien lataus epäonnistui: " + err);
+
   }
+
 }
 
 function naytaOsat() {
@@ -350,10 +356,7 @@ async function tallenna() {
 
 async function naytaYhteenveto() {
 
-  const data = await API({
-    action: "haeYhteenveto"
-  });
-
+  const data = await API("haeYhteenveto");
   const view = document.getElementById("yhteenvetoView");
 
   view.style.display = "block";
@@ -376,13 +379,10 @@ async function naytaYhteenveto() {
         <td>${r[3]}</td>
       </tr>
     `;
-
   });
 
   html += "</table>";
-
   view.innerHTML = html;
-
 }
 
 
