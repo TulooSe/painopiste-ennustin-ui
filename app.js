@@ -423,13 +423,17 @@ function renderStartTable() {
 }
 
 function renderOsat() {
-  console.log("Renderöidään osat:", state.osat);
+
   const container = document.getElementById("osatView");
-  if (!container) return;
+
+  if (!container) {
+    console.error("osatView puuttuu HTML:stä");
+    return;
+  }
 
   container.innerHTML = "";
 
-  if (!state.osat || !state.osat.length) {
+  if (!state.osat || state.osat.length === 0) {
     container.innerHTML = "<p>Ei osia.</p>";
     return;
   }
@@ -453,6 +457,7 @@ function renderOsat() {
   const tbody = table.querySelector("tbody");
 
   state.osat.forEach(o => {
+
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
@@ -468,11 +473,12 @@ function renderOsat() {
     `;
 
     tbody.appendChild(tr);
-  });
-  console.log("HTML kirjoitettu:", html);
-  container.appendChild(table);
-}
 
+  });
+
+  container.appendChild(table);
+
+}
 
 // ===============================
 // EVENT HANDLERS
