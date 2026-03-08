@@ -249,7 +249,7 @@ async function paivitaLennokkiLista() {
 
 
 async function vaihdaLennokki(id) {
-  await API("asetaAktiivinen", 
+  await API("asetaAktiivinen", {
     id: id
   });
 
