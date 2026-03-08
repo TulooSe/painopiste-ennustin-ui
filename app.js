@@ -246,7 +246,7 @@ async function paivitaLennokkiLista() {
 }
 
 
-async function vaihdaLennokki(id) 
+async function vaihdaLennokki(id) {
   await API({"asetaAktiivinen", {
     id: id
   });
