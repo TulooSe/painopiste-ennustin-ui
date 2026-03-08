@@ -159,7 +159,8 @@ async function API(action, payload = {}) {
   }
 
   const data = await response.json();
-
+  console.log("API vastaus:", action, data);
+  
   if (data.error) {
     throw new Error(data.error);
   }
@@ -169,6 +170,7 @@ async function API(action, payload = {}) {
 
 
 async function loadLennokit() {
+  console.log("Haetaan lennokit käyttäjälle:", Auth.getUser());
   try {
     const data = await API("haeLennokitAloitukseen");
 
