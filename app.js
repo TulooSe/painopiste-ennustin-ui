@@ -385,6 +385,18 @@ async function naytaYhteenveto() {
   view.innerHTML = html;
 }
 
+function vaihdaSuodatus() {
+  state.suodatus = !state.suodatus;
+  renderOsat();
+}
+
+
+function palaaAloitukseen() {
+  document.getElementById("appView").style.display = "none";
+  document.getElementById("startView").style.display = "block";
+}
+
+
 
 // ===============================
 // RENDER LOGIIKKA
