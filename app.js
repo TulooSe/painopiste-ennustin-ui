@@ -401,6 +401,9 @@ async function naytaYhteenveto() {
       id: state.valittuLennokkiId
     });
 
+    // TALLENNA KOKOONPANOT
+    state.kokoonpanot = data.map(r => r[0]).filter(Boolean);
+    
     osatView.style.display = "none";
     view.style.display = "block";
 
@@ -575,7 +578,9 @@ function renderOsat() {
     const select = tr.querySelector("select");
 
     // KOKOONPANOLISTA
-    const kokoonpanot = [...new Set(state.osat.map(x => x.kokoonpano))];
+    const kokoonpanot = state.kokoonpanot.length
+      ? state.kokoonpanot
+      : [...new Set(state.osat.map(x => x.kokoonpano))];
 
     kokoonpanot.forEach(k => {
 
@@ -618,19 +623,28 @@ function renderOsat() {
   container.appendChild(table);
 }
 
-function toggleGroup(ryhma) {
+function toggleGroup(ryhma){
 
   const rows = document.querySelectorAll(`#osatTable tr[data-group='${ryhma}']`);
+  const header = document.querySelector(`.osa-group-header[data-group='${ryhma}']`);
+  const arrow = header?.querySelector(".group-arrow");
 
-  rows.forEach(r => {
+  let hidden = false;
 
-    if (r.classList.contains("groupRow")) return;
+  rows.forEach(r=>{
+    if(r.classList.contains("osa-group-header")) return;
 
-    r.style.display =
-      r.style.display === "none" ? "" : "none";
-
+    if(r.style.display==="none"){
+      r.style.display="";
+    } else {
+      r.style.display="none";
+      hidden=true;
+    }
   });
 
+  if(arrow){
+    arrow.textContent = hidden ? "▸" : "▾";
+  }
 }
 
 
