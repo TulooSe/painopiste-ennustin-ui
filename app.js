@@ -518,29 +518,95 @@ function renderOsat() {
 
   const tbody = table.querySelector("tbody");
 
+  let viimeKokoonpano = null;
+
   state.osat.forEach(o => {
+
+    // SUODATUS
+    if (state.suodatus && (!o.massa || Number(o.massa) === 0)) {
+      return;
+    }
+
+    // RYHMÄRIVI
+    if (o.kokoonpano !== viimeKokoonpano) {
+
+      const group = document.createElement("tr");
+      group.className = "groupRow";
+      group.innerHTML = `<td colspan="5">${o.kokoonpano ?? ""}</td>`;
+
+      tbody.appendChild(group);
+
+      viimeKokoonpano = o.kokoonpano;
+    }
 
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
       <td class="col-nro">${o.osanro ?? ""}</td>
+
       <td class="col-osa">${o.osa ?? ""}</td>
+
       <td class="col-num">
         <input type="number" value="${o.massa ?? 0}">
       </td>
+
       <td class="col-num">
         <input type="number" value="${o.varsi ?? 0}">
       </td>
-      <td class="col-kok">${o.kokoonpano ?? ""}</td>
+
+      <td class="col-kok">
+        <select></select>
+      </td>
     `;
+
+    const massaInput = tr.querySelectorAll("input")[0];
+    const varsiInput = tr.querySelectorAll("input")[1];
+    const select = tr.querySelector("select");
+
+    // KOKOONPANOLISTA
+    const kokoonpanot = [...new Set(state.osat.map(x => x.kokoonpano))];
+
+    kokoonpanot.forEach(k => {
+
+      const opt = document.createElement("option");
+      opt.value = k;
+      opt.textContent = k;
+
+      if (k === o.kokoonpano) opt.selected = true;
+
+      select.appendChild(opt);
+
+    });
+
+    // MUUTOS -> _dirty
+    massaInput.oninput = () => {
+      o.massa = Number(massaInput.value);
+      o._dirty = true;
+      muutoksia = true;
+      if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+    };
+
+    varsiInput.oninput = () => {
+      o.varsi = Number(varsiInput.value);
+      o._dirty = true;
+      muutoksia = true;
+      if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+    };
+
+    select.onchange = () => {
+      o.kokoonpano = select.value;
+      o._dirty = true;
+      muutoksia = true;
+      if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+    };
 
     tbody.appendChild(tr);
 
   });
 
   container.appendChild(table);
-
 }
+
 
 // ===============================
 // EVENT HANDLERS
