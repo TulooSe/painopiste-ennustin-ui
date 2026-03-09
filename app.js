@@ -135,6 +135,7 @@ let valittuLennokkiId = null;
 let aktiivinenLennokkiId = null;
 let uusiLennokkiNimi = "";
 let muutoksia = false;
+let viimeRyhmä = null;
 
 
 async function API(action, payload = {}) {
@@ -528,17 +529,27 @@ function renderOsat() {
     }
 
     // RYHMÄRIVI
-    if (o.kokoonpano !== viimeKokoonpano) {
+    if (o.ryhma !== viimeRyhmä) {
 
       const group = document.createElement("tr");
       group.className = "groupRow";
-      group.innerHTML = `<td colspan="5">${o.kokoonpano ?? ""}</td>`;
-
+    
+      group.innerHTML = `
+        <td colspan="5">
+          <span class="toggle">▼</span> ${o.ryhma ?? ""}
+        </td>
+      `;
+    
+      group.dataset.group = o.ryhma;
+    
+      group.onclick = () => toggleGroup(o.ryhma);
+    
       tbody.appendChild(group);
-
-      viimeKokoonpano = o.kokoonpano;
+    
+      viimeRyhmä = o.ryhma;
     }
 
+    
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
@@ -599,12 +610,27 @@ function renderOsat() {
       muutoksia = true;
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
     };
-
+    tr.dataset.group = o.ryhma;
     tbody.appendChild(tr);
 
   });
 
   container.appendChild(table);
+}
+
+function toggleGroup(ryhma) {
+
+  const rows = document.querySelectorAll(`#osatTable tr[data-group='${ryhma}']`);
+
+  rows.forEach(r => {
+
+    if (r.classList.contains("groupRow")) return;
+
+    r.style.display =
+      r.style.display === "none" ? "" : "none";
+
+  });
+
 }
 
 
