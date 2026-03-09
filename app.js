@@ -285,8 +285,11 @@ async function lataaOsat() {
 
 function naytaOsat() {
 
-  document.getElementById("osatView").style.display = "block";
-  document.getElementById("yhteenvetoView").style.display = "none";
+  const osatView = document.getElementById("osatView");
+  const yhteenvetoView = document.getElementById("yhteenvetoView");
+
+  if (osatView) osatView.style.display = "block";
+  if (yhteenvetoView) yhteenvetoView.style.display = "none";
 
 }
 
@@ -338,52 +341,99 @@ async function lataaYhteenveto() {
 
 
 async function tallenna() {
+
   const virhe = state.osat.find(o => Number(o.massa) < 0);
-  if (virhe) { alert("Massa ei voi olla negatiivinen.\n\nOsa: " + virhe.osa); return; }
-  const muuttuneet = state.osat.filter(o => o._dirty);
-  if (!muuttuneet.length) return;
-  if (tallennaBtn) tallennaBtn.disabled = true;
-  try {
-    await API("tallennaOsat", { osat: muuttuneet });
-    muuttuneet.forEach(o => delete o._dirty);
-    muutoksia = false;
-    if (tallennaBtn) { tallennaBtn.disabled = false; tallennaBtn.classList.remove("unsaved"); }
-  } catch (err) {
-    alert("Tallennus epäonnistui: " + err);
-    if (tallennaBtn) tallennaBtn.disabled = false;
-  }
-}
 
-async function naytaYhteenveto() {
-
-  const data = await API("haeYhteenveto");
-  const view = document.getElementById("yhteenvetoView");
-
-  view.style.display = "block";
-  document.getElementById("osatView").style.display = "none";
-
-  if (!data.length) {
-    view.innerHTML = "<p>Ei tietoja</p>";
+  if (virhe) {
+    alert("Massa ei voi olla negatiivinen.\n\nOsa: " + virhe.osa);
     return;
   }
 
-  let html = "<table class='summary'>";
+  const muuttuneet = state.osat.filter(o => o._dirty);
 
-  data.forEach(r => {
+  if (!muuttuneet.length) return;
 
-    html += `
-      <tr>
-        <td>${r[0]}</td>
-        <td>${r[1]}</td>
-        <td>${r[2]}</td>
-        <td>${r[3]}</td>
-      </tr>
-    `;
-  });
+  if (tallennaBtn) tallennaBtn.disabled = true;
 
-  html += "</table>";
-  view.innerHTML = html;
+  try {
+
+    await API("tallennaOsat", {
+      id: state.valittuLennokkiId,
+      osat: muuttuneet
+    });
+
+    muuttuneet.forEach(o => delete o._dirty);
+
+    muutoksia = false;
+
+    if (tallennaBtn) {
+      tallennaBtn.disabled = false;
+      tallennaBtn.classList.remove("unsaved");
+    }
+
+  } catch (err) {
+
+    alert("Tallennus epäonnistui: " + err);
+
+    if (tallennaBtn) {
+      tallennaBtn.disabled = false;
+    }
+
+  }
 }
+
+
+async function naytaYhteenveto() {
+
+  const view = document.getElementById("yhteenvetoView");
+  const osatView = document.getElementById("osatView");
+  const table = document.getElementById("yhteenvetoTable");
+
+  if (!view || !osatView || !table) {
+    console.error("Yhteenveto elementtejä puuttuu HTML:stä");
+    return;
+  }
+
+  try {
+
+    const data = await API("haeYhteenveto", {
+      id: state.valittuLennokkiId
+    });
+
+    osatView.style.display = "none";
+    view.style.display = "block";
+
+    if (!data || !data.length) {
+      table.innerHTML = "<p>Ei tietoja</p>";
+      return;
+    }
+
+    let html = "<table class='summary'>";
+
+    data.forEach(r => {
+
+      html += `
+        <tr>
+          <td>${r[0] ?? ""}</td>
+          <td>${r[1] ?? ""}</td>
+          <td>${r[2] ?? ""}</td>
+          <td>${r[3] ?? ""}</td>
+        </tr>
+      `;
+
+    });
+
+    html += "</table>";
+
+    table.innerHTML = html;
+
+  } catch (err) {
+
+    console.error("Yhteenveto epäonnistui:", err);
+
+  }
+}
+
 
 function vaihdaSuodatus() {
   state.suodatus = !state.suodatus;
