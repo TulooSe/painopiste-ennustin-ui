@@ -534,8 +534,16 @@ function renderOsat() {
     // RYHMÄRIVI
     if (o.ryhma !== viimeRyhmä) {
 
-      const group = document.createElement("tr");
-      group.className = "groupRow";
+     const header = document.createElement("tr");
+     header.className = "osa-group-header";
+     header.dataset.group = ryhma;
+      
+     header.innerHTML = `
+     <td colspan="5">
+       <span class="group-arrow">▾</span>
+       <span class="group-name">${ryhma}</span>
+       <span class="group-massa">${summa} g</span>
+     </
     
       group.innerHTML = `
         <td colspan="5">
@@ -619,7 +627,10 @@ function renderOsat() {
     tbody.appendChild(tr);
 
   });
-
+  const suodatusBtn = document.getElementById("suodatusBtn");
+  if (suodatusBtn) {
+    suodatusBtn.classList.toggle("active", state.suodatus);
+  }
   container.appendChild(table);
 }
 
