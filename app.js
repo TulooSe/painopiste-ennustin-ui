@@ -559,7 +559,7 @@ function renderOsat() {
         <td colspan="5">
           <span class="group-arrow">▾</span>
           <span class="group-name">${o.ryhma}</span>
-          <span class="group-massa"></span>
+          <span class="group-massa">${massa} g</span>
         </td>
       `;
     
