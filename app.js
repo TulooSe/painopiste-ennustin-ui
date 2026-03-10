@@ -113,7 +113,7 @@ const state = {
   valittuLennokkiId: null,
   osat: [],
   aktiivinenRyhma: null,
-  suodataNollat: false,
+  suodatus: false,
   kokoonpanot: [],
   uusiLennokki: { nimi: "", malli: "RAKENTEILLA" }
 };
@@ -533,29 +533,22 @@ function renderOsat() {
 
     // RYHMÄRIVI
     if (o.ryhma !== viimeRyhmä) {
-
-     const header = document.createElement("tr");
-     header.className = "osa-group-header";
-     header.dataset.group = ryhma;
-      
-     header.innerHTML = `
-     <td colspan="5">
-       <span class="group-arrow">▾</span>
-       <span class="group-name">${ryhma}</span>
-       <span class="group-massa">${summa} g</span>
-     </
     
-      group.innerHTML = `
+      const header = document.createElement("tr");
+      header.className = "osa-group-header";
+      header.dataset.group = o.ryhma;
+    
+      header.innerHTML = `
         <td colspan="5">
-          <span class="toggle">▼</span> ${o.ryhma ?? ""}
+          <span class="group-arrow">▾</span>
+          <span class="group-name">${o.ryhma}</span>
+          <span class="group-massa"></span>
         </td>
       `;
     
-      group.dataset.group = o.ryhma;
+      header.onclick = () => toggleGroup(o.ryhma);
     
-      group.onclick = () => toggleGroup(o.ryhma);
-    
-      tbody.appendChild(group);
+      tbody.appendChild(header);
     
       viimeRyhmä = o.ryhma;
     }
