@@ -524,6 +524,23 @@ function renderOsat() {
 
   let viimeKokoonpano = null;
 
+  // LASKE RYHMIEN MASSAT
+  const ryhmaMassat = {};
+    
+  state.osat.forEach(o => {
+    
+    if (state.suodatus && (!o.massa || Number(o.massa) === 0)) return;
+    
+    const r = o.ryhma || "Muut";
+    
+    if (!ryhmaMassat[r]) ryhmaMassat[r] = 0;
+    
+    ryhmaMassat[r] += Number(o.massa || 0);
+    
+  });
+
+
+  
   state.osat.forEach(o => {
 
     // SUODATUS
