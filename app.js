@@ -327,7 +327,7 @@ async function lataaYhteenveto() {
         <tr class="${isYhteensa ? 'yhteensa' : ''}">
           <td>${r[0]}</td>
           <td class="col-num">${Number(r[1] || 0).toFixed(0)}</td>
-          <td class="col-num">${Number(r[3] || 0).toFixed(0)}</td>
+          <td class="col-num">${Number(r[3] || 0).toFixed(1)}</td>
         </tr>
       `;
     });
