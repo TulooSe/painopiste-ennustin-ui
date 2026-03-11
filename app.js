@@ -326,8 +326,8 @@ async function lataaYhteenveto() {
       html += `
         <tr class="${isYhteensa ? 'yhteensa' : ''}">
           <td>${r[0]}</td>
-          <td class="col-num">${r[1]}</td>
-          <td class="col-num">${Math.round(r[3] || 0)}</td>
+          <td class="col-num">${Number(r[1] || 0).toFixed(0)}</td>
+          <td class="col-num">${Number(r[3] || 0).toFixed(0)}</td>
         </tr>
       `;
     });
@@ -489,7 +489,8 @@ function renderStartTable() {
 }
 
 function renderOsat() {
-
+  const ryhmaMassat = {};
+  let viimeRyhmä = null;
   const container = document.getElementById("osatView");
 
   if (!container) {
@@ -524,51 +525,37 @@ function renderOsat() {
 
   let viimeKokoonpano = null;
 
-  // LASKE RYHMIEN MASSAT
-  const ryhmaMassat = {};
-    
-  state.osat.forEach(o => {
-    
-    if (state.suodatus && (!o.massa || Number(o.massa) === 0)) return;
-    
-    const r = o.ryhma || "Muut";
-    
-    if (!ryhmaMassat[r]) ryhmaMassat[r] = 0;
-    
-    ryhmaMassat[r] += Number(o.massa || 0);
-    
-  });
-
-
+    state.osat.forEach(o => {
   
-  state.osat.forEach(o => {
-
-    // SUODATUS
-    if (state.suodatus && (!o.massa || Number(o.massa) === 0)) {
-      return;
-    }
-
-    // RYHMÄRIVI
-    if (o.ryhma !== viimeRyhmä) {
-    
+    if (state.suodatus && (!o.massa || Number(o.massa) === 0)) return;
+  
+    const ryhma = o.ryhma || "Muut";
+  
+    if (!ryhmaMassat[ryhma]) ryhmaMassat[ryhma] = 0;
+    ryhmaMassat[ryhma] += Number(o.massa || 0);
+  
+    if (ryhma !== viimeRyhmä) {
+  
       const header = document.createElement("tr");
       header.className = "osa-group-header";
-      header.dataset.group = o.ryhma;
-    
+      header.dataset.group = ryhma;
+  
       header.innerHTML = `
         <td colspan="5">
           <span class="group-arrow">▾</span>
-          <span class="group-name">${o.ryhma}</span>
-          <span class="group-massa">${Math.round(ryhmaMassat[o.ryhma] || 0)} g</span>
+          <span class="group-name">${ryhma}</span>
+          <span class="group-massa">${Math.round(ryhmaMassat[ryhma])} g</span>
         </td>
       `;
-    
-      header.onclick = () => toggleGroup(o.ryhma);
-    
+  
+      header.onclick = () => toggleGroup(ryhma);
       tbody.appendChild(header);
-    
-      viimeRyhmä = o.ryhma;
+  
+      viimeRyhmä = ryhma;
     }
+  
+    // osa-rivi jatkuu normaalisti
+  });
 
     
     const tr = document.createElement("tr");
@@ -614,6 +601,7 @@ function renderOsat() {
 
     // MUUTOS -> _dirty
     massaInput.oninput = () => {
+      renderOsat();
       o.massa = Number(massaInput.value);
       o._dirty = true;
       muutoksia = true;
