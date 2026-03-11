@@ -474,8 +474,8 @@ function renderStartTable() {
       state.valittuLennokkiId = l.id; };
     tr.innerHTML = `
       <td>${l.id}</td>
-      <td>${l.massa ?? ""}</td>
-      <td>${l.pp ?? ""}</td>
+      <td class="col-num">${Number(l.massa ?? 0).toFixed(0)}</td>
+      <td class="col-num">${Number(l.pp ?? 0).toFixed(0)}</td>
       <td>${l.pvm ?? ""}</td>
     `;
     tr.onclick = () => {
