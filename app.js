@@ -457,41 +457,48 @@ function palaaAloitukseen() {
 // ===============================
 
 function renderStartTable() {
+
   if (!Array.isArray(state.lennokit)) {
-  console.error("Lennokit ei ole array", state.lennokit);
-  return;
+    console.error("Lennokit ei ole array", state.lennokit);
+    return;
   }
-  console.log("Lennokit data:", state.lennokit);
+
   const body = document.getElementById("startTableBody");
   if (!body) return;
 
   body.innerHTML = "";
 
   state.lennokit.forEach(l => {
+
     const tr = document.createElement("tr");
-    tr.dataset.id = l.id;
-    tr.onclick = () => {
-      state.valittuLennokkiId = l.id; };
+
     tr.innerHTML = `
       <td>${l.id}</td>
-      <td class="col-num">${Number(l.massa ?? 0).toFixed(0)}</td>
-      <td class="col-num">${Number(l.pp ?? 0).toFixed(0)}</td>
-      <td>${l.pvm ?? ""}</td>
+      <td class="col-num">${Number(l.massa || 0).toFixed(0)}</td>
+      <td class="col-num">${Number(l.pp || 0).toFixed(1)}</td>
+      <td>${l.pvm || ""}</td>
     `;
+
     tr.onclick = () => {
-      document.querySelectorAll("#startTableBody tr")
+
+      document
+        .querySelectorAll("#startTableBody tr")
         .forEach(r => r.classList.remove("selected"));
+
       tr.classList.add("selected");
+
       state.valittuLennokkiId = l.id;
     };
+
     body.appendChild(tr);
+
   });
+
 }
 
-function renderOsat() {
 
-  const ryhmaMassat = {};
-  let viimeRyhmä = null;
+
+function renderOsat() {
 
   const container = document.getElementById("osatView");
 
@@ -525,6 +532,14 @@ function renderOsat() {
 
   const tbody = table.querySelector("tbody");
 
+
+
+  // ===============================
+  // 1 LASKE RYHMÄMASSAT
+  // ===============================
+
+  const ryhmaMassat = {};
+
   state.osat.forEach(o => {
 
     if (state.suodatus && (!o.massa || Number(o.massa) === 0)) return;
@@ -532,12 +547,35 @@ function renderOsat() {
     const ryhma = o.ryhma || "Muut";
 
     if (!ryhmaMassat[ryhma]) ryhmaMassat[ryhma] = 0;
+
     ryhmaMassat[ryhma] += Number(o.massa || 0);
+
+  });
+
+
+
+  // ===============================
+  // 2 RENDERÖI TAULUKKO
+  // ===============================
+
+  let viimeRyhmä = null;
+
+  state.osat.forEach(o => {
+
+    if (state.suodatus && (!o.massa || Number(o.massa) === 0)) return;
+
+    const ryhma = o.ryhma || "Muut";
+
+
+
+    // ---------- RYHMÄOTSIKKO ----------
 
     if (ryhma !== viimeRyhmä) {
 
       const header = document.createElement("tr");
+
       header.className = "osa-group-header";
+
       header.dataset.group = ryhma;
 
       header.innerHTML = `
@@ -549,24 +587,31 @@ function renderOsat() {
       `;
 
       header.onclick = () => toggleGroup(ryhma);
+
       tbody.appendChild(header);
 
       viimeRyhmä = ryhma;
     }
 
+
+
+    // ---------- OSA RIVI ----------
+
     const tr = document.createElement("tr");
 
-    tr.innerHTML = `
-      <td class="col-nro">${o.osanro ?? ""}</td>
+    tr.dataset.group = ryhma;
 
-      <td class="col-osa">${o.osa ?? ""}</td>
+    tr.innerHTML = `
+      <td class="col-nro">${o.osanro || ""}</td>
+
+      <td class="col-osa">${o.osa || ""}</td>
 
       <td class="col-num">
-        <input type="number" value="${o.massa ?? 0}">
+        <input type="number" value="${o.massa || 0}">
       </td>
 
       <td class="col-num">
-        <input type="number" value="${o.varsi ?? 0}">
+        <input type="number" value="${o.varsi || 0}">
       </td>
 
       <td class="col-kok">
@@ -574,9 +619,15 @@ function renderOsat() {
       </td>
     `;
 
+
+
     const massaInput = tr.querySelectorAll("input")[0];
     const varsiInput = tr.querySelectorAll("input")[1];
     const select = tr.querySelector("select");
+
+
+
+    // ---------- KOKOONPANOLISTA ----------
 
     const kokoonpanot = state.kokoonpanot.length
       ? state.kokoonpanot
@@ -585,7 +636,9 @@ function renderOsat() {
     kokoonpanot.forEach(k => {
 
       const opt = document.createElement("option");
+
       opt.value = k;
+
       opt.textContent = k;
 
       if (k === o.kokoonpano) opt.selected = true;
@@ -594,111 +647,118 @@ function renderOsat() {
 
     });
 
+
+
+    // ---------- MUUTOSLOGIIKKA ----------
+
     massaInput.oninput = () => {
+
       o.massa = Number(massaInput.value);
+
       o._dirty = true;
+
       muutoksia = true;
 
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
 
-      renderOsat();
+      renderOsat(); // päivitä ryhmämassa
+
     };
+
+
 
     varsiInput.oninput = () => {
+
       o.varsi = Number(varsiInput.value);
+
       o._dirty = true;
+
       muutoksia = true;
 
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+
     };
+
+
 
     select.onchange = () => {
+
       o.kokoonpano = select.value;
+
       o._dirty = true;
+
       muutoksia = true;
 
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+
     };
 
-    tr.dataset.group = o.ryhma;
+
 
     tbody.appendChild(tr);
 
   });
 
+
+
+  // ===============================
+  // SUODATUSNAPIN TILA
+  // ===============================
+
   const suodatusBtn = document.getElementById("suodatusBtn");
+
   if (suodatusBtn) {
+
     suodatusBtn.classList.toggle("active", state.suodatus);
+
   }
 
+
+
   container.appendChild(table);
+
 }
 
 
-function toggleGroup(ryhma){
+
+function toggleGroup(ryhma) {
 
   const rows = document.querySelectorAll(`#osatTable tr[data-group='${ryhma}']`);
+
   const header = document.querySelector(`.osa-group-header[data-group='${ryhma}']`);
+
   const arrow = header?.querySelector(".group-arrow");
 
   let hidden = false;
 
-  rows.forEach(r=>{
-    if(r.classList.contains("osa-group-header")) return;
+  rows.forEach(r => {
 
-    if(r.style.display==="none"){
-      r.style.display="";
+    if (r.classList.contains("osa-group-header")) return;
+
+    if (r.style.display === "none") {
+
+      r.style.display = "";
+
     } else {
-      r.style.display="none";
-      hidden=true;
+
+      r.style.display = "none";
+
+      hidden = true;
+
     }
+
   });
 
-  if(arrow){
+  if (arrow) {
+
     arrow.textContent = hidden ? "▸" : "▾";
+
   }
+
 }
 
 
-// ===============================
-// EVENT HANDLERS
-// ===============================
 
-function bindStartEvents() {
-  const container = document.getElementById("startView");
-  if (!container) return;
-
-  container.addEventListener("click", e => {
-    const row = e.target.closest("tr");
-
-    if (row) {
-      state.valittuLennokkiId = row.dataset.id;
-      container.querySelectorAll("#startTableBody tr")
-        .forEach(r => r.classList.remove("selected"));
-      row.classList.add("selected");
-    }
-
-    // Jos joskus lisäät napin ID:llä openEditorBtn
-    if (e.target.id === "openEditorBtn" && state.valittuLennokkiId) {
-      document.getElementById("startView").style.display = "none";
-      document.getElementById("appView").style.display = "block";
-    }
-  });
-}
-
-
-function bindEditorEvents() {
-  const container = document.getElementById("appView");
-  if (!container) return;
-
-  const backBtn = container.querySelector("#backBtn");
-  if (backBtn) {
-    backBtn.addEventListener("click", () => {
-      document.getElementById("appView").style.display = "none";
-      document.getElementById("startView").style.display = "block";
-    });
-  }
-}
 
 // ===============================
 // START VIEW BUTTON FUNCTIONS
