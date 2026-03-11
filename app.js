@@ -489,8 +489,10 @@ function renderStartTable() {
 }
 
 function renderOsat() {
+
   const ryhmaMassat = {};
   let viimeRyhmä = null;
+
   const container = document.getElementById("osatView");
 
   if (!container) {
@@ -523,23 +525,21 @@ function renderOsat() {
 
   const tbody = table.querySelector("tbody");
 
-  let viimeKokoonpano = null;
+  state.osat.forEach(o => {
 
-    state.osat.forEach(o => {
-  
     if (state.suodatus && (!o.massa || Number(o.massa) === 0)) return;
-  
+
     const ryhma = o.ryhma || "Muut";
-  
+
     if (!ryhmaMassat[ryhma]) ryhmaMassat[ryhma] = 0;
     ryhmaMassat[ryhma] += Number(o.massa || 0);
-  
+
     if (ryhma !== viimeRyhmä) {
-  
+
       const header = document.createElement("tr");
       header.className = "osa-group-header";
       header.dataset.group = ryhma;
-  
+
       header.innerHTML = `
         <td colspan="5">
           <span class="group-arrow">▾</span>
@@ -547,17 +547,13 @@ function renderOsat() {
           <span class="group-massa">${Math.round(ryhmaMassat[ryhma])} g</span>
         </td>
       `;
-  
+
       header.onclick = () => toggleGroup(ryhma);
       tbody.appendChild(header);
-  
+
       viimeRyhmä = ryhma;
     }
-  
-    // osa-rivi jatkuu normaalisti
-  });
 
-    
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
@@ -582,7 +578,6 @@ function renderOsat() {
     const varsiInput = tr.querySelectorAll("input")[1];
     const select = tr.querySelector("select");
 
-    // KOKOONPANOLISTA
     const kokoonpanot = state.kokoonpanot.length
       ? state.kokoonpanot
       : [...new Set(state.osat.map(x => x.kokoonpano))];
@@ -599,19 +594,21 @@ function renderOsat() {
 
     });
 
-    // MUUTOS -> _dirty
     massaInput.oninput = () => {
-      renderOsat();
       o.massa = Number(massaInput.value);
       o._dirty = true;
       muutoksia = true;
+
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+
+      renderOsat();
     };
 
     varsiInput.oninput = () => {
       o.varsi = Number(varsiInput.value);
       o._dirty = true;
       muutoksia = true;
+
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
     };
 
@@ -619,18 +616,24 @@ function renderOsat() {
       o.kokoonpano = select.value;
       o._dirty = true;
       muutoksia = true;
+
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
     };
+
     tr.dataset.group = o.ryhma;
+
     tbody.appendChild(tr);
 
   });
+
   const suodatusBtn = document.getElementById("suodatusBtn");
   if (suodatusBtn) {
     suodatusBtn.classList.toggle("active", state.suodatus);
   }
+
   container.appendChild(table);
 }
+
 
 function toggleGroup(ryhma){
 
