@@ -309,6 +309,7 @@ button.loading {
 .col-num {
   width: 35%;
   text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .col-date {
