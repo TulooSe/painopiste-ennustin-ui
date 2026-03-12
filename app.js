@@ -811,6 +811,22 @@ function bindStartEvents(){
 
 }
 
+function bindEditorEvents(){
+
+  const tallennaBtn = document.getElementById("tallennaBtn");
+  const suodatusBtn = document.getElementById("suodatusBtn");
+  const yhteenvetoBtn = document.getElementById("yhteenvetoBtn");
+  const osatBtn = document.getElementById("osatBtn");
+  const takaisinBtn = document.getElementById("takaisinBtn");
+
+  if (tallennaBtn) tallennaBtn.onclick = tallenna;
+  if (suodatusBtn) suodatusBtn.onclick = vaihdaSuodatus;
+  if (yhteenvetoBtn) yhteenvetoBtn.onclick = naytaYhteenveto;
+  if (osatBtn) osatBtn.onclick = naytaOsat;
+  if (takaisinBtn) takaisinBtn.onclick = palaaAloitukseen;
+
+}
+
 
 
 // ===============================
