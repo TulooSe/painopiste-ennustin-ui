@@ -471,6 +471,7 @@ function renderStartTable() {
   state.lennokit.forEach(l => {
 
     const tr = document.createElement("tr");
+    tr.dataset.id = l.id;
 
     tr.innerHTML = `
       <td>${l.id}</td>
@@ -783,6 +784,33 @@ function scrollOhje(id) {
     el.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
+
+
+
+function bindStartEvents(){
+
+  const table = document.getElementById("startTableBody");
+
+  if(!table) return;
+
+  table.onclick = (e)=>{
+
+    const tr = e.target.closest("tr");
+
+    if(!tr) return;
+
+    document
+      .querySelectorAll("#startTableBody tr")
+      .forEach(r=>r.classList.remove("selected"));
+
+    tr.classList.add("selected");
+
+    state.valittuLennokkiId = tr.dataset.id;
+
+  };
+
+}
+
 
 
 // ===============================
