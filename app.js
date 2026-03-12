@@ -341,7 +341,7 @@ async function lataaYhteenveto() {
         <tr class="${isYhteensa ? 'yhteensa' : ''}">
           <td>${r[0]}</td>
           <td class="col-num">${Number(r[1] || 0).toFixed(0)}</td>
-          <td class="col-num">${Number(r[3] || 0).toFixed(1)}</td>
+          <td class="col-num">${Number(r[3] || 0).toFixed(0)}</td>
         </tr>
       `;
     });
@@ -490,7 +490,7 @@ function renderStartTable() {
     tr.innerHTML = `
       <td>${l.id}</td>
       <td class="col-num">${Number(l.massa || 0).toFixed(0)}</td>
-      <td class="col-num">${Number(l.pp || 0).toFixed(1)}</td>
+      <td class="col-num">${Number(l.pp || 0).toFixed(0)}</td>
       <td>${l.pvm || ""}</td>
     `;
 
