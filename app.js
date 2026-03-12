@@ -126,6 +126,19 @@ function setLennokit(lennokit) { state.lennokit = lennokit; }
 // APP.JS – Sovelluslogiikka
 // ===============================
 
+function safeCall(fn, name) {
+  try {
+    if (typeof fn === "function") {
+      fn();
+    } else {
+      console.warn("Funktio puuttuu:", name);
+    }
+  } catch (err) {
+    console.error("Virhe funktiossa:", name, err);
+  }
+}
+
+
 const APP_VERSION = "1.50";
 let osat = [];
 let kokoonpanot = [];
@@ -187,6 +200,7 @@ async function loadLennokit() {
   } catch (err) {
     console.error("loadLennokit virhe:", err);
   }
+  console.log("Lennokit ladattu:", state.lennokit.length);
 }
 
 
@@ -827,26 +841,59 @@ function bindEditorEvents(){
 
 }
 
-
-
-// ===============================
-// INIT 
-// ===============================
-
 function init() {
-  console.log("Sovellus käynnistyy");
 
-  document.getElementById("startView").style.display = "block";
-  document.getElementById("appView").style.display = "none";
+  console.log("=== Painopiste käynnistyy ===");
+  console.log("Versio:", APP_VERSION);
+  console.log("Käyttäjä:", Auth.getUser());
 
-  const versionEls = document.querySelectorAll("#appVersion, #appVersion2");
-  versionEls.forEach(el => el.textContent = APP_VERSION);
+  try {
 
-  bindStartEvents();
-  bindEditorEvents();
+    // ===============================
+    // NÄKYMÄT
+    // ===============================
 
-  loadLennokit();
+    const startView = document.getElementById("startView");
+    const appView = document.getElementById("appView");
+
+    if (startView) startView.style.display = "block";
+    if (appView) appView.style.display = "none";
+
+
+    // ===============================
+    // VERSIO
+    // ===============================
+
+    document
+      .querySelectorAll("#appVersion, #appVersion2")
+      .forEach(el => el.textContent = APP_VERSION);
+
+
+    // ===============================
+    // EVENTIT
+    // ===============================
+
+    safeCall(bindStartEvents, "bindStartEvents");
+    safeCall(bindEditorEvents, "bindEditorEvents");
+
+
+    // ===============================
+    // DATA
+    // ===============================
+
+    loadLennokit();
+
+
+    console.log("Init valmis");
+
+  } catch (err) {
+
+    console.error("INIT virhe:", err);
+
+  }
+
 }
+
 
 // ===============================
 // DOMREADY & AUTH
