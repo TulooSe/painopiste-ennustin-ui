@@ -333,9 +333,7 @@ async function naytaYhteenveto() {
 
   const view = document.getElementById("yhteenvetoView");
   const osatView = document.getElementById("osatView");
-  const table = document.getElementById("yhteenvetoTable");
-
-  if (!view || !osatView || !table) {
+  if (!view || !osatView) {
     console.error("Yhteenveto elementtejä puuttuu HTML:stä");
     return;
   }
@@ -344,28 +342,41 @@ async function naytaYhteenveto() {
     const data = await API("haeYhteenveto", {
       id: state.valittuLennokkiId
     });
-
-    // TALLENNA KOKOONPANOT
-    state.kokoonpanot = data.map(r => r[0]).filter(Boolean);
     osatView.style.display = "none";
     view.style.display = "block";
     if (!data || !data.length) {
-      table.innerHTML = "<p>Ei tietoja</p>";
+      view.innerHTML = "<p>Ei tietoja</p>";
       return;
     }
-    let html = "<table class='summary'>";
+    let html = `
+      <table class="summary">
+        <thead>
+          <tr>
+            <th>Kokoonpano</th>
+            <th class="col-num">Kokonaismassa</th>
+            <th class="col-num">Kokonaismomentti</th>
+            <th class="col-num">Painopiste</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
     data.forEach(r => {
+      const massa = Number(r[1] || 0);
+      const momentti = Number(r[2] || 0);
+      const pp = Number(r[3] || 0);
+      const isYhteensa = r[0] === "Yhteensä";
       html += `
-        <tr>
+        <tr class="${isYhteensa ? 'yhteensa' : ''}">
           <td>${r[0] ?? ""}</td>
-          <td>${r[1] ?? ""}</td>
-          <td>${r[2] ?? ""}</td>
-          <td>${r[3] ?? ""}</td>
+          <td class="col-num">${massa.toFixed(0)}</td>
+          <td class="col-num">${momentti.toFixed(0)}</td>
+          <td class="col-num">${pp.toFixed(0)}</td>
         </tr>
       `;
     });
-    html += "</table>";
-    table.innerHTML = html;
+
+    html += "</tbody></table>";
+    view.innerHTML = html;
   } catch (err) {
     console.error("Yhteenveto epäonnistui:", err);
   }
