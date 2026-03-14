@@ -621,12 +621,12 @@ td.col-num input {
 th.col-nro, td.col-nro { width: 5ch; text-align: center; }
 th.col-osa, td.col-osa { width: 21ch; }
 th.col-num, td.col-num { width: 15ch; text-align: right; }
-th.col-kok, td.col-kok { width: 28ch; }
+th.col-kok, td.col-kok { width: 26ch; }
 
 /* Varsi sarake leveämmäksi */
 th.col-num:nth-child(4),
 td.col-num:nth-child(4) {
-  width: 16ch;
+  width: 18ch;
 }
 
 /* Yhteenveto: Yhteensä-rivi */
