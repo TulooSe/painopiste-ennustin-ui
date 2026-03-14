@@ -4,7 +4,6 @@
 
 const LOGIN_STORAGE_KEY = "pp_user_email";
 const LOGIN_REMEMBER_KEY = "pp_user_remember";
-
 const Auth = (function () {
   let currentUser = null;
 
@@ -23,7 +22,6 @@ const Auth = (function () {
   function showLogin() {
     const overlay = document.createElement("div");
     overlay.id = "loginOverlay";
-  
     overlay.innerHTML = `
       <div class="login-overlay">
         <div class="login-box">
@@ -48,9 +46,7 @@ const Auth = (function () {
         </div>
       </div>
     `;
-  
     document.body.appendChild(overlay);
-  
     document
       .getElementById("loginBtn")
       .addEventListener("click", handleLogin);
@@ -74,7 +70,6 @@ const Auth = (function () {
     }
 
     currentUser = email;
-
     if (remember) {
       localStorage.setItem(LOGIN_STORAGE_KEY, email);
       localStorage.setItem(LOGIN_REMEMBER_KEY, "true");
@@ -82,7 +77,6 @@ const Auth = (function () {
       localStorage.removeItem(LOGIN_STORAGE_KEY);
       localStorage.setItem(LOGIN_REMEMBER_KEY, "false");
     }
-
     hideLogin();
   }
 
@@ -138,7 +132,6 @@ function safeCall(fn, name) {
   }
 }
 
-
 const APP_VERSION = "1.50";
 let osat = [];
 let kokoonpanot = [];
@@ -150,12 +143,9 @@ let uusiLennokkiNimi = "";
 let muutoksia = false;
 let viimeRyhmä = null;
 
-
 async function API(action, payload = {}) {
-
   const user = Auth.getUser();
   if (!user) throw new Error("Käyttäjä ei ole kirjautunut");
-
   const response = await fetch(API_BASE, {
     method: "POST",
     headers: {
@@ -167,45 +157,35 @@ async function API(action, payload = {}) {
       ...payload
     })
   });
-
   if (!response.ok) {
     throw new Error("HTTP " + response.status);
   }
-
   const data = await response.json();
   console.log("API vastaus:", action, data);
-  
   if (data.error) {
     throw new Error(data.error);
   }
-
   return data;
 }
-
 
 async function loadLennokit() {
   console.log("Haetaan lennokit käyttäjälle:", Auth.getUser());
   try {
     const data = await API("haeLennokitAloitukseen");
-
     if (!Array.isArray(data)) {
       console.error("Virheellinen vastaus:", data);
       state.lennokit = [];
     } else {
       state.lennokit = data;
     }
-
     renderStartTable();
-
   } catch (err) {
     console.error("loadLennokit virhe:", err);
   }
   console.log("Lennokit ladattu:", state.lennokit.length);
 }
 
-
 async function avaaLennokki() {
-
   if (!state.valittuLennokkiId) {
     alert("Valitse lennokki");
     return;
@@ -215,99 +195,66 @@ async function avaaLennokki() {
   await API("asetaAktiivinen", {
   id: state.valittuLennokkiId
   });
-
   // 2 Vaihda näkymä
   document.getElementById("startView").style.display = "none";
   document.getElementById("appView").style.display = "block";
-
   // 3 Päivitä dropdown
   await paivitaLennokkiLista();
-  
   // 4 Hae osat
   await lataaOsat();
-
   // 5 Piirrä osat
   renderOsat();
-
 }
 
 async function paivitaLennokkiLista() {
-
   const vastaus = await API("listaaLennokit");
-
   const lista = Array.isArray(vastaus)
     ? vastaus
     : (vastaus?.lennokit || []);
-
   const select = document.getElementById("lennokkiSelect");
   if (!select) return;
-
   select.innerHTML = "";
-
   lista.forEach(l => {
-
     const opt = document.createElement("option");
-
     opt.value = l.id;
     opt.textContent = l.id;
-
     if (l.aktiivinen) opt.selected = true;
-
     select.appendChild(opt);
-
   });
-
   select.onchange = (e) => {
     vaihdaLennokki(e.target.value);
   };
 }
 
-
 async function vaihdaLennokki(id) {
   await API("asetaAktiivinen", {
     id: id
   });
-
   state.valittuLennokkiId = id;
-
   await lataaOsat();
   renderOsat();
 }
 
-
 async function lataaOsat() {
-
   console.log("Ladataan osat ID:", state.valittuLennokkiId);
-
   try {
-
     const response = await API("haeOsat");
-
     console.log("Backend vastaus:", response);
-
     state.osat = response.osat || [];
     state.kokoonpanot = response.kokoonpanot || [];
-
     renderOsat();
-
   } catch (err) {
-
     alert("Osien lataus epäonnistui: " + err);
-
   }
-
 }
 
 function naytaOsat() {
-
   const osatView = document.getElementById("osatView");
   const yhteenvetoView = document.getElementById("yhteenvetoView");
 
   if (osatView) osatView.style.display = "block";
   if (yhteenvetoView) yhteenvetoView.style.display = "none";
-
 }
-
 
 async function lataaYhteenveto() {
   try {
@@ -316,7 +263,6 @@ async function lataaYhteenveto() {
     });
 
     if (!yhteenvetoView) return;
-
     if (!data || !data.length) {
       yhteenvetoView.innerHTML = "<p>Ei yhteenvetotietoja.</p>";
       return;
@@ -333,8 +279,7 @@ async function lataaYhteenveto() {
         </thead>
         <tbody>
     `;
-    
-    
+  
     data.forEach(r => {
       const isYhteensa = r[0] === "Yhteensä";
       html += `
@@ -345,58 +290,44 @@ async function lataaYhteenveto() {
         </tr>
       `;
     });
-
     html += "</tbody></table>";
     yhteenvetoView.innerHTML = html;
-
   } catch (err) {
     alert("Yhteenveto-virhe: " + err);
   }
 }
 
-
 async function tallenna() {
 
   const virhe = state.osat.find(o => Number(o.massa) < 0);
-
   if (virhe) {
     alert("Massa ei voi olla negatiivinen.\n\nOsa: " + virhe.osa);
     return;
   }
 
   const muuttuneet = state.osat.filter(o => o._dirty);
-
   if (!muuttuneet.length) return;
-
   if (tallennaBtn) tallennaBtn.disabled = true;
-
   try {
-
     await API("tallennaOsat", {
       id: state.valittuLennokkiId,
       osat: muuttuneet
     });
 
     muuttuneet.forEach(o => delete o._dirty);
-
     muutoksia = false;
-
     if (tallennaBtn) {
       tallennaBtn.disabled = false;
       tallennaBtn.classList.remove("unsaved");
     }
 
   } catch (err) {
-
     alert("Tallennus epäonnistui: " + err);
-
     if (tallennaBtn) {
       tallennaBtn.disabled = false;
     }
-
   }
 }
-
 
 async function naytaYhteenveto() {
 
@@ -410,26 +341,20 @@ async function naytaYhteenveto() {
   }
 
   try {
-
     const data = await API("haeYhteenveto", {
       id: state.valittuLennokkiId
     });
 
     // TALLENNA KOKOONPANOT
     state.kokoonpanot = data.map(r => r[0]).filter(Boolean);
-    
     osatView.style.display = "none";
     view.style.display = "block";
-
     if (!data || !data.length) {
       table.innerHTML = "<p>Ei tietoja</p>";
       return;
     }
-
     let html = "<table class='summary'>";
-
     data.forEach(r => {
-
       html += `
         <tr>
           <td>${r[0] ?? ""}</td>
@@ -438,32 +363,23 @@ async function naytaYhteenveto() {
           <td>${r[3] ?? ""}</td>
         </tr>
       `;
-
     });
-
     html += "</table>";
-
     table.innerHTML = html;
-
   } catch (err) {
-
     console.error("Yhteenveto epäonnistui:", err);
-
   }
 }
-
 
 function vaihdaSuodatus() {
   state.suodatus = !state.suodatus;
   renderOsat();
 }
 
-
 function palaaAloitukseen() {
   document.getElementById("appView").style.display = "none";
   document.getElementById("startView").style.display = "block";
 }
-
 
 
 // ===============================
@@ -476,54 +392,39 @@ function renderStartTable() {
     console.error("Lennokit ei ole array", state.lennokit);
     return;
   }
-
   const body = document.getElementById("startTableBody");
   if (!body) return;
-
   body.innerHTML = "";
-
   state.lennokit.forEach(l => {
-
     const tr = document.createElement("tr");
     tr.dataset.id = l.id;
-
     tr.innerHTML = `
       <td>${l.id}</td>
       <td class="col-num">${Number(l.massa || 0).toFixed(0)}</td>
       <td class="col-num">${Number(l.pp || 0).toFixed(0)}</td>
       <td>${l.pvm || ""}</td>
     `;
-
     tr.onclick = () => {
-
       document
         .querySelectorAll("#startTableBody tr")
         .forEach(r => r.classList.remove("selected"));
-
       tr.classList.add("selected");
-
       state.valittuLennokkiId = l.id;
     };
-
     body.appendChild(tr);
-
   });
-
 }
-
 
 
 function renderOsat() {
 
   const container = document.getElementById("osatView");
-
   if (!container) {
     console.error("osatView puuttuu HTML:stä");
     return;
   }
 
   container.innerHTML = "";
-
   if (!state.osat || state.osat.length === 0) {
     container.innerHTML = "<p>Ei osia.</p>";
     return;
@@ -531,7 +432,6 @@ function renderOsat() {
 
   const table = document.createElement("table");
   table.id = "osatTable";
-
   table.innerHTML = `
     <thead>
       <tr>
@@ -544,9 +444,7 @@ function renderOsat() {
     </thead>
     <tbody></tbody>
   `;
-
   const tbody = table.querySelector("tbody");
-
 
 
   // ===============================
@@ -554,19 +452,12 @@ function renderOsat() {
   // ===============================
 
   const ryhmaMassat = {};
-
   state.osat.forEach(o => {
-
     if (state.suodatus && (!o.massa || Number(o.massa) === 0)) return;
-
     const ryhma = o.ryhma || "Muut";
-
     if (!ryhmaMassat[ryhma]) ryhmaMassat[ryhma] = 0;
-
     ryhmaMassat[ryhma] += Number(o.massa || 0);
-
   });
-
 
 
   // ===============================
@@ -574,25 +465,16 @@ function renderOsat() {
   // ===============================
 
   let viimeRyhmä = null;
-
   state.osat.forEach(o => {
-
     if (state.suodatus && (!o.massa || Number(o.massa) === 0)) return;
-
     const ryhma = o.ryhma || "Muut";
-
-
 
     // ---------- RYHMÄOTSIKKO ----------
 
     if (ryhma !== viimeRyhmä) {
-
       const header = document.createElement("tr");
-
       header.className = "osa-group-header";
-
       header.dataset.group = ryhma;
-
       header.innerHTML = `
         <td colspan="5">
           <span class="group-arrow">▾</span>
@@ -600,22 +482,15 @@ function renderOsat() {
           <span class="group-massa">${Math.round(ryhmaMassat[ryhma])} g</span>
         </td>
       `;
-
       header.onclick = () => toggleGroup(ryhma);
-
       tbody.appendChild(header);
-
       viimeRyhmä = ryhma;
     }
-
-
 
     // ---------- OSA RIVI ----------
 
     const tr = document.createElement("tr");
-
     tr.dataset.group = ryhma;
-
     tr.innerHTML = `
       <td class="col-nro">${o.osanro || ""}</td>
 
@@ -634,86 +509,48 @@ function renderOsat() {
       </td>
     `;
 
-
-
     const massaInput = tr.querySelectorAll("input")[0];
     const varsiInput = tr.querySelectorAll("input")[1];
     const select = tr.querySelector("select");
-
-
 
     // ---------- KOKOONPANOLISTA ----------
 
     const kokoonpanot = state.kokoonpanot.length
       ? state.kokoonpanot
       : [...new Set(state.osat.map(x => x.kokoonpano))];
-
     kokoonpanot.forEach(k => {
-
       const opt = document.createElement("option");
-
       opt.value = k;
-
       opt.textContent = k;
-
       if (k === o.kokoonpano) opt.selected = true;
-
       select.appendChild(opt);
-
     });
-
-
 
     // ---------- MUUTOSLOGIIKKA ----------
 
     massaInput.oninput = () => {
-
       o.massa = Number(massaInput.value);
-
       o._dirty = true;
-
       muutoksia = true;
-
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
-
       renderOsat(); // päivitä ryhmämassa
-
     };
-
-
 
     varsiInput.oninput = () => {
-
       o.varsi = Number(varsiInput.value);
-
       o._dirty = true;
-
       muutoksia = true;
-
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
-
     };
-
-
 
     select.onchange = () => {
-
       o.kokoonpano = select.value;
-
       o._dirty = true;
-
       muutoksia = true;
-
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
-
     };
-
-
-
     tbody.appendChild(tr);
-
   });
-
 
 
   // ===============================
@@ -721,58 +558,33 @@ function renderOsat() {
   // ===============================
 
   const suodatusBtn = document.getElementById("suodatusBtn");
-
   if (suodatusBtn) {
-
     suodatusBtn.classList.toggle("active", state.suodatus);
-
   }
-
-
-
   container.appendChild(table);
-
 }
-
 
 
 function toggleGroup(ryhma) {
 
   const rows = document.querySelectorAll(`#osatTable tr[data-group='${ryhma}']`);
-
   const header = document.querySelector(`.osa-group-header[data-group='${ryhma}']`);
-
   const arrow = header?.querySelector(".group-arrow");
-
   let hidden = false;
 
   rows.forEach(r => {
-
     if (r.classList.contains("osa-group-header")) return;
-
     if (r.style.display === "none") {
-
       r.style.display = "";
-
     } else {
-
       r.style.display = "none";
-
       hidden = true;
-
     }
-
   });
-
   if (arrow) {
-
     arrow.textContent = hidden ? "▸" : "▾";
-
   }
-
 }
-
-
 
 
 // ===============================
@@ -804,25 +616,16 @@ function scrollOhje(id) {
 function bindStartEvents(){
 
   const table = document.getElementById("startTableBody");
-
   if(!table) return;
-
   table.onclick = (e)=>{
-
     const tr = e.target.closest("tr");
-
     if(!tr) return;
-
     document
       .querySelectorAll("#startTableBody tr")
       .forEach(r=>r.classList.remove("selected"));
-
     tr.classList.add("selected");
-
     state.valittuLennokkiId = tr.dataset.id;
-
   };
-
 }
 
 function bindEditorEvents(){
@@ -838,7 +641,6 @@ function bindEditorEvents(){
   if (yhteenvetoBtn) yhteenvetoBtn.onclick = naytaYhteenveto;
   if (osatBtn) osatBtn.onclick = naytaOsat;
   if (takaisinBtn) takaisinBtn.onclick = palaaAloitukseen;
-
 }
 
 function init() {
@@ -882,16 +684,10 @@ function init() {
     // ===============================
 
     loadLennokit();
-
-
     console.log("Init valmis");
-
   } catch (err) {
-
     console.error("INIT virhe:", err);
-
   }
-
 }
 
 
