@@ -353,8 +353,8 @@ async function naytaYhteenveto() {
         <thead>
           <tr>
             <th>Kokoonpano</th>
-            <th class="col-num">MassaSumma</th>
-            <th class="col-num">MomenttiSumma</th>
+            <th class="col-num">SumMassa</th>
+            <th class="col-num">SumMomentti</th>
             <th class="col-num">Painopiste</th>
           </tr>
         </thead>
