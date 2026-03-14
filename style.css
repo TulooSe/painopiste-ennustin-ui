@@ -654,6 +654,11 @@ tr.yhteensa td {
   border-radius: 4px;
 }
 
+.osa-group-header.unsaved {
+  animation: blink-bg 1s linear infinite;
+  font-weight: 700;
+}
+
 .osa-group-header:hover {
   background: #e2e8f0;
 }
