@@ -297,6 +297,28 @@ button.loading {
   background: #e5e7eb;
 }
 
+/* ALOITUSTAULUKON SARAKKEIDEN LEVEYS */
+
+.start-table th:nth-child(1),
+.start-table td:nth-child(1) {
+  width: 60%;        /* Lennokki */
+}
+
+.start-table th:nth-child(2),
+.start-table td:nth-child(2) {
+  width: 15%;        /* Paino */
+}
+
+.start-table th:nth-child(3),
+.start-table td:nth-child(3) {
+  width: 15%;        /* Pp */
+}
+
+.start-table th:nth-child(4),
+.start-table td:nth-child(4) {
+  width: 10%;        /* Pvm */
+}
+
 .col-name {
   width: 60%;
   min-width: 220px;
