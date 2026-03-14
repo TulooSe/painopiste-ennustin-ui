@@ -301,12 +301,12 @@ button.loading {
 
 .start-table th:nth-child(1),
 .start-table td:nth-child(1) {
-  width: 45%;        /* Lennokki */
+  width: 55%;        /* Lennokki */
 }
 
 .start-table th:nth-child(2),
 .start-table td:nth-child(2) {
-  width: 30%;        /* Paino */
+  width: 20%;        /* Paino */
 }
 
 .start-table th:nth-child(3),
