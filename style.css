@@ -298,22 +298,27 @@ button.loading {
 }
 
 .col-name {
-  width: 40%;
-  min-width: 180px;
+  width: 60%;
+  min-width: 220px;
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;   
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .col-num {
-  width: 35%;
+  width: 18%;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
+.start-table td.col-num:nth-child(3) {
+  width: 14%;          /* Pp */
+}
+
 .col-date {
-  width: 92px;
+  width: 8%;
   text-align: center;
 }
 
