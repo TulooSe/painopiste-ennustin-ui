@@ -301,7 +301,7 @@ button.loading {
 
 .start-table th:nth-child(1),
 .start-table td:nth-child(1) {
-  width: 55%;        /* Lennokki */
+  width: 50%;        /* Lennokki */
 }
 
 .start-table th:nth-child(2),
@@ -316,7 +316,7 @@ button.loading {
 
 .start-table th:nth-child(4),
 .start-table td:nth-child(4) {
-  width: 20%;        /* Pvm */
+  width: 25%;        /* Pvm */
 }
 
 .col-name {
