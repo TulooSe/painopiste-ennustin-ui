@@ -554,7 +554,7 @@ function renderOsat() {
       o._dirty = true;
       muutoksia = true;
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
-      renderOsat(); // päivitä ryhmämassa
+      paivitaRyhmaMassa(ryhma);
     };
 
     varsiInput.oninput = () => {
@@ -587,10 +587,21 @@ function renderOsat() {
 // RYHMÄOTSIKON UNSAVED-TILA
 // ===============================
 
-if (muutoksia) {
-  document
-    .querySelectorAll(".osa-group-header")
-    .forEach(h => h.classList.add("unsaved"));
+  if (muutoksia) {
+    massaInput.oninput = () => {
+  
+    o.massa = Number(massaInput.value);
+    o._dirty = true;
+    muutoksia = true;
+  
+    if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+  
+    document
+      .querySelectorAll(".osa-group-header")
+      .forEach(h => h.classList.add("unsaved"));
+  
+    paivitaRyhmaMassa(ryhma);
+  };
 }
   container.appendChild(table);
 }
@@ -614,6 +625,18 @@ function toggleGroup(ryhma) {
   });
   if (arrow) {
     arrow.textContent = hidden ? "▸" : "▾";
+  }
+}
+
+function paivitaRyhmaMassa(ryhma){
+  const massat = state.osat
+    .filter(o => (o.ryhma || "Muut") === ryhma)
+    .reduce((sum,o)=> sum + Number(o.massa || 0),0);
+  const header = document.querySelector(
+    `.osa-group-header[data-group='${ryhma}'] .group-massa`
+  );
+  if(header){
+    header.textContent = Math.round(massat) + " g";
   }
 }
 
