@@ -644,25 +644,25 @@ tr.yhteensa td {
 
 #yhteenvetoView th:nth-child(1),
 #yhteenvetoView td:nth-child(1) {
-  width: 50%;
+  width: 40%;
   text-align: left;
 }
 
 #yhteenvetoView th:nth-child(2),
 #yhteenvetoView td:nth-child(2) {
-  width: 17%;
+  width: 20%;
   text-align: right;
 }
 
 #yhteenvetoView th:nth-child(3),
 #yhteenvetoView td:nth-child(3) {
-  width: 17%;
+  width: 20%;
   text-align: right;
 }
 
 #yhteenvetoView th:nth-child(4),
 #yhteenvetoView td:nth-child(4) {
-  width: 16%;
+  width: 20%;
   text-align: right;
 }
 
