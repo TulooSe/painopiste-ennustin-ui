@@ -201,8 +201,6 @@ async function avaaLennokki() {
   await paivitaLennokkiLista();
   // 4 Hae osat
   await lataaOsat();
-  // 5 Piirrä osat
-  renderOsat();
 }
 
 async function paivitaLennokkiLista() {
