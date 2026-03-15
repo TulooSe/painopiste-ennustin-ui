@@ -316,6 +316,10 @@ async function tallenna() {
 
     muuttuneet.forEach(o => delete o._dirty);
     muutoksia = false;
+    document
+      .querySelectorAll(".osa-group-header")
+      .forEach(h => h.classList.remove("unsaved"));
+    
     if (tallennaBtn) {
       tallennaBtn.disabled = false;
       tallennaBtn.classList.remove("unsaved");
@@ -330,7 +334,7 @@ async function tallenna() {
 }
 
 async function naytaYhteenveto() {
-
+  if (!varmistaTallennus()) return;
   const view = document.getElementById("yhteenvetoView");
   const osatView = document.getElementById("osatView");
   if (!view || !osatView) {
@@ -387,7 +391,13 @@ function vaihdaSuodatus() {
   renderOsat();
 }
 
+function varmistaTallennus() {
+  if (!muutoksia) return true;
+  return confirm("Tallentamattomia muutoksia. Poistutaanko silti?");
+}
+
 function palaaAloitukseen() {
+  if (!varmistaTallennus()) return;
   document.getElementById("appView").style.display = "none";
   document.getElementById("startView").style.display = "block";
 }
@@ -572,6 +582,16 @@ function renderOsat() {
   if (suodatusBtn) {
     suodatusBtn.classList.toggle("active", state.suodatus);
   }
+
+  // ===============================
+// RYHMÄOTSIKON UNSAVED-TILA
+// ===============================
+
+if (muutoksia) {
+  document
+    .querySelectorAll(".osa-group-header")
+    .forEach(h => h.classList.add("unsaved"));
+}
   container.appendChild(table);
 }
 
@@ -699,6 +719,12 @@ function init() {
   } catch (err) {
     console.error("INIT virhe:", err);
   }
+    window.addEventListener("beforeunload", function (e) {
+    if (!muutoksia) return;
+    e.preventDefault();
+    e.returnValue = "";
+  
+  });
 }
 
 
