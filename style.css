@@ -614,10 +614,6 @@ td.col-num input {
   text-align: right
 }
 
-#yhteenvetoView table {
-  width: 100%;
-}
-
 th.col-nro, td.col-nro { width: 5ch; text-align: center; }
 th.col-osa, td.col-osa { width: 21ch; }
 th.col-num, td.col-num { width: 15ch; text-align: right; }
@@ -629,11 +625,45 @@ td.col-num:nth-child(4) {
   width: 20ch;
 }
 
+
+/* ===============================
+   YHTEENVETO TAULUKON SARAKKEET
+   =============================== */
+
 /* Yhteenveto: Yhteensä-rivi */
 tr.yhteensa td {
   background: #e5e7eb;        /* sama vaalea harmaa kuin otsikoissa */
   font-weight: bold;
   border-top: 2px solid #9ca3af;
+}
+
+#yhteenvetoView table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+#yhteenvetoView th:nth-child(1),
+#yhteenvetoView td:nth-child(1) {
+  width: 50%;
+  text-align: left;
+}
+
+#yhteenvetoView th:nth-child(2),
+#yhteenvetoView td:nth-child(2) {
+  width: 17%;
+  text-align: right;
+}
+
+#yhteenvetoView th:nth-child(3),
+#yhteenvetoView td:nth-child(3) {
+  width: 17%;
+  text-align: right;
+}
+
+#yhteenvetoView th:nth-child(4),
+#yhteenvetoView td:nth-child(4) {
+  width: 16%;
+  text-align: right;
 }
 
 /* ===== OSARYHMÄT ===== */
