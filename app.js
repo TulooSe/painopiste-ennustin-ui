@@ -665,8 +665,6 @@ function scrollOhje(id) {
   }
 }
 
-
-
 function bindStartEvents(){
 
   const table = document.getElementById("startTableBody");
@@ -700,6 +698,7 @@ function bindEditorEvents(){
 function init() {
 
   console.log("=== Painopiste käynnistyy ===");
+  tallennaBtn = document.getElementById("tallennaBtn");
   console.log("Versio:", APP_VERSION);
   console.log("Käyttäjä:", Auth.getUser());
 
