@@ -714,15 +714,16 @@ function bindStartEvents(){
 
 function bindEditorEvents(){
 
-  document.querySelectorAll("#tallennaBtn")
-  .forEach(btn => btn.onclick = tallenna);naBtn");
-  
   const suodatusBtn = document.getElementById("suodatusBtn");
   const yhteenvetoBtn = document.getElementById("yhteenvetoBtn");
   const osatBtn = document.getElementById("osatBtn");
   const takaisinBtn = document.getElementById("takaisinBtn");
 
-  if (tallennaBtn) tallennaBtn.onclick = tallenna;
+  // Tallenna-napit (voi olla useita)
+  document
+    .querySelectorAll("#tallennaBtn")
+    .forEach(btn => btn.onclick = tallenna);
+
   if (suodatusBtn) suodatusBtn.onclick = vaihdaSuodatus;
   if (yhteenvetoBtn) yhteenvetoBtn.onclick = naytaYhteenveto;
   if (osatBtn) osatBtn.onclick = naytaOsat;
