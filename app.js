@@ -714,7 +714,9 @@ function bindStartEvents(){
 
 function bindEditorEvents(){
 
-  const tallennaBtn = document.getElementById("tallennaBtn");
+  document.querySelectorAll("#tallennaBtn")
+  .forEach(btn => btn.onclick = tallenna);naBtn");
+  
   const suodatusBtn = document.getElementById("suodatusBtn");
   const yhteenvetoBtn = document.getElementById("yhteenvetoBtn");
   const osatBtn = document.getElementById("osatBtn");
