@@ -720,10 +720,18 @@ tr.yhteensa td {
 }
 
 .editor-footer button{
-  padding: 10px 30px;
-  font-size: 16px;
+  background: #e5e7eb;
+  color: #111827;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
+.editor-footer button:hover{
+  background:#cbd5f5;
+}
 
 /* =========================================================
    9. INPUTIT, SELECTIT & FOKUS
