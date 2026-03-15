@@ -254,6 +254,9 @@ function naytaOsat() {
 
   if (osatView) osatView.style.display = "block";
   if (yhteenvetoView) yhteenvetoView.style.display = "none";
+
+  const footer = document.querySelector(".editor-footer");
+  if (footer) footer.style.display = "block";  
 }
 
 async function lataaYhteenveto() {
@@ -350,6 +353,9 @@ async function naytaYhteenveto() {
     });
     osatView.style.display = "none";
     view.style.display = "block";
+    
+    const footer = document.querySelector(".editor-footer");
+    if (footer) footer.style.display = "none";
     if (!data || !data.length) {
       view.innerHTML = "<p>Ei tietoja</p>";
       return;
@@ -402,6 +408,9 @@ function palaaAloitukseen() {
   if (!varmistaTallennus()) return;
   document.getElementById("appView").style.display = "none";
   document.getElementById("startView").style.display = "block";
+
+  const footer = document.querySelector(".editor-footer");
+  if (footer) footer.style.display = "none";
 }
 
 
