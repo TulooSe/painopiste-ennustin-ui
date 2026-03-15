@@ -696,6 +696,23 @@ tr.yhteensa td {
   margin-top: 6px;
 }
 
+/* STICKY TALLENNA */
+
+.editor-footer{
+  position: sticky;
+  bottom: 0;
+  background: white;
+  border-top: 1px solid #d1d5db;
+  padding: 10px;
+  text-align: center;
+  z-index: 20;
+}
+
+.editor-footer button{
+  padding: 10px 30px;
+  font-size: 16px;
+}
+
 
 /* =========================================================
    9. INPUTIT, SELECTIT & FOKUS
