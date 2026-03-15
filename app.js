@@ -436,9 +436,45 @@ function renderStartTable() {
   });
 }
 
+function handleEnterNavigation(e) {
+  if (e.key !== "Enter") return;
+  e.preventDefault();
+  const row = e.target.closest("tr");
+  if (!row) return;
+  const massa = row.querySelectorAll("input")[0];
+  const varsi = row.querySelectorAll("input")[1];
+  const select = row.querySelector("select");
+
+  // Massa → Varsi
+  if (e.target === massa) {
+    varsi.focus();
+    return;
+  }
+
+  // Varsi → Kokoonpano
+  if (e.target === varsi) {
+    select.focus();
+    return;
+  }
+
+  // Kokoonpano → seuraavan rivin Massa
+  if (e.target === select) {
+    const nextRow = row.nextElementSibling;
+    if (!nextRow) return;
+    if (nextRow.classList.contains("osa-group-header")) {
+      const afterHeader = nextRow.nextElementSibling;
+      if (!afterHeader) return;
+      const nextInput = afterHeader.querySelector("input");
+      if (nextInput) nextInput.focus();
+      return;
+    }
+    const nextInput = nextRow.querySelector("input");
+    if (nextInput) nextInput.focus();
+  }
+}
+
 
 function renderOsat() {
-
   const container = document.getElementById("osatView");
   if (!container) {
     console.error("osatView puuttuu HTML:stä");
@@ -533,6 +569,9 @@ function renderOsat() {
     const massaInput = tr.querySelectorAll("input")[0];
     const varsiInput = tr.querySelectorAll("input")[1];
     const select = tr.querySelector("select");
+    massaInput.addEventListener("keydown", handleEnterNavigation);
+    varsiInput.addEventListener("keydown", handleEnterNavigation);
+    select.addEventListener("keydown", handleEnterNavigation);
 
     // ---------- KOKOONPANOLISTA ----------
 
