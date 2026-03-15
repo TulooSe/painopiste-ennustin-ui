@@ -654,11 +654,22 @@ tr.yhteensa td {
   border-radius: 4px;
 }
 
-.osa-group-header.unsaved {
-  animation: blink-bg 1s linear infinite;
-  font-weight: 700;
-}
+/* ===============================
+   RYHMÄOTSIKON MUUTOSVILKUTUS
+   =============================== */
 
+.osa-group-header.unsaved {
+  animation: blinkHeader 1s infinite;
+}
+@keyframes blinkHeader {  
+  0% {background-color: #fff3cd;                  
+  }
+  50% {background-color: #ffe066;
+  }
+  100% {background-color: #fff3cd;
+  }
+
+}
 .osa-group-header:hover {
   background: #e2e8f0;
 }
