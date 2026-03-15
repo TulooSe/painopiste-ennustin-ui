@@ -554,6 +554,11 @@ function renderOsat() {
       o._dirty = true;
       muutoksia = true;
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+      // vilkutetaan ryhmäotsikkoa
+      const header = document.querySelector(
+        `.osa-group-header[data-group='${ryhma}']`
+      );
+      if (header) header.classList.add("unsaved");
       paivitaRyhmaMassa(ryhma);
     };
 
@@ -562,6 +567,10 @@ function renderOsat() {
       o._dirty = true;
       muutoksia = true;
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+      const header = document.querySelector(
+        `.osa-group-header[data-group='${ryhma}']`
+      );
+      if (header) header.classList.add("unsaved");
     };
 
     select.onchange = () => {
@@ -569,7 +578,12 @@ function renderOsat() {
       o._dirty = true;
       muutoksia = true;
       if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+      const header = document.querySelector(
+        `.osa-group-header[data-group='${ryhma}']`
+      );
+      if (header) header.classList.add("unsaved");
     };
+    
     tbody.appendChild(tr);
   });
 
@@ -582,27 +596,6 @@ function renderOsat() {
   if (suodatusBtn) {
     suodatusBtn.classList.toggle("active", state.suodatus);
   }
-
-  // ===============================
-// RYHMÄOTSIKON UNSAVED-TILA
-// ===============================
-
-  if (muutoksia) {
-    massaInput.oninput = () => {
-  
-    o.massa = Number(massaInput.value);
-    o._dirty = true;
-    muutoksia = true;
-  
-    if (tallennaBtn) tallennaBtn.classList.add("unsaved");
-  
-    document
-      .querySelectorAll(".osa-group-header")
-      .forEach(h => h.classList.add("unsaved"));
-  
-    paivitaRyhmaMassa(ryhma);
-  };
-}
   container.appendChild(table);
 }
 
