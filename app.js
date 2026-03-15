@@ -141,7 +141,6 @@ let valittuLennokkiId = null;
 let aktiivinenLennokkiId = null;
 let uusiLennokkiNimi = "";
 let muutoksia = false;
-let viimeRyhmä = null;
 
 async function API(action, payload = {}) {
   const user = Auth.getUser();
