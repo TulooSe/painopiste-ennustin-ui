@@ -320,10 +320,12 @@ async function tallenna() {
       .querySelectorAll(".osa-group-header")
       .forEach(h => h.classList.remove("unsaved"));
     
-    if (tallennaBtn) {
-      tallennaBtn.disabled = false;
-      tallennaBtn.classList.remove("unsaved");
-    }
+   document
+    .querySelectorAll("#tallennaBtn")
+    .forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove("unsaved");
+    });
 
   } catch (err) {
     alert("Tallennus epäonnistui: " + err);
@@ -592,7 +594,10 @@ function renderOsat() {
       o.massa = Number(massaInput.value);
       o._dirty = true;
       muutoksia = true;
-      if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+      document
+        .querySelectorAll("#tallennaBtn")
+        .forEach(btn => btn.classList.add("unsaved"));
+          
       // vilkutetaan ryhmäotsikkoa
       const header = document.querySelector(
         `.osa-group-header[data-group='${ryhma}']`
@@ -605,7 +610,11 @@ function renderOsat() {
       o.varsi = Number(varsiInput.value);
       o._dirty = true;
       muutoksia = true;
-      if (tallennaBtn) tallennaBtn.classList.add("unsaved");
+      document
+        .querySelectorAll("#tallennaBtn")
+        .forEach(btn => btn.classList.add("unsaved"));
+
+      
       const header = document.querySelector(
         `.osa-group-header[data-group='${ryhma}']`
       );
