@@ -444,40 +444,41 @@ function renderStartTable() {
   });
 }
 
+
 function handleEnterNavigation(e) {
   if (e.key !== "Enter") return;
   e.preventDefault();
   const row = e.target.closest("tr");
   if (!row) return;
-  const massa = row.querySelectorAll("input")[0];
-  const varsi = row.querySelectorAll("input")[1];
+  const inputs = row.querySelectorAll("input");
+  const massa = inputs[0];
+  const varsi = inputs[1];
   const select = row.querySelector("select");
 
   // Massa → Varsi
   if (e.target === massa) {
-    varsi.focus();
+    varsi?.focus();
     return;
   }
 
   // Varsi → Kokoonpano
   if (e.target === varsi) {
-    select.focus();
+    select?.focus();
     return;
   }
 
   // Kokoonpano → seuraavan rivin Massa
   if (e.target === select) {
-    const nextRow = row.nextElementSibling;
-    if (!nextRow) return;
-    if (nextRow.classList.contains("osa-group-header")) {
-      const afterHeader = nextRow.nextElementSibling;
-      if (!afterHeader) return;
-      const nextInput = afterHeader.querySelector("input");
-      if (nextInput) nextInput.focus();
-      return;
+    let next = row.nextElementSibling;
+    // ohita ryhmäotsikko
+    while (next && next.classList.contains("osa-group-header")) {
+      next = next.nextElementSibling;
     }
-    const nextInput = nextRow.querySelector("input");
-    if (nextInput) nextInput.focus();
+    if (!next) return;
+    const nextMassa = next.querySelector("input");
+    if (nextMassa) {
+      nextMassa.focus();
+    }
   }
 }
 
