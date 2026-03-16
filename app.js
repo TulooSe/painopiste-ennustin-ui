@@ -440,6 +440,34 @@ function renderStartTable() {
       tr.classList.add("selected");
       state.valittuLennokkiId = l.id;
     };
+    // ===============================
+    // UUSI LENNUKKI RIVI
+    // ===============================
+    
+    const trNew = document.createElement("tr");
+    
+    trNew.innerHTML = `
+    <td>
+      <input id="uusiNimi" 
+             type="text" 
+             placeholder="Anna nimi"
+             class="start-input">
+    </td>
+    
+    <td class="col-num">-</td>
+    
+    <td class="col-num">-</td>
+    
+    <td>
+      <select id="uusiTila" class="start-select">
+        <option value="RAKENTEILLA">RAKENTEILLA</option>
+        <option value="PUOLIVALMIS">PUOLIVALMIS</option>
+        <option value="VALMIS">VALMIS</option>
+      </select>
+    </td>
+    `;
+    
+    body.appendChild(trNew);
     body.appendChild(tr);
   });
 }
