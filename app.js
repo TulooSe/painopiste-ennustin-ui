@@ -416,7 +416,6 @@ function palaaAloitukseen() {
 // ===============================
 
 function renderStartTable() {
-
   if (!Array.isArray(state.lennokit)) {
     console.error("Lennokit ei ole array", state.lennokit);
     return;
@@ -424,6 +423,11 @@ function renderStartTable() {
   const body = document.getElementById("startTableBody");
   if (!body) return;
   body.innerHTML = "";
+
+  // ===============================
+  // LENNOKIT
+  // ===============================
+
   state.lennokit.forEach(l => {
     const tr = document.createElement("tr");
     tr.dataset.id = l.id;
@@ -440,24 +444,23 @@ function renderStartTable() {
       tr.classList.add("selected");
       state.valittuLennokkiId = l.id;
     };
-    // ===============================
-    // UUSI LENNUKKI RIVI
-    // ===============================
-    
-    const trNew = document.createElement("tr");
-    
-    trNew.innerHTML = `
+    body.appendChild(tr);
+  });
+
+  // ===============================
+  // UUSI LENNUKKI RIVI
+  // ===============================
+
+  const trNew = document.createElement("tr");
+  trNew.innerHTML = `
     <td>
-      <input id="uusiNimi" 
-             type="text" 
+      <input id="uusiNimi"
+             type="text"
              placeholder="Anna nimi"
              class="start-input">
     </td>
-    
     <td class="col-num">-</td>
-    
     <td class="col-num">-</td>
-    
     <td>
       <select id="uusiTila" class="start-select">
         <option value="RAKENTEILLA">RAKENTEILLA</option>
@@ -465,11 +468,8 @@ function renderStartTable() {
         <option value="VALMIS">VALMIS</option>
       </select>
     </td>
-    `;
-    
-    body.appendChild(trNew);
-    body.appendChild(tr);
-  });
+  `;
+  body.appendChild(trNew);
 }
 
 
