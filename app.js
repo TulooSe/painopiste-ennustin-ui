@@ -470,7 +470,23 @@ function renderStartTable() {
     </td>
   `;
   body.appendChild(trNew);
+  const nimiInput = trNew.querySelector("#uusiNimi");
+  const tilaSelect = trNew.querySelector("#uusiTila");
+  const addBtn = document.getElementById("lisaaLennokkiBtn"); // + nappi
+    if (nimiInput && addBtn) {
+      nimiInput.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter") return;
+      const nimi = nimiInput.value.trim();
+      if (!nimi) {
+        alert("Anna lennokin nimi");
+      return;
+     }
+     // Aktivoi lisäys
+      addBtn.classList.add("unsaved"); // sama vilkutus kuin tallenna
+      addBtn.dataset.ready = "true";
+    });
 }
+
 
 
 function handleEnterNavigation(e) {
@@ -742,7 +758,6 @@ function scrollOhje(id) {
 }
 
 function bindStartEvents(){
-
   const table = document.getElementById("startTableBody");
   if(!table) return;
   table.onclick = (e)=>{
@@ -754,6 +769,32 @@ function bindStartEvents(){
     tr.classList.add("selected");
     state.valittuLennokkiId = tr.dataset.id;
   };
+  const addBtn = document.getElementById("lisaaLennokkiBtn");
+  if (addBtn) {
+    addBtn.onclick = async () => {
+      if (addBtn.dataset.ready !== "true") return;
+      const nimi = document.getElementById("uusiNimi").value.trim();
+      const tila = document.getElementById("uusiTila").value;
+      if (!nimi) {
+        alert("Anna lennokin nimi");
+        return;
+      }
+      try {
+        await API("luoLennokki", {
+          nimi: nimi,
+          tila: tila
+        });
+        // reset
+        addBtn.classList.remove("unsaved");
+        addBtn.dataset.ready = "false";
+        document.getElementById("uusiNimi").value = "";
+        document.getElementById("uusiNimi").focus();
+        loadLennokit();
+        } catch (err) {
+        alert("Lisäys epäonnistui: " + err);
+      }
+    };
+  }
 }
 
 function bindEditorEvents(){
