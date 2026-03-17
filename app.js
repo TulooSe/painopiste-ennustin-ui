@@ -477,6 +477,10 @@ function renderStartTable() {
       nimiInput.addEventListener("keydown", (e) => {
       if (e.key !== "Enter") return;
       const nimi = nimiInput.value.trim();
+      nimiInput.addEventListener("input", () => {
+        addBtn.classList.remove("unsaved");
+        addBtn.dataset.ready = "false";
+      });  
       if (!nimi) {
         alert("Anna lennokin nimi");
       return;
@@ -486,7 +490,7 @@ function renderStartTable() {
       addBtn.dataset.ready = "true";
     });
 }
-
+}
 
 
 function handleEnterNavigation(e) {
