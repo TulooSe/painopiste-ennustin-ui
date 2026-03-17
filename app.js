@@ -472,7 +472,7 @@ function renderStartTable() {
   body.appendChild(trNew);
   const nimiInput = trNew.querySelector("#uusiNimi");
   /*const tilaSelect = trNew.querySelector("#uusiTila");*/
-  const addBtn = document.getElementById("lisaaLennokkiBtn"); // + nappi
+  const addBtn = document.querySelector(".start-actions button"); // + nappi
     if (nimiInput && addBtn) {
       nimiInput.addEventListener("input", () => {
         addBtn.classList.remove("unsaved");
@@ -800,6 +800,38 @@ function bindStartEvents(){
     };
   }
 }
+
+
+async function avaaUusiLennokki() {
+  const addBtn = document.querySelector(".start-actions button"); // + nappi
+  // sallitaan lisäys vain jos Enter painettu
+  if (addBtn?.dataset.ready !== "true") return;
+  const nimiInput = document.getElementById("uusiNimi");
+  const tilaSelect = document.getElementById("uusiTila");
+  const nimi = nimiInput?.value.trim();
+  const tila = tilaSelect?.value;
+  if (!nimi) {
+    alert("Anna lennokin nimi");
+    return;
+  }
+  try {
+    await API("luoLennokki", {
+      nimi: nimi,
+      tila: tila
+    });
+    // reset
+    addBtn.classList.remove("unsaved");
+    addBtn.dataset.ready = "false";
+    if (nimiInput) {
+      nimiInput.value = "";
+      nimiInput.focus();
+    }
+    loadLennokit();
+  } catch (err) {
+    alert("Lisäys epäonnistui: " + err);
+  }
+}
+
 
 function bindEditorEvents(){
 
