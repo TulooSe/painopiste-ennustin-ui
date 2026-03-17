@@ -230,6 +230,9 @@ button.loading {
   background: #d1d5db;
 }
 
+#lisaaLennokkiBtn.unsaved {
+  animation: blink 1s infinite;
+}
 
 /* =========================================================
    4. ALOITUSNÄYTTÖ – LENNOKKITAULUKKO
