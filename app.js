@@ -471,25 +471,25 @@ function renderStartTable() {
   `;
   body.appendChild(trNew);
   const nimiInput = trNew.querySelector("#uusiNimi");
-  const tilaSelect = trNew.querySelector("#uusiTila");
+  /*const tilaSelect = trNew.querySelector("#uusiTila");*/
   const addBtn = document.getElementById("lisaaLennokkiBtn"); // + nappi
     if (nimiInput && addBtn) {
-      nimiInput.addEventListener("keydown", (e) => {
-      if (e.key !== "Enter") return;
-      const nimi = nimiInput.value.trim();
       nimiInput.addEventListener("input", () => {
         addBtn.classList.remove("unsaved");
         addBtn.dataset.ready = "false";
-      });  
-      if (!nimi) {
-        alert("Anna lennokin nimi");
-      return;
-     }
-     // Aktivoi lisäys
-      addBtn.classList.add("unsaved"); // sama vilkutus kuin tallenna
-      addBtn.dataset.ready = "true";
-    });
-}
+      }); 
+      nimiInput.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter") return;
+        const nimi = nimiInput.value.trim();
+        if (!nimi) {
+          alert("Anna lennokin nimi");
+        return;
+       }
+        // Aktivoi lisäys
+        addBtn.classList.add("unsaved"); // sama vilkutus kuin tallenna
+        addBtn.dataset.ready = "true";
+      });
+  }
 }
 
 
