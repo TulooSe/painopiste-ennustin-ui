@@ -170,7 +170,7 @@ async function API(action, payload = {}) {
 async function loadLennokit() {
   console.log("Haetaan lennokit käyttäjälle:", Auth.getUser());
   try {
-    const data = await API("haeLennokitAloitukseen");
+    const data = await API("haeLennokit");
     if (!Array.isArray(data)) {
       console.error("Virheellinen vastaus:", data);
       state.lennokit = [];
@@ -448,7 +448,7 @@ function renderStartTable() {
   });
 
   // ===============================
-  // UUSI LENNUKKI RIVI
+  // UUSI LENNOKKI RIVI
   // ===============================
 
   const trNew = document.createElement("tr");
@@ -784,7 +784,7 @@ function bindStartEvents(){
         return;
       }
       try {
-        await API("luoLennokki", {
+        await API("luoUusiLennokki", {
           nimi: nimi,
           malli: tila
         });
@@ -798,37 +798,6 @@ function bindStartEvents(){
         alert("Lisäys epäonnistui: " + err);
       }
     };
-  }
-}
-
-
-async function avaaUusiLennokki() {
-  const addBtn = document.querySelector(".start-actions button"); // + nappi
-  // sallitaan lisäys vain jos Enter painettu
-  if (addBtn?.dataset.ready !== "true") return;
-  const nimiInput = document.getElementById("uusiNimi");
-  const tilaSelect = document.getElementById("uusiMalli");
-  const nimi = nimiInput?.value.trim();
-  const tila = tilaSelect?.value;
-  if (!nimi) {
-    alert("Anna lennokin nimi");
-    return;
-  }
-  try {
-    await API("luoUusiLennokki", {
-      nimi: nimi,
-      malli: tila
-    });
-    // reset
-    addBtn.classList.remove("unsaved");
-    addBtn.dataset.ready = "false";
-    if (nimiInput) {
-      nimiInput.value = "";
-      nimiInput.focus();
-    }
-    loadLennokit();
-  } catch (err) {
-    alert("Lisäys epäonnistui: " + err);
   }
 }
 
