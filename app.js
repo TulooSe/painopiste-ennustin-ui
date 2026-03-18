@@ -170,7 +170,7 @@ async function API(action, payload = {}) {
 async function loadLennokit() {
   console.log("Haetaan lennokit käyttäjälle:", Auth.getUser());
   try {
-    const data = await API("listaaLennokit");
+    const data = await API("haeLennokitAloituksee");
     if (!Array.isArray(data)) {
       console.error("Virheellinen vastaus:", data);
       state.lennokit = [];
