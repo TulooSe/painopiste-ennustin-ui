@@ -462,7 +462,7 @@ function renderStartTable() {
     <td class="col-num">-</td>
     <td class="col-num">-</td>
     <td>
-      <select id="uusiTila" class="start-select">
+      <select id="uusiMalli" class="start-select">
         <option value="RAKENTEILLA">RAKENTEILLA</option>
         <option value="PUOLIVALMIS">PUOLIVALMIS</option>
         <option value="VALMIS">VALMIS</option>
@@ -778,7 +778,7 @@ function bindStartEvents(){
     addBtn.onclick = async () => {
       if (addBtn.dataset.ready !== "true") return;
       const nimi = document.getElementById("uusiNimi").value.trim();
-      const tila = document.getElementById("uusiTila").value;
+      const tila = document.getElementById("uusiMalli").value;
       if (!nimi) {
         alert("Anna lennokin nimi");
         return;
@@ -786,7 +786,7 @@ function bindStartEvents(){
       try {
         await API("luoLennokki", {
           nimi: nimi,
-          tila: tila
+          malli: tila
         });
         // reset
         addBtn.classList.remove("unsaved");
@@ -807,7 +807,7 @@ async function avaaUusiLennokki() {
   // sallitaan lisäys vain jos Enter painettu
   if (addBtn?.dataset.ready !== "true") return;
   const nimiInput = document.getElementById("uusiNimi");
-  const tilaSelect = document.getElementById("uusiTila");
+  const tilaSelect = document.getElementById("uusiMalli");
   const nimi = nimiInput?.value.trim();
   const tila = tilaSelect?.value;
   if (!nimi) {
@@ -815,9 +815,9 @@ async function avaaUusiLennokki() {
     return;
   }
   try {
-    await API("luoLennokki", {
+    await API("luoUusiLennokki", {
       nimi: nimi,
-      tila: tila
+      malli: tila
     });
     // reset
     addBtn.classList.remove("unsaved");
