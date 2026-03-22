@@ -142,9 +142,11 @@ let aktiivinenLennokkiId = null;
 let uusiLennokkiNimi = "";
 let muutoksia = false;
 
+
 async function API(action, payload = {}) {
   const user = Auth.getUser();
   if (!user) throw new Error("Käyttäjä ei ole kirjautunut");
+  console.log("API kutsu:", action, payload);
   const response = await fetch(API_BASE, {
     method: "POST",
     headers: {
@@ -156,16 +158,25 @@ async function API(action, payload = {}) {
       ...payload
     })
   });
+  console.log("HTTP status:", response.status);
+  const text = await response.text();
+  console.log("RAW vastaus:", text);
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch (e) {
+    throw new Error("JSON parse failed: " + text);
+  }
+  console.log("JSON:", data);
   if (!response.ok) {
     throw new Error("HTTP " + response.status);
   }
-  const data = await response.json();
-  console.log("API vastaus:", action, data);
   if (data.error) {
     throw new Error(data.error);
   }
   return data;
 }
+
 
 async function loadLennokit() {
   console.log("Haetaan lennokit käyttäjälle:", Auth.getUser());
