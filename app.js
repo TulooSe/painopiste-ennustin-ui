@@ -887,5 +887,3 @@ document.addEventListener("userLoggedIn", () => {
   console.log("Käyttäjä kirjautunut:", Auth.getUser());
   init();
 });
-
-window.avaaUusiLennokki = avaaUusiLennokki;
