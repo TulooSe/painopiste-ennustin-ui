@@ -309,7 +309,6 @@ async function lataaYhteenveto() {
 }
 
 async function tallenna() {
-
   const virhe = state.osat.find(o => Number(o.massa) < 0);
   if (virhe) {
     alert("Massa ei voi olla negatiivinen.\n\nOsa: " + virhe.osa);
@@ -484,6 +483,10 @@ function renderStartTable() {
   const nimiInput = trNew.querySelector("#uusiNimi");
   /*const tilaSelect = trNew.querySelector("#uusiTila");*/
   const addBtn = document.querySelector(".start-actions button"); // + nappi
+
+  addBtn.onclick = async () => {
+  console.log("PLUS NAPPI PAINETTU");
+    
     if (nimiInput && addBtn) {
       nimiInput.addEventListener("input", () => {
         addBtn.classList.remove("unsaved");
