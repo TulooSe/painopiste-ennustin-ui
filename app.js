@@ -482,11 +482,7 @@ function renderStartTable() {
   body.appendChild(trNew);
   const nimiInput = trNew.querySelector("#uusiNimi");
   /*const tilaSelect = trNew.querySelector("#uusiTila");*/
-  const addBtn = document.querySelector(".start-actions button"); // + nappi
-
-  addBtn.onclick = async () => {
-  console.log("PLUS NAPPI PAINETTU");
-    
+  const addBtn = document.querySelector(".start-actions button"); // + nappi  
     if (nimiInput && addBtn) {
       nimiInput.addEventListener("input", () => {
         addBtn.classList.remove("unsaved");
@@ -790,6 +786,8 @@ function bindStartEvents(){
   const addBtn = document.getElementById("lisaaLennokkiBtn");
   if (addBtn) {
     addBtn.onclick = async () => {
+      console.log("PLUS NAPPI PAINETTU");
+      
       if (addBtn.dataset.ready !== "true") return;
       const nimi = document.getElementById("uusiNimi").value.trim();
       const tila = document.getElementById("uusiMalli").value;
