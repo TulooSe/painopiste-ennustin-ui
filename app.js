@@ -249,6 +249,13 @@ async function kopioiValittuLennokki() {
       uusiNimi: uusiNimi.trim()
     });
     await loadLennokit();
+    state.valittuLennokkiId = uusiNimi.trim();
+    const uusiRivi = document.querySelector(
+      `#startTableBody tr[data-id="${CSS.escape(state.valittuLennokkiId)}"]`
+    );
+    if (uusiRivi) {
+      uusiRivi.classList.add("selected");
+    }
   } catch (err) {
     alert("Kopiointi epäonnistui:\n\n" + err.message);
   }
