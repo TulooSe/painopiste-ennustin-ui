@@ -133,11 +133,7 @@ function safeCall(fn, name) {
 }
 
 const APP_VERSION = "1.50";
-let osat = [];
-let kokoonpanot = [];
-let tallennaBtn = document.getElementById("tallennaBtn");
-let yhteenvetoView = document.getElementById("yhteenvetoView");
-let uusiLennokkiNimi = "";
+
 let muutoksia = false;
 
 
@@ -561,7 +557,6 @@ function renderStartTable() {
   }
 }
 
-
 function handleEnterNavigation(e) {
   if (e.key !== "Enter") return;
   e.preventDefault();
@@ -924,8 +919,8 @@ function init() {
     // EVENTIT
     // ===============================
 
-    safeCall(bindStartEvents, "bindStartEvents");
-    safeCall(bindEditorEvents, "bindEditorEvents");
+    bindStartEvents();
+    bindEditorEvents();
 
 
     // ===============================
