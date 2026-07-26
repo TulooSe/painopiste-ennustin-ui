@@ -233,6 +233,27 @@ async function poistaValittuLennokki() {
   }
 }
 
+async function kopioiValittuLennokki() {
+  if (!state.valittuLennokkiId) {
+    alert("Valitse kopioitava lennokki.");
+    return;
+  }
+  const uusiNimi = prompt(
+    "Anna uuden lennokin nimi:",
+    state.valittuLennokkiId + "_COPY"
+  );
+  if (!uusiNimi) return;
+  try {
+    await API("kopioiLennokki", {
+      alkuperainenId: state.valittuLennokkiId,
+      uusiNimi: uusiNimi.trim()
+    });
+    await loadLennokit();
+  } catch (err) {
+    alert("Kopiointi epäonnistui:\n\n" + err.message);
+  }
+}
+
 async function paivitaLennokkiLista() {
   const vastaus = await API("listaaLennokit");
   const lista = Array.isArray(vastaus)
