@@ -137,8 +137,6 @@ let osat = [];
 let kokoonpanot = [];
 let tallennaBtn = document.getElementById("tallennaBtn");
 let yhteenvetoView = document.getElementById("yhteenvetoView");
-let valittuLennokkiId = null;
-let aktiivinenLennokkiId = null;
 let uusiLennokkiNimi = "";
 let muutoksia = false;
 
@@ -499,6 +497,9 @@ function renderStartTable() {
   state.lennokit.forEach(l => {
     const tr = document.createElement("tr");
     tr.dataset.id = l.id;
+      if (l.id === state.valittuLennokkiId) {
+    tr.classList.add("selected");
+  }
     tr.innerHTML = `
       <td>${l.id}</td>
       <td class="col-num">${Number(l.massa || 0).toFixed(0)}</td>
