@@ -249,6 +249,7 @@ async function kopioiValittuLennokki() {
       uusiNimi: uusiNimi.trim()
     });
     await loadLennokit();
+    valitseLennokki(uusiNimi.trim());
   } catch (err) {
     alert("Kopiointi epäonnistui:\n\n" + err.message);
   }
@@ -281,6 +282,23 @@ async function vaihdaLennokki(id) {
   state.valittuLennokkiId = id;
   await lataaOsat();
   renderOsat();
+}
+
+function valitseLennokki(id) {
+  state.valittuLennokkiId = id;
+  document
+    .querySelectorAll("#startTableBody tr")
+    .forEach(r => r.classList.remove("selected"));
+  const rivi = document.querySelector(
+    `#startTableBody tr[data-id="${CSS.escape(id)}"]`
+  );
+  if (rivi) {
+    rivi.classList.add("selected");
+    rivi.scrollIntoView({
+      block: "nearest",
+      behavior: "smooth"
+    });
+  }
 }
 
 async function lataaOsat() {
