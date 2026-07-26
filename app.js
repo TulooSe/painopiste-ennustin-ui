@@ -245,7 +245,7 @@ async function kopioiValittuLennokki() {
   if (!uusiNimi) return;
   try {
     await API("kopioiLennokki", {
-      alkuperainenId: state.valittuLennokkiId,
+      alkuperainen: state.valittuLennokkiId,
       uusiNimi: uusiNimi.trim()
     });
     await loadLennokit();
