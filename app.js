@@ -214,6 +214,25 @@ async function avaaLennokki() {
   await lataaOsat();
 }
 
+async function poistaValittuLennokki() {
+  if (!state.valittuLennokkiId) {
+    alert("Valitse poistettava lennokki.");
+    return;
+  }
+  if (!confirm(`Poistetaanko lennokki "${state.valittuLennokkiId}"?`)) {
+    return;
+  }
+  try {
+    await API("poistaLennokki", {
+      lennokkiId: state.valittuLennokkiId
+    });
+    state.valittuLennokkiId = null;
+    await loadLennokit();
+  } catch (err) {
+    alert("Poisto epäonnistui:\n\n" + err.message);
+  }
+}
+
 async function paivitaLennokkiLista() {
   const vastaus = await API("listaaLennokit");
   const lista = Array.isArray(vastaus)
