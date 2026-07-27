@@ -119,7 +119,7 @@ function setLennokit(lennokit) { state.lennokit = lennokit; }
 // ===============================
 // APP.JS – Sovelluslogiikka
 // ===============================
-
+/*
 function safeCall(fn, name) {
   try {
     if (typeof fn === "function") {
@@ -131,6 +131,7 @@ function safeCall(fn, name) {
     console.error("Virhe funktiossa:", name, err);
   }
 }
+*/
 
 const APP_VERSION = "1.50";
 
