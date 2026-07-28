@@ -119,24 +119,10 @@ function setLennokit(lennokit) { state.lennokit = lennokit; }
 // ===============================
 // APP.JS – Sovelluslogiikka
 // ===============================
-/*
-function safeCall(fn, name) {
-  try {
-    if (typeof fn === "function") {
-      fn();
-    } else {
-      console.warn("Funktio puuttuu:", name);
-    }
-  } catch (err) {
-    console.error("Virhe funktiossa:", name, err);
-  }
-}
-*/
 
 const APP_VERSION = "1.50";
 
 let muutoksia = false;
-
 
 async function API(action, payload = {}) {
   const user = Auth.getUser();
@@ -471,6 +457,8 @@ function palaaAloitukseen() {
 
   const footer = document.querySelector(".editor-footer");
   if (footer) footer.style.display = "none";
+  
+  await loadLennokit();
 }
 
 
