@@ -450,7 +450,7 @@ function varmistaTallennus() {
   return confirm("Tallentamattomia muutoksia. Poistutaanko silti?");
 }
 
-function palaaAloitukseen() {
+async function palaaAloitukseen() {
   if (!varmistaTallennus()) return;
   document.getElementById("appView").style.display = "none";
   document.getElementById("startView").style.display = "block";
