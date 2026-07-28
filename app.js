@@ -929,6 +929,77 @@ function init() {
   });
 }
 
+// ===============================
+// LOADING-ANIMAATIO
+// ===============================
+
+const loadingCanvas = document.getElementById("loadingCanvas");
+const loadingCtx = loadingCanvas.getContext("2d");
+
+const planeImg = new Image();
+planeImg.src = "VLVihuri_III_Ikoni_500x300-removebg-preview.png";
+
+const cgImg = new Image();
+cgImg.src = "PP_ikoni-removebg-preview.png";
+
+let cgHeightAbovePlane = 0;
+let horizontalRange = 50;
+let animationSpeed = 0.04;
+let cgSize = 60;
+
+let t = -1;
+let phase = -Math.PI/2;
+
+function animateLoading() {
+
+    loadingCtx.clearRect(
+        0,
+        0,
+        loadingCanvas.width,
+        loadingCanvas.height
+    );
+
+    const planeX =
+        loadingCanvas.width/2 - planeImg.width/2;
+
+    const planeY =
+        loadingCanvas.height/2 - planeImg.height/2;
+
+    loadingCtx.drawImage(
+        planeImg,
+        planeX,
+        planeY
+    );
+
+    const cgX =
+        loadingCanvas.width/2.5
+        + Math.sin(t + phase) * horizontalRange
+        - cgSize/2;
+
+    const cgY =
+        planeY - cgHeightAbovePlane;
+
+    loadingCtx.drawImage(
+        cgImg,
+        cgX,
+        cgY,
+        cgSize,
+        cgSize
+    );
+
+    t += animationSpeed;
+
+    requestAnimationFrame(animateLoading);
+}
+
+Promise.all([
+    new Promise(r => planeImg.onload = r),
+    new Promise(r => cgImg.onload = r)
+]).then(() => {
+
+    animateLoading();
+
+});
 
 // ===============================
 // DOMREADY & AUTH
