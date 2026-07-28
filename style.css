@@ -140,6 +140,24 @@ button.loading {
   font-size: 13px;
 }
 
+.loading-overlay{
+    position:fixed;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+
+    background:rgba(255,255,255,.75);
+
+    z-index:99999;
+}
+
+.loading-overlay canvas{
+    width:320px;
+    max-width:80vw;
+    height:auto;
+}
+
 /* =========================================================
    2. ALOITUSNÄYTTÖ – RAKENNE
 ========================================================= */
