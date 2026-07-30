@@ -932,6 +932,8 @@ function init() {
 
 const loadingCanvas = document.getElementById("loadingCanvas");
 const loadingCtx = loadingCanvas.getContext("2d");
+console.log("Canvas:", loadingCanvas);
+console.log("Context:", loadingCtx);
 
 const planeImg = new Image();
 planeImg.src = "VLVihuri_III_Ikoni_500x300-removebg-preview.png";
