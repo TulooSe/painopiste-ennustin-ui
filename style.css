@@ -143,12 +143,10 @@ button.loading {
 .loading-overlay{
     position:fixed;
     inset:0;
-    display:flex;
+    display:none;
     justify-content:center;
     align-items:center;
-
     background:rgba(255,255,255,.75);
-
     z-index:99999;
 }
 
