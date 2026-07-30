@@ -949,12 +949,12 @@ let phase = -Math.PI/2;
 
 function animateLoading() {
 
-    loadingCtx.clearRect(
-        0,
-        0,
+    loadingCtx.clearRect(0,0,
         loadingCanvas.width,
         loadingCanvas.height
     );
+    loadingCtx.fillStyle = "red";
+    loadingCtx.fillRect(0,0,600,350);
 
     const planeX =
         loadingCanvas.width/2 - planeImg.width/2;
