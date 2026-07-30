@@ -97,12 +97,16 @@ const API_BASE = "https://script.google.com/macros/s/AKfycbwZOwLipQWHpHSo8V4B82a
     <span onclick="suljeOhje()" class="close">&times;</span>
     <div id="ohjeTeksti"></div>
   </div>
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-box">
+        <canvas id="loadingCanvas"
+                width="600"
+                height="350">
+        </canvas>
+        <div class="loading-text">
+            Päivitetään lennokin painopistelaskentaa...
+        </div>
+    </div>
 </div>
-  <div id="loadingOverlay" class="loading-overlay">
-      <canvas id="loadingCanvas"
-              width="600"
-              height="350">
-      </canvas>
-  </div>
 </body>
 </html>
