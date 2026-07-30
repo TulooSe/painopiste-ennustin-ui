@@ -125,35 +125,23 @@ const APP_VERSION = "1.50";
 let muutoksia = false;
 
 async function API(action, payload = {}) {
-  const user = Auth.getUser();
-  if (!user) throw new Error("Käyttäjä ei ole kirjautunut");
-
   showLoading();
-
   try {
-    console.log("API kutsu:", action, payload);
+    const user = Auth.getUser();
+    if (!user) throw new Error("Käyttäjä ei ole kirjautunut");
     const response = await fetch(API_BASE, {
       method: "POST",
       headers: {
         "Content-Type": "text/plain;charset=utf-8"
       },
       body: JSON.stringify({
-        action: action,
+        action,
         userId: user,
         ...payload
       })
     });
-
-    console.log("HTTP status:", response.status);
     const text = await response.text();
-    console.log("RAW vastaus:", text);
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      throw new Error("JSON parse failed: " + text);
-    }
-    console.log("JSON:", data);
+    const data = JSON.parse(text);
     if (!response.ok) {
       throw new Error("HTTP " + response.status);
     }
@@ -165,6 +153,7 @@ async function API(action, payload = {}) {
     hideLoading();
   }
 }
+
 
 async function loadLennokit() {
   console.log("Haetaan lennokit käyttäjälle:", Auth.getUser());
