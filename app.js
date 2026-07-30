@@ -126,6 +126,7 @@ let muutoksia = false;
 
 async function API(action, payload = {}) {
   showLoading();
+  await new Promise(resolve => setTimeout(resolve, 100));
   try {
     const user = Auth.getUser();
     if (!user) throw new Error("Käyttäjä ei ole kirjautunut");
@@ -1000,6 +1001,9 @@ Promise.all([
 function showLoading() {
     console.log("SHOW LOADING");
     document.getElementById("loadingOverlay").style.display = "flex";
+    setTimeout(() => {
+        console.log("overlay näkyy");
+    }, 1000);
 }
 
 function hideLoading() {
