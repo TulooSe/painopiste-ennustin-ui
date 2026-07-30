@@ -1009,10 +1009,12 @@ Promise.all([
 });
 
 function showLoading() {
+    console.log("SHOW LOADING");
     document.getElementById("loadingOverlay").style.display = "flex";
 }
 
 function hideLoading() {
+    console.log("HIDE LOADING");
     document.getElementById("loadingOverlay").style.display = "none";
 }
 
