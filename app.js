@@ -954,15 +954,22 @@ function animateLoading() {
         loadingCanvas.width,
         loadingCanvas.height
     );
-    const planeX =
-        loadingCanvas.width/2 - planeImg.width/2;
-    const planeY =
-        loadingCanvas.height/2 - planeImg.height/2;
-    loadingCtx.drawImage(
-        planeImg,
-        planeX,
-        planeY
-    );
+
+  const planeWidth = 320;
+  const planeHeight =
+      planeWidth * planeImg.height / planeImg.width;
+  const planeX =
+      (loadingCanvas.width - planeWidth) / 2;
+  const planeY =
+      (loadingCanvas.height - planeHeight) / 2;
+  loadingCtx.drawImage(
+      planeImg,
+      planeX,
+      planeY,
+      planeWidth,
+      planeHeight
+  );
+  
     const cgX =
         loadingCanvas.width/2.5
         + Math.sin(t + phase) * horizontalRange
