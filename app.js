@@ -969,20 +969,21 @@ function animateLoading() {
       planeWidth,
       planeHeight
   );
-  
+    
     const cgX =
-        loadingCanvas.width/2.5
-        + Math.sin(t + phase) * horizontalRange
-        - cgSize/2;
+      loadingCanvas.width / 2
+      + Math.sin(t + phase) * horizontalRange
+      - cgSize / 2;
+    
     const cgY =
-        planeY - cgHeightAbovePlane;
-    loadingCtx.drawImage(
-        cgImg,
-        cgX,
-        cgY,
-        cgSize,
-        cgSize
-    );
+      planeY + 18;
+      loadingCtx.drawImage(
+          cgImg,
+          cgX,
+          cgY,
+          cgSize,
+          cgSize
+      );
     t += animationSpeed;
     requestAnimationFrame(animateLoading);
 }
