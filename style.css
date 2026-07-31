@@ -147,11 +147,9 @@ button.loading {
     display:none;
     justify-content:center;
     align-items:center;
-
-    background:rgba(255,255,255,.20);
-
+    
+    background: transparent;
     pointer-events:none;
-
     z-index:99999;
 }
 
