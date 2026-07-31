@@ -955,7 +955,7 @@ function animateLoading() {
         loadingCanvas.height
     );
 
-  const planeWidth = 500;
+  const planeWidth = 700;
   const planeHeight =
       planeWidth * planeImg.height / planeImg.width;
   const planeX =
