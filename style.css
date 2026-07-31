@@ -148,7 +148,7 @@ button.loading {
     justify-content:center;
     align-items:center;
     
-    background: rgba(255,255,255,0.35);
+    background: rgba(248,250,252,0.60);
     pointer-events:none;
     z-index:99999;
 }
