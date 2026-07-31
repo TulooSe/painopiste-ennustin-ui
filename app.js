@@ -944,7 +944,7 @@ cgImg.src = "PP_ikoni-removebg-preview.png";
 let cgHeightAbovePlane = 0;
 let horizontalRange = 50;
 let animationSpeed = 0.04;
-let cgSize = 60;
+let cgSize = 120;
 
 let t = -1;
 let phase = -Math.PI/2;
