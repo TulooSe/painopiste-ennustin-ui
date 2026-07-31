@@ -950,12 +950,43 @@ let t = -1;
 let phase = -Math.PI/2;
 
 function animateLoading() {
-
+    loadingCtx.clearRect(0,0,
+        loadingCanvas.width,
+        loadingCanvas.height
+    );
     loadingCtx.fillStyle = "red";
-    loadingCtx.fillRect(0, 0, 600, 350);
-
+    loadingCtx.fillRect(0,0,600,350);
+    const planeX =
+        loadingCanvas.width/2 - planeImg.width/2;
+    const planeY =
+        loadingCanvas.height/2 - planeImg.height/2;
+    loadingCtx.drawImage(
+        planeImg,
+        planeX,
+        planeY
+    );
+    const cgX =
+        loadingCanvas.width/2.5
+        + Math.sin(t + phase) * horizontalRange
+        - cgSize/2;
+    const cgY =
+        planeY - cgHeightAbovePlane;
+    loadingCtx.drawImage(
+        cgImg,
+        cgX,
+        cgY,
+        cgSize,
+        cgSize
+    );
+    t += animationSpeed;
     requestAnimationFrame(animateLoading);
 }
+Promise.all([
+    new Promise(r => planeImg.onload = r),
+    new Promise(r => cgImg.onload = r)
+]).then(() => {
+    animateLoading();
+});
 
 function showLoading() {
     console.log("SHOW LOADING");
