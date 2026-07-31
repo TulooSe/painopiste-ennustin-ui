@@ -954,8 +954,6 @@ function animateLoading() {
         loadingCanvas.width,
         loadingCanvas.height
     );
-    loadingCtx.fillStyle = "red";
-    loadingCtx.fillRect(0,0,600,350);
     const planeX =
         loadingCanvas.width/2 - planeImg.width/2;
     const planeY =
