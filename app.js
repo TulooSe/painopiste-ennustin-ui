@@ -254,11 +254,12 @@ async function paivitaLennokkiLista() {
 }
 
 async function vaihdaLennokki(id) {
-  await API("asetaAktiivinen", {
-    id: id
-  });
+  await API("asetaAktiivinen", { id });
   state.valittuLennokkiId = id;
-  await lataaOsat();
+  await Promise.all([
+      lataaOsat(),
+      loadLennokit()
+  ]);
   renderOsat();
 }
 
