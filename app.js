@@ -266,7 +266,6 @@ async function vaihdaLennokki(id) {
 }
 
 
-
 function valitseLennokki(id) {
   state.valittuLennokkiId = id;
   document
