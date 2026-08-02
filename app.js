@@ -254,6 +254,7 @@ async function paivitaLennokkiLista() {
 }
 
 async function vaihdaLennokki(id) {
+    console.log("3. renderOsat vaihdaLennokki()");
     await API("asetaAktiivinen", { id });
     state.valittuLennokkiId = id;
         lataaOsat();
@@ -286,6 +287,7 @@ function valitseLennokki(id) {
 }
 
 async function lataaOsat() {
+  console.log("1. lataaOsat alkaa");
   console.log("Ladataan osat ID:", state.valittuLennokkiId);
   const container = document.getElementById("osatView");
   container.innerHTML = "<p>Ladataan...</p>";
@@ -596,6 +598,7 @@ function handleEnterNavigation(e) {
 
 
 function renderOsat() {
+  console.log("2. renderOsat lataaOsat()");
   const container = document.getElementById("osatView");
   if (!container) {
     console.error("osatView puuttuu HTML:stä");
