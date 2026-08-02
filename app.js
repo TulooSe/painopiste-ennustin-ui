@@ -292,6 +292,7 @@ async function lataaOsat() {
     console.log("Backend vastaus:", response);
     state.osat = response.osat || [];
     state.kokoonpanot = response.kokoonpanot || [];
+    renderOsat();
    } catch (err) {
     alert("Osien lataus epäonnistui: " + err);
   }
