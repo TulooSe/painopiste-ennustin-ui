@@ -258,20 +258,14 @@ async function vaihdaLennokki(id) {
     await API("asetaAktiivinen", { id });
     state.valittuLennokkiId = id;
     const yhteenvetoVisible =
-      document.getElementById("yhteenvetoView").style.display === "block";
+        document.getElementById("yhteenvetoView").style.display === "block";
     if (yhteenvetoVisible) {
         await naytaYhteenveto();
     } else {
         await lataaOsat();
-    }
-
-    if (osatVisible) {
-        await lataaOsat();        // renderOsat() kutsutaan tämän sisällä
-    } else {
-        await naytaYhteenveto();
-    }
-        await loadLennokit();
 }
+
+
 
 function valitseLennokki(id) {
   state.valittuLennokkiId = id;
