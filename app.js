@@ -264,7 +264,6 @@ async function vaihdaLennokki(id) {
     } else {
         await naytaYhteenveto();
     }
-
         await loadLennokit();
 }
 
