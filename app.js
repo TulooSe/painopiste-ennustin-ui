@@ -257,8 +257,14 @@ async function vaihdaLennokki(id) {
     console.log("3. renderOsat vaihdaLennokki()");
     await API("asetaAktiivinen", { id });
     state.valittuLennokkiId = id;
-    const osatVisible =
-        document.getElementById("osatView").style.display !== "none";
+    const yhteenvetoVisible =
+      document.getElementById("yhteenvetoView").style.display === "block";
+    if (yhteenvetoVisible) {
+        await naytaYhteenveto();
+    } else {
+        await lataaOsat();
+    }
+
     if (osatVisible) {
         await lataaOsat();        // renderOsat() kutsutaan tämän sisällä
     } else {
