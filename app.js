@@ -298,6 +298,7 @@ async function lataaOsat() {
     state.osat = response.osat || [];
     state.kokoonpanot = response.kokoonpanot || [];
     console.log("Osia saatu:", state.osat.length);
+    console.log("Piirretään osat");
     renderOsat();
    } catch (err) {
     alert("Osien lataus epäonnistui: " + err);
