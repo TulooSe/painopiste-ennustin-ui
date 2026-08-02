@@ -287,6 +287,9 @@ function valitseLennokki(id) {
 
 async function lataaOsat() {
   console.log("Ladataan osat ID:", state.valittuLennokkiId);
+  const container = document.getElementById("osatView");
+  container.innerHTML = "<p>Ladataan...</p>";
+  
   try {
     const response = await API("haeOsat");
     console.log("Backend vastaus:", response);
