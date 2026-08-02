@@ -392,6 +392,9 @@ async function tallenna() {
 async function naytaYhteenveto() {
   if (!varmistaTallennus()) return;
   const view = document.getElementById("yhteenvetoView");
+
+  view.innerHTML = "<p>Ladataan...</p>";
+  
   const osatView = document.getElementById("osatView");
   if (!view || !osatView) {
     console.error("Yhteenveto elementtejä puuttuu HTML:stä");
