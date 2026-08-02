@@ -254,15 +254,14 @@ async function paivitaLennokkiLista() {
 }
 
 async function vaihdaLennokki(id) {
-    console.log("3. renderOsat vaihdaLennokki()");
+    console.log("3. vaihdaLennokki");
     await API("asetaAktiivinen", { id });
     state.valittuLennokkiId = id;
-    const yhteenvetoVisible =
-        document.getElementById("yhteenvetoView").style.display === "block";
-    if (yhteenvetoVisible) {
+    await lataaOsat();
+    if (document.getElementById("yhteenvetoView").style.display === "block") {
         await naytaYhteenveto();
-    } else {
-        await lataaOsat();
+    }
+    await loadLennokit();
 }
 
 
