@@ -256,11 +256,20 @@ async function paivitaLennokkiLista() {
 async function vaihdaLennokki(id) {
   await API("asetaAktiivinen", { id });
   state.valittuLennokkiId = id;
-  await Promise.all([
+  const yhteenvetoVisible =
+    document.getElementById("yhteenvetoView").style.display !== "none";
+
+  if (yhteenvetoVisible) {
+    await Promise.all([
+      lataaYhteenveto(),
+      loadLennokit()
+    ]);
+  } else {
+    await Promise.all([
       lataaOsat(),
       loadLennokit()
-  ]);
-  renderOsat();
+    ]);
+  }
 }
 
 function valitseLennokki(id) {
