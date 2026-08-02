@@ -257,16 +257,15 @@ async function vaihdaLennokki(id) {
     console.log("3. renderOsat vaihdaLennokki()");
     await API("asetaAktiivinen", { id });
     state.valittuLennokkiId = id;
-        lataaOsat();
-        loadLennokit();
-
     const osatVisible =
         document.getElementById("osatView").style.display !== "none";
     if (osatVisible) {
-        renderOsat();
+        await lataaOsat();        // renderOsat() kutsutaan tämän sisällä
     } else {
         await naytaYhteenveto();
     }
+
+        await loadLennokit();
 }
 
 function valitseLennokki(id) {
@@ -289,6 +288,8 @@ function valitseLennokki(id) {
 async function lataaOsat() {
   console.log("1. lataaOsat alkaa");
   console.log("Ladataan osat ID:", state.valittuLennokkiId);
+  state.osat = [];
+  state.kokoonpanot = [];
   const container = document.getElementById("osatView");
   container.innerHTML = "<p>Ladataan...</p>";
   
