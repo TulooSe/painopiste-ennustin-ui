@@ -293,9 +293,7 @@ async function lataaOsat() {
     state.osat = response.osat || [];
     state.kokoonpanot = response.kokoonpanot || [];
 
-    const osatView = document.getElementById("osatView");
-    if (osatView.style.display !== "none") {
-      renderOsat();
+    renderOsat();
    } catch (err) {
     alert("Osien lataus epäonnistui: " + err);
   }
