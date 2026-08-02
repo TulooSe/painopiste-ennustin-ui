@@ -292,7 +292,7 @@ async function lataaOsat() {
     console.log("Backend vastaus:", response);
     state.osat = response.osat || [];
     state.kokoonpanot = response.kokoonpanot || [];
-    if (document.getElementById("appView").offsetParent !== null) {
+    
     renderOsat();
    } catch (err) {
     alert("Osien lataus epäonnistui: " + err);
