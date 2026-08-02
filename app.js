@@ -256,10 +256,8 @@ async function paivitaLennokkiLista() {
 async function vaihdaLennokki(id) {
     await API("asetaAktiivinen", { id });
     state.valittuLennokkiId = id;
-    await Promise.all([
-        lataaOsat(),
-        loadLennokit()
-    ]);
+        lataaOsat();
+        loadLennokit();
 
     const osatVisible =
         document.getElementById("osatView").style.display !== "none";
