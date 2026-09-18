@@ -205,6 +205,13 @@ button.loading {
   margin: 0 auto;
   gap: 4px;
   overflow-x: hidden;
+  position: relative;
+}
+
+.logout-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
 }
 
 .start-logo {
