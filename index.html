@@ -24,8 +24,9 @@ const API_BASE = "https://script.google.com/macros/s/AKfycbx3aclgfS6WkEaoi-pwT_5
     <button id="logoutBtn"
           class="logout-btn"
           type="button"
-          onclick="Auth.logout()">
-    Kirjaudu ulos
+          onclick="Auth.logout()"
+           title="Kirjaudu ulos">
+      X
     </button>
     
     <img src="Iconi_500x300-removebg-preview.png" 
@@ -37,14 +38,26 @@ const API_BASE = "https://script.google.com/macros/s/AKfycbx3aclgfS6WkEaoi-pwT_5
       <span class="start-version">v<span id="appVersion"></span></span>
     </div>
 
-    <div class="start-actions">
-      <button id="lisaaLennokkiBtn">+</button>
-      <button onclick="avaaLennokki()">›</button>
-      <button onclick="kopioiValittuLennokki()">⧉</button>
-      <button onclick="muokkaaValittuaLennokkia()">✏️</button>
-      <button onclick="poistaValittuLennokki()">−</button>
-      <button onclick="avaaOhje()">?</button>
+   <div class="start-actions">
+      <button id="lisaaLennokkiBtn"
+              title="Lisää uusi lennokki">+</button>
+    
+      <button onclick="avaaLennokki()"
+              title="Avaa valittu lennokki">›</button>
+    
+      <button onclick="kopioiValittuLennokki()"
+              title="Kopioi valittu lennokki">⧉</button>
+    
+      <button onclick="muokkaaValittuaLennokkia()"
+              title="Muokkaa valittua lennokkia">✏️</button>
+    
+      <button onclick="poistaValittuLennokki()"
+              title="Poista valittu lennokki">−</button>
+    
+      <button onclick="avaaOhje()"
+              title="Ohje">?</button>
     </div>
+
 
     <div class="start-table-wrapper">
       <table class="start-table">
