@@ -20,8 +20,17 @@ const API_BASE = "https://script.google.com/macros/s/AKfycbx3aclgfS6WkEaoi-pwT_5
 <div id="startView" class="start-view">
 
   <div class="start-card">
-
-    <img src="Iconi_500x300-removebg-preview.png" class="start-logo" alt="Logo">
+    
+    <button id="logoutBtn"
+          class="logout-btn"
+          type="button"
+          onclick="Auth.logout()">
+    Kirjaudu ulos
+    </button>
+    
+    <img src="Iconi_500x300-removebg-preview.png" 
+         class="start-logo" 
+         alt="Logo">
 
     <div class="start-title">
       Painopisteen Ennustin
