@@ -233,6 +233,47 @@ async function kopioiValittuLennokki() {
   }
 }
 
+async function muokkaaValittuaLennokkia() {
+  if (!state.valittuLennokkiId) {
+    alert("Valitse muokattava lennokki.");
+    return;
+  }
+
+  const vanhaNimi = state.valittuLennokkiId;
+  const uusiNimi = prompt(
+    "Anna lennokille uusi nimi:",
+    vanhaNimi
+  );
+
+  if (uusiNimi === null) return;
+  const nimi = uusiNimi.trim();
+  if (!nimi) {
+    alert("Lennokin nimi ei voi olla tyhjä.");
+    return;
+  }
+  
+  if (nimi === vanhaNimi) return;
+  try {
+    await API("nimeaLennokkiUudelleen", {
+      vanha: vanhaNimi,
+      uusi: nimi
+    });
+
+    // Päivitä valittu lennokki uuteen nimeen
+    state.valittuLennokkiId = nimi;
+
+    // Päivitä aloitusnäkymän lista
+    await loadLennokit();
+
+    // Valitse uudelleennimetty lennokki
+    valitseLennokki(nimi);
+
+  } catch (err) {
+    alert("Nimen muuttaminen epäonnistui:\n\n" + err.message);
+  }
+}
+
+
 async function paivitaLennokkiLista() {
   const vastaus = await API("listaaLennokit");
   const lista = Array.isArray(vastaus)
