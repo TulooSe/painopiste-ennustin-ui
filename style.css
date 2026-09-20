@@ -1057,7 +1057,7 @@ tbody tr.active-row td {
   }
 
   .toc {
-    page-break-after: always;
+    page-break-after: auto;
   }
 
   .ohje {
