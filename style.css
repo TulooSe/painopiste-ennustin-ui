@@ -1060,6 +1060,13 @@ tbody tr.active-row td {
     page-break-after: auto;
   }
 
+  #ohjeTeksti {
+    max-height: none;
+    height: auto;
+    overflow: visible;
+    padding: 0;
+  }
+
   .ohje {
     width: 100%;
     max-width: none;
