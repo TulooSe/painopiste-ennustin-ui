@@ -1052,29 +1052,49 @@ tbody tr.active-row td {
     margin: 10mm;
   }
 
-  .ohje-print {
-    display: none;
+  html,
+  body {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    overflow: visible !important;
   }
 
-  .toc {
-    page-break-after: auto;
+  #appRoot {
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    overflow: visible !important;
+  }
+
+  .ohje-print {
+    display: none !important;
   }
 
   #ohjeTeksti {
-    max-height: none;
-    height: auto;
-    overflow: visible;
-    padding: 0;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
   }
 
   .ohje {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 0;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
     color: #000;
     background: #fff;
-    box-sizing: border-box;
+  }
+
+  .toc {
+    overflow: visible !important;
+    page-break-after: auto;
   }
 
   .ohje h2,
@@ -1091,7 +1111,6 @@ tbody tr.active-row td {
     max-width: none;
   }
 }
-
 
 .help-btn {
   font-size: 18px;
