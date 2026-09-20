@@ -1027,6 +1027,49 @@ tbody tr.active-row td {
 /* =========================================================
    14. OHJE & HELP-NÄKYMÄ
 ========================================================= */
+.ohje-print {
+  margin: 12px 0 20px 0;
+  text-align: right;
+}
+
+.ohje-print button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #e5e7eb;
+  color: #111827;
+  cursor: pointer;
+  font-size: 0.95em;
+}
+
+.ohje-print button:hover {
+  background: #d1d5db;
+}
+
+@media print {
+  .ohje-print {
+    display: none;
+  }
+
+  .toc {
+    page-break-after: always;
+  }
+
+  .ohje {
+    color: #000;
+    background: #fff;
+  }
+
+  .ohje h2,
+  .ohje h3 {
+    color: #000;
+  }
+
+  .ohje a {
+    color: #000;
+    text-decoration: none;
+  }
+}
 
 .help-btn {
   font-size: 18px;
