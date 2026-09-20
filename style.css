@@ -1047,6 +1047,11 @@ tbody tr.active-row td {
 }
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
   .ohje-print {
     display: none;
   }
@@ -1056,8 +1061,13 @@ tbody tr.active-row td {
   }
 
   .ohje {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
     color: #000;
     background: #fff;
+    box-sizing: border-box;
   }
 
   .ohje h2,
@@ -1069,7 +1079,12 @@ tbody tr.active-row td {
     color: #000;
     text-decoration: none;
   }
+
+  .ohje p {
+    max-width: none;
+  }
 }
+
 
 .help-btn {
   font-size: 18px;
