@@ -1085,119 +1085,125 @@ function tulostaOhjePDF() {
   const ohje = document.querySelector(".ohje");
 
   if (!ohje) {
-    alert("Ohjetta ei löytynyt tulostettavaksi.");
+    alert("Ohjetta ei löytynyt.");
     return;
   }
+
+  console.log("TULOSTUSTESTI");
+  console.log("Ohje-elementti:", ohje);
+  console.log("Ohjeen tekstipituus:", ohje.innerText.length);
+  console.log("Ohjeen korkeus:", ohje.scrollHeight);
+  console.log("Ohjeen leveys:", ohje.scrollWidth);
 
   const printWindow = window.open("", "_blank");
 
   if (!printWindow) {
-    alert("Tulostusikkunaa ei voitu avata. Tarkista selaimen ponnahdusikkunoiden esto.");
+    alert("Tulostusikkunaa ei voitu avata.");
     return;
   }
 
-  printWindow.document.open();
-
   printWindow.document.write(`
-    <!DOCTYPE html>
-    <html lang="fi">
-    <head>
-      <meta charset="UTF-8">
-      <title>Painopisteen Ennustin – Käyttöohje</title>
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
 
-      <style>
-        @page {
-          size: A4 portrait;
-          margin: 10mm;
-        }
+<style>
 
-        * {
-          box-sizing: border-box;
-        }
+@page {
+  size: A4 portrait;
+  margin: 15mm;
+}
 
-        html,
-        body {
-          margin: 0;
-          padding: 0;
-          width: 100%;
-          background: white;
-          color: black;
-          font-family: Arial, sans-serif;
-        }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+  background: white;
+  color: black;
+  font-family: Arial, sans-serif;
+}
 
-        .ohje {
-          width: 100%;
-          max-width: none;
-          margin: 0;
-          padding: 0;
-          font-size: 11pt;
-          line-height: 1.25;
-        }
+body {
+  font-size: 11pt;
+  line-height: 1.4;
+}
 
-        .ohje-print {
-          display: none !important;
-        }
+.ohje {
+  width: auto !important;
+  max-width: none !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 
-        .toc {
-          padding-left: 18px;
-          margin-bottom: 20px;
-        }
+.ohje-print {
+  display: none !important;
+}
 
-        .toc ul {
-          margin: 0;
-          padding-left: 20px;
-        }
+h2 {
+  font-size: 18pt;
+  margin: 0 0 15px 0;
+}
 
-        .toc li {
-          margin: 2px 0;
-          padding: 0;
-          line-height: 1.2;
-        }
+h3 {
+  font-size: 13pt;
+  margin: 18px 0 6px 0;
+  break-after: avoid;
+  page-break-after: avoid;
+}
 
-        .toc a {
-          color: black;
-          text-decoration: none;
-        }
+p {
+  margin: 0 0 8px 0;
+}
 
-        .ohje h2 {
-          font-size: 18pt;
-          margin-top: 0;
-          margin-bottom: 12px;
-        }
+.toc {
+  margin-bottom: 20px;
+}
 
-        .ohje h3 {
-          font-size: 13pt;
-          margin-top: 14px;
-          margin-bottom: 5px;
-          color: black;
-          break-after: avoid;
-          page-break-after: avoid;
-        }
+.toc ul {
+  margin: 0;
+  padding-left: 20px;
+}
 
-        .ohje p {
-          margin-top: 3px;
-          margin-bottom: 7px;
-          max-width: none;
-        }
+.toc li {
+  margin: 2px 0;
+}
 
-        @media print {
-          .ohje {
-            width: 100%;
-          }
-        }
-      </style>
-    </head>
+.toc a {
+  color: black;
+  text-decoration: none;
+}
 
-    <body>
-      ${ohje.outerHTML}
-    </body>
-    </html>
+</style>
+</head>
+
+<body>
+
+${ohje.innerHTML}
+
+</body>
+</html>
   `);
 
   printWindow.document.close();
 
-  printWindow.onload = function () {
+  setTimeout(() => {
+    console.log(
+      "Tulostusikkunan tekstipituus:",
+      printWindow.document.body.innerText.length
+    );
+
+    console.log(
+      "Tulostusikkunan korkeus:",
+      printWindow.document.body.scrollHeight
+    );
+
     printWindow.focus();
     printWindow.print();
-  };
+  }, 500);
 }
