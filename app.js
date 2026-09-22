@@ -1076,3 +1076,128 @@ document.addEventListener("userLoggedIn", () => {
   console.log("Käyttäjä kirjautunut:", Auth.getUser());
   init();
 });
+
+// ===============================
+// TULOSTUS
+// ===============================
+
+function tulostaOhjePDF() {
+  const ohje = document.querySelector(".ohje");
+
+  if (!ohje) {
+    alert("Ohjetta ei löytynyt tulostettavaksi.");
+    return;
+  }
+
+  const printWindow = window.open("", "_blank");
+
+  if (!printWindow) {
+    alert("Tulostusikkunaa ei voitu avata. Tarkista selaimen ponnahdusikkunoiden esto.");
+    return;
+  }
+
+  printWindow.document.open();
+
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html lang="fi">
+    <head>
+      <meta charset="UTF-8">
+      <title>Painopisteen Ennustin – Käyttöohje</title>
+
+      <style>
+        @page {
+          size: A4 portrait;
+          margin: 10mm;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        html,
+        body {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          background: white;
+          color: black;
+          font-family: Arial, sans-serif;
+        }
+
+        .ohje {
+          width: 100%;
+          max-width: none;
+          margin: 0;
+          padding: 0;
+          font-size: 11pt;
+          line-height: 1.25;
+        }
+
+        .ohje-print {
+          display: none !important;
+        }
+
+        .toc {
+          padding-left: 18px;
+          margin-bottom: 20px;
+        }
+
+        .toc ul {
+          margin: 0;
+          padding-left: 20px;
+        }
+
+        .toc li {
+          margin: 2px 0;
+          padding: 0;
+          line-height: 1.2;
+        }
+
+        .toc a {
+          color: black;
+          text-decoration: none;
+        }
+
+        .ohje h2 {
+          font-size: 18pt;
+          margin-top: 0;
+          margin-bottom: 12px;
+        }
+
+        .ohje h3 {
+          font-size: 13pt;
+          margin-top: 14px;
+          margin-bottom: 5px;
+          color: black;
+          break-after: avoid;
+          page-break-after: avoid;
+        }
+
+        .ohje p {
+          margin-top: 3px;
+          margin-bottom: 7px;
+          max-width: none;
+        }
+
+        @media print {
+          .ohje {
+            width: 100%;
+          }
+        }
+      </style>
+    </head>
+
+    <body>
+      ${ohje.outerHTML}
+    </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+
+  printWindow.onload = function () {
+    printWindow.focus();
+    printWindow.print();
+  };
+}
